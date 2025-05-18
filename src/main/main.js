@@ -10,7 +10,7 @@ function createWindow () {
     }
   })
 
-  win.loadFile(path.join(__dirname, '../../public/index.html'))
+  win.loadFile(path.join(__dirname, '../../public/welcome/index.html'))
 }
 
 app.whenReady().then(() => {
