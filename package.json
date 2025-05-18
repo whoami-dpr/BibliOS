@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^36.2.1"
+    "electron": "^36.2.1",
+    "nodemon": "^3.1.10"
   },
   "dependencies": {
     "boolean": "^3.2.0",
