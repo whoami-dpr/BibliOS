@@ -1,7 +1,7 @@
 # BibliOS – Sistema Bibliotecario Universitario
 
 <p align="center">
-  <img src="./frontend/src/assets/BibliOS_Logo2.png" alt="BibliOS" width="200" />
+  <img src="./frontend/src/assets/BibliOS_Logo.png" alt="BibliOS" width="200" />
 </p>
 
 Proyecto universitario desarrollado para la Facultad de Ingeniería – UTN FRLP.
