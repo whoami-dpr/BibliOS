@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-
 * {
     margin: 0;
     padding: 0;
@@ -44,7 +43,6 @@ header img {
     margin: 0 20px;
     color: white;
 }
-
 
 body {
     padding-top: 70px; 
@@ -118,5 +116,4 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #00b286;
-}
-
+} 

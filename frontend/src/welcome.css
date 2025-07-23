@@ -50,7 +50,6 @@ header img:hover {
     transition: color 0.3s ease;
 }
 
-
 .nav a::after {
     content: "";
     position: absolute;
@@ -90,6 +89,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start;
     color: white;
     font-weight: 900;
 }
@@ -110,6 +110,11 @@ body {
     font-size: 1.2rem;
     margin: 1rem 0;
     color: #e0e0e0;
+}
+
+.hero-text .hero-title,
+.hero-text .hero-description {
+    text-align: left;
 }
 
 .cta-group {
@@ -133,6 +138,15 @@ body {
 
 .primary-btn:hover {
     background-color: #b58b4a;
+}
+
+.primary-btn,
+.primary-btn:visited,
+.primary-btn:active,
+.primary-btn:hover,
+.primary-btn:focus {
+  color: #111 !important;
+  text-decoration: none;
 }
 
 .hero-img img {
@@ -177,4 +191,4 @@ body {
         background: #c9a368;
         border-radius: 3px;
     }
-}
+} 
