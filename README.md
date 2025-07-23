@@ -1,4 +1,4 @@
-<h1 align="center">BibliOS – Sistema Bibliotecario Universitario</h1>
+<h1 align="center">BibliOS</h1>
 
 <p align="center">
   <img src="./frontend/src/assets/BibliOS_Logo2.png" alt="BibliOS" width="200" />
