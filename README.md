@@ -13,26 +13,27 @@ BibliOS es un sistema de gestión bibliotecaria pensado para bibliotecas académ
 - Registro y seguimiento de préstamos.
 - Interfaz web clara y moderna.
 
-## Tecnologías utilizadas
-
-- Frontend: HTML, CSS, JavaScript
-- Backend: (completar según corresponda)
-- Base de datos: (MySQL / PostgreSQL / SQLite)
-- Otros frameworks o librerías: (completar si aplica)
-
 ## Cómo ejecutar el proyecto
 
 1. Clonar el repositorio:
    git clone https://github.com/usuario/biblios.git
-   cd biblios
-
+   cd bibliOS
+   
 2. Instalar dependencias:
-   (ejemplo con Node.js o Python)
+   npm install
+   cd frontend
+   npm install
+   cd ..
 
-3. Ejecutar el servidor:
-   (ejemplo: npm start o python app.py)
+3. Levanta el entorno de desarrollo, desde la carpeta raíz del proyecto:
+   npm run dev
 
-4. Acceder a la aplicación en el navegador:
+
+#Build de producción
+Para generar el instalador de la app:
+npm run build
+
+5. Acceder a la aplicación en el navegador:
    http://localhost:3000
 
 ## Licencia
