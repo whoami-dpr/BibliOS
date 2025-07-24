@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 body {
   background: linear-gradient(to right, #121212, #1c1c1c);
 }
@@ -11,11 +13,13 @@ body {
   box-shadow: 0 4px 24px rgba(0,0,0,0.25);
   color: #fff;
   position: relative;
+  font-family: 'Inter', Arial, sans-serif;
 }
 .prestamos-container h2 {
   margin-bottom: 32px;
   font-size: 2.2rem;
-  font-family: 'Lora', serif;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 700;
   color: #d4a24e;
   text-align: center;
 }
@@ -33,6 +37,7 @@ body {
   background: #232323;
   color: #fff;
   font-size: 1rem;
+  font-family: 'Inter', Arial, sans-serif;
 }
 .prestamo-form input:focus {
   border-color: #d4a24e;
@@ -48,6 +53,7 @@ body {
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s;
+  font-family: 'Inter', Arial, sans-serif;
 }
 .prestamo-form button:hover {
   background: #b58b4a;
@@ -69,12 +75,14 @@ body {
 .prestamos-table th {
   background: #181818;
   color: #d4a24e;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.05rem;
+  font-family: 'Inter', Arial, sans-serif;
 }
 .prestamos-table td {
   color: #fff;
   font-size: 1rem;
+  font-family: 'Inter', Arial, sans-serif;
 }
 .prestamos-table tr:nth-child(even) td {
   background: #202020;

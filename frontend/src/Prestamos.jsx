@@ -2,13 +2,8 @@ import React, { useState } from 'react';
 import './prestamos.css';
 import Navbar from './Navbar.jsx';
 
-const prestamosMock = [
-  { id: 1, libro: 'Cien años de soledad', socio: 'Juan Pérez', fechaPrestamo: '2024-06-01', fechaDevolucion: '2024-06-15', estado: 'Activo' },
-  { id: 2, libro: 'El Principito', socio: 'Ana Gómez', fechaPrestamo: '2024-06-03', fechaDevolucion: '2024-06-17', estado: 'Devuelto' },
-];
-
 export default function Prestamos() {
-  const [prestamos, setPrestamos] = useState(prestamosMock);
+  const [prestamos, setPrestamos] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [nuevo, setNuevo] = useState({ libro: '', socio: '', fechaPrestamo: '', fechaDevolucion: '' });
 
