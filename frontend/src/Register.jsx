@@ -1,19 +1,11 @@
 import './register.css';
 import logo2 from './assets/BibliOS_Logo2.png';
+import Navbar from './Navbar.jsx';
 
 function Register() {
   return (
     <>
-      <header>
-        <a href="#" className="logo">
-          <img src={logo2} alt="Logo Biblios" />
-        </a>
-        <ul className="nav">
-          <li><a href="#">Prestamos</a></li>
-          <li><a href="#">Socios</a></li>
-          <li><a href="#">Libros</a></li>
-        </ul>
-      </header>
+      <Navbar />
       <main>
         <section className="form-container">
           <h2>Registro de Biblioteca</h2>
