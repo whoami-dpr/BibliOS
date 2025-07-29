@@ -24,17 +24,46 @@ header {
     justify-content: space-between;
     z-index: 1000;
     padding: 0 2rem;
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-header img {
-    margin-top: 20px;
-    height: 80px;
-    width: 80px;
+.logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    text-decoration: none;
+    outline: none;
 }
 
-header img:hover {
-    transform: scale(1.1);
+.logo:hover {
+    text-decoration: none;
+    outline: none;
+    box-shadow: none !important;
+    filter: none !important;
+    transform: none !important;
 }
+
+.logo:hover img {
+    box-shadow: none !important;
+    filter: none !important;
+    transform: none !important;
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+
+
+
 
 .nav {
     display: flex;
@@ -46,8 +75,13 @@ header img:hover {
     color: white;
     text-decoration: none;
     margin: 0 20px;
-    padding-bottom: 4px; 
+    padding: 4px 0;
     transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
 .nav a::after {
@@ -73,6 +107,11 @@ body {
     padding-top: 70px;
 }
 
+body.home-page-active {
+    overflow: hidden;
+    height: 100vh;
+}
+
 .hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -82,7 +121,20 @@ body {
     margin: 0 auto;
     padding: 2rem 4rem;
     gap: 2rem;
-    overflow-x: hidden;
+    overflow: hidden;
+    height: calc(100vh - 70px);
+}
+
+.home-page {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
 .hero-text {
@@ -92,6 +144,7 @@ body {
     align-items: flex-start;
     color: white;
     font-weight: 900;
+    height: 100%;
 }
 
 .hero-text .tagline {
@@ -147,6 +200,13 @@ body {
 .primary-btn:focus {
   color: #111 !important;
   text-decoration: none;
+}
+
+.hero-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .hero-img img {

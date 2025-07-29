@@ -4,10 +4,19 @@ import logo2 from './assets/BibliOS_Logo2.png';
 import libro from './assets/libro.png';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar.jsx';
+import { useEffect } from 'react';
 
 function App() {
+  useEffect(() => {
+    document.body.classList.add('home-page-active');
+    
+    return () => {
+      document.body.classList.remove('home-page-active');
+    };
+  }, []);
+
   return (
-    <>
+    <div className="home-page">
       <Navbar />
       <main className="hero">
         <div className="hero-text">
@@ -24,7 +33,7 @@ function App() {
           <img src={libro} alt="Libro" className="float" />
         </div>
       </main>
-    </>
+    </div>
   );
 }
 
