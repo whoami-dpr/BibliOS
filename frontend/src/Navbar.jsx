@@ -10,8 +10,8 @@ export default function Navbar() {
       <ul className="nav">
         <li><Link to="/dashboard">Dashboard</Link></li>
         <li><Link to="/prestamos">Prestamos</Link></li>
-        <li><a href="#">Socios</a></li>
-        <li><a href="#">Libros</a></li>
+        <li><Link to="/socios">Socios</Link></li>
+        <li><Link to="/libros">Libros</Link></li>
       </ul>
     </header>
   );

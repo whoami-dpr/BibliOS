@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, ComposedChart
 } from 'recharts';
 import { 
-  Book, User, Calendar, TrendingUp, Clock, AlertCircle,
-  Check, X, Activity, Library, BarChart3, PieChart as PieChartIcon
+  BookOpen, Users, CalendarDays, TrendingUp, Clock, AlertTriangle,
+  CheckCircle, X, Activity, Library, BarChart3, PieChart as PieChartIcon
 } from 'lucide-react';
 import Navbar from './Navbar.jsx';
 import './dashboard.css';
+import { useLibrary } from './hooks/useLibrary.js';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { activeLibrary, hasActiveLibrary, getLibraryStats, loading } = useLibrary();
   const [stats, setStats] = useState({
     totalLibros: 0,
     totalSocios: 0,
@@ -47,20 +51,26 @@ export default function Dashboard() {
   ];
 
   useEffect(() => {
-    // Simular carga de datos
-    setStats({
-      totalLibros: 1250,
-      totalSocios: 172,
-      prestamosActivos: 45,
-      prestamosVencidos: 8,
-      prestamosCompletados: 1247
-    });
-  }, []);
+    // Esperar a que termine de cargar antes de verificar
+    if (loading) return;
+
+    // TEMPORALMENTE COMENTADO: Verificar si hay una biblioteca activa
+    // if (!hasActiveLibrary()) {
+    //   navigate('/registro');
+    //   return;
+    // }
+
+    // Cargar estadísticas de la biblioteca activa
+    const libraryStats = getLibraryStats();
+    if (libraryStats) {
+      setStats(libraryStats);
+    }
+  }, [loading, hasActiveLibrary, getLibraryStats, navigate]);
 
   const StatCard = ({ icon: Icon, title, value, color, change }) => (
     <div className="stat-card">
-      <div className="stat-icon" style={{ backgroundColor: color }}>
-        <Icon size={20} color="white" />
+      <div className="stat-icon">
+        <Icon size={20} strokeWidth={1.5} />
       </div>
       <div className="stat-content">
         <h3>{title}</h3>
@@ -74,41 +84,62 @@ export default function Dashboard() {
     </div>
   );
 
+  // Mostrar loading mientras se verifica la biblioteca activa
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="dashboard-container">
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+            <p style={{ color: 'white', fontSize: '1.2rem' }}>Cargando dashboard...</p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Navbar />
       <div className="dashboard-container">
         <section className="mt-8 mb-4">
-          <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Biblioteca Dashboard</h1>
-          <p className="text-gray-400 text-lg max-w-2xl">
-            Analizá y visualizá todas las estadísticas de tu biblioteca. Monitoreá préstamos, socios y actividad en tiempo real.
-          </p>
+          <div className="dashboard-header">
+            <div className="header-content">
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                {activeLibrary ? activeLibrary.nombre : 'Biblioteca Demo'}
+              </h1>
+              <span className="header-separator">|</span>
+              <p className="text-gray-400 text-lg max-w-2xl">
+                Analizá y visualizá todas las estadísticas de tu biblioteca. Monitoreá préstamos, socios y actividad en tiempo real.
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Tarjetas de estadísticas principales */}
         <section className="stats-grid">
           <StatCard 
-            icon={Book} 
+            icon={BookOpen} 
             title="Total Libros" 
             value={stats.totalLibros} 
             color="#3b82f6"
             change={12}
           />
           <StatCard 
-            icon={User} 
+            icon={Users} 
             title="Socios Registrados" 
             value={stats.totalSocios} 
             color="#10b981"
             change={8}
           />
           <StatCard 
-            icon={Calendar} 
+            icon={CalendarDays} 
             title="Préstamos Activos" 
             value={stats.prestamosActivos} 
             color="#f59e0b"
           />
           <StatCard 
-            icon={AlertCircle} 
+            icon={AlertTriangle} 
             title="Préstamos Vencidos" 
             value={stats.prestamosVencidos} 
             color="#ef4444"
@@ -118,11 +149,11 @@ export default function Dashboard() {
         {/* Gráficos principales */}
         <section className="charts-grid">
           {/* Gráfico de préstamos por mes */}
-          <div className="chart-card">
-            <div className="chart-header">
-              <BarChart3 size={20} />
-              <h3>Préstamos y Devoluciones por Mes</h3>
-            </div>
+                           <div className="chart-card">
+                   <div className="chart-header">
+                     <BarChart3 size={18} strokeWidth={1.5} />
+                     <h3>Préstamos y Devoluciones por Mes</h3>
+                   </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={prestamosPorMes}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -144,11 +175,11 @@ export default function Dashboard() {
           </div>
 
           {/* Gráfico de libros por categoría */}
-          <div className="chart-card">
-            <div className="chart-header">
-              <PieChartIcon size={20} />
-              <h3>Distribución de Libros por Categoría</h3>
-            </div>
+                           <div className="chart-card">
+                   <div className="chart-header">
+                     <PieChartIcon size={18} strokeWidth={1.5} />
+                     <h3>Distribución de Libros por Categoría</h3>
+                   </div>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -178,11 +209,11 @@ export default function Dashboard() {
           </div>
 
           {/* Gráfico de socios activos */}
-          <div className="chart-card">
-            <div className="chart-header">
-              <TrendingUp size={20} />
-              <h3>Evolución de Socios Activos</h3>
-            </div>
+                           <div className="chart-card">
+                   <div className="chart-header">
+                     <TrendingUp size={18} strokeWidth={1.5} />
+                     <h3>Evolución de Socios Activos</h3>
+                   </div>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={sociosActivos}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -208,11 +239,11 @@ export default function Dashboard() {
           </div>
 
           {/* Gráfico de tendencia de préstamos */}
-          <div className="chart-card">
-            <div className="chart-header">
-              <Activity size={20} />
-              <h3>Tendencia de Préstamos</h3>
-            </div>
+                           <div className="chart-card">
+                   <div className="chart-header">
+                     <Activity size={18} strokeWidth={1.5} />
+                     <h3>Tendencia de Préstamos</h3>
+                   </div>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={prestamosPorMes}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -243,29 +274,29 @@ export default function Dashboard() {
         {/* Sección de alertas y notificaciones */}
         <section className="alerts-section">
           <h3>Alertas y Notificaciones</h3>
-          <div className="alerts-grid">
-            <div className="alert-card warning">
-              <AlertCircle size={20} />
-              <div>
-                <h4>Préstamos Vencidos</h4>
-                <p>{stats.prestamosVencidos} préstamos requieren atención inmediata</p>
-              </div>
-            </div>
-            <div className="alert-card info">
-              <Clock size={20} />
-              <div>
-                <h4>Próximos a Vencer</h4>
-                <p>15 préstamos vencen en los próximos 3 días</p>
-              </div>
-            </div>
-            <div className="alert-card success">
-              <Check size={20} />
-              <div>
-                <h4>Devoluciones Exitosas</h4>
-                <p>{stats.prestamosCompletados} préstamos completados este mes</p>
-              </div>
-            </div>
-          </div>
+                           <div className="alerts-grid">
+                   <div className="alert-card warning">
+                     <AlertTriangle size={18} strokeWidth={1.5} />
+                     <div>
+                       <h4>Préstamos Vencidos</h4>
+                       <p>{stats.prestamosVencidos} préstamos requieren atención inmediata</p>
+                     </div>
+                   </div>
+                   <div className="alert-card info">
+                     <Clock size={18} strokeWidth={1.5} />
+                     <div>
+                       <h4>Próximos a Vencer</h4>
+                       <p>15 préstamos vencen en los próximos 3 días</p>
+                     </div>
+                   </div>
+                   <div className="alert-card success">
+                     <CheckCircle size={18} strokeWidth={1.5} />
+                     <div>
+                       <h4>Devoluciones Exitosas</h4>
+                       <p>{stats.prestamosCompletados} préstamos completados este mes</p>
+                     </div>
+                   </div>
+                 </div>
         </section>
       </div>
     </>

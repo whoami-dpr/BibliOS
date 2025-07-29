@@ -1,4 +1,13 @@
-/* Préstamos Styles */
+/* Socios Styles */
+.socios-container {
+  padding: 0.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  color: white;
+  background: linear-gradient(to right, #121212, #1c1c1c);
+  padding-top: 20px;
+}
 
 /* Eliminar outline azul globalmente */
 button:focus,
@@ -11,18 +20,8 @@ button:hover {
   -moz-box-shadow: none !important;
 }
 
-.prestamos-container {
-  padding: 0.5rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  min-height: 100vh;
-  color: white;
-  background: linear-gradient(to right, #121212, #1c1c1c);
-  padding-top: 20px;
-}
-
 /* Header */
-.prestamos-header {
+.socios-header {
   margin-bottom: 1.5rem;
   width: 100%;
   position: relative;
@@ -42,7 +41,17 @@ button:hover {
   flex-wrap: nowrap !important;
 }
 
-.prestamos-header h1 {
+.header-separator {
+  color: #c9a368;
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin: 0 0.5rem;
+  white-space: nowrap;
+  display: inline-block !important;
+  flex-shrink: 0;
+}
+
+.socios-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0;
@@ -55,17 +64,7 @@ button:hover {
   flex-shrink: 0;
 }
 
-.header-separator {
-  color: #c9a368;
-  font-size: 1.5rem;
-  font-weight: 300;
-  margin: 0 0.5rem;
-  white-space: nowrap;
-  display: inline-block !important;
-  flex-shrink: 0;
-}
-
-.prestamos-header p {
+.socios-header p {
   font-size: 1rem;
   color: white;
   margin: 0;
@@ -73,7 +72,7 @@ button:hover {
   display: inline-block !important;
   flex-shrink: 0;
   margin-top: 0.35rem;
-}image.png
+}
 
 .add-button {
   background: #1f2937;
@@ -163,16 +162,16 @@ button:hover {
 
 .stat-content h3 {
   font-size: 0.9rem;
-  color: #9ca3af;
-  margin: 0 0 0.5rem 0;
   font-weight: 500;
+  color: #9ca3af;
+  margin: 0 0 0.25rem 0;
 }
 
 .stat-value {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 0.25rem 0;
   color: white;
+  margin: 0;
 }
 
 /* Form Section */
@@ -181,13 +180,13 @@ button:hover {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.5rem;
+  margin-bottom: 1.5rem;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  margin-bottom: 2rem;
 }
 
 .form-section h3 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin: 0 0 1.5rem 0;
   color: white;
@@ -196,10 +195,10 @@ button:hover {
   gap: 0.75rem;
 }
 
-.prestamo-form {
+.socio-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .form-row {
@@ -211,7 +210,7 @@ button:hover {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .form-group label {
@@ -224,7 +223,6 @@ button:hover {
 }
 
 .form-group input,
-.form-group select,
 .form-group textarea {
   padding: 0.75rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -237,16 +235,16 @@ button:hover {
 }
 
 .form-group input:focus,
-.form-group select:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: #c9a368;
   background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(201, 163, 104, 0.1);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #9ca3af;
+  color: #6b7280;
 }
 
 .form-actions {
@@ -277,27 +275,26 @@ button:hover {
 }
 
 .cancel-button {
-  background: rgba(255, 255, 255, 0.1);
+  background: #6b7280;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .cancel-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: #4b5563;
 }
 
 /* Filters Section */
 .filters-section {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   align-items: center;
 }
 
@@ -327,7 +324,7 @@ button:hover {
 }
 
 .search-box input::placeholder {
-  color: #9ca3af;
+  color: #6b7280;
 }
 
 .filter-box select {
@@ -340,7 +337,7 @@ button:hover {
 }
 
 .filter-box select option {
-  background: #23272b;
+  background: #1f2937;
   color: white;
 }
 
@@ -349,9 +346,9 @@ button:hover {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
+  overflow: hidden;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
 }
 
 .table-header {
@@ -363,16 +360,16 @@ button:hover {
 }
 
 .table-header h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: white;
   margin: 0;
+  color: white;
 }
 
 .count {
   font-size: 0.9rem;
   color: #9ca3af;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
 }
@@ -381,98 +378,133 @@ button:hover {
   overflow-x: auto;
 }
 
-.prestamos-table {
+.socios-table {
   width: 100%;
   border-collapse: collapse;
-  background: transparent;
 }
 
-.prestamos-table th {
+.socios-table th {
   background: rgba(255, 255, 255, 0.05);
-  color: #c9a368;
-  font-weight: 600;
-  font-size: 0.9rem;
   padding: 1rem;
   text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #9ca3af;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.prestamos-table td {
+.socios-table td {
   padding: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: white;
   font-size: 0.9rem;
 }
 
-.prestamos-table tr:hover {
+.socios-table tr:hover {
   background: rgba(255, 255, 255, 0.02);
 }
 
-/* Table Content Styles */
-.book-info,
-.user-info,
-.date-info {
+.socio-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.socio-info svg {
+  color: #c9a368;
+}
+
+.socio-address {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 0.8rem;
   color: #d1d5db;
 }
 
-.book-info svg,
-.user-info svg,
-.date-info svg {
+.contact-item svg {
   color: #9ca3af;
 }
 
 .status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
   font-size: 0.8rem;
   font-weight: 500;
   color: white;
-  text-transform: capitalize;
+}
+
+.prestamos-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.prestamos-activos,
+.prestamos-totales {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #d1d5db;
+}
+
+.prestamos-activos svg,
+.prestamos-totales svg {
+  color: #9ca3af;
 }
 
 .actions {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
 }
 
 .action-btn {
   background: transparent;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #9ca3af;
   padding: 0.5rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.action-btn.view {
-  color: #3b82f6;
+.action-btn.view:hover {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
 }
 
-.action-btn.edit {
-  color: #f59e0b;
+.action-btn.edit:hover {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: white;
 }
 
-.action-btn.complete {
-  color: #10b981;
-}
-
-.action-btn.delete {
-  color: #ef4444;
-}
-
-.action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.1);
+.action-btn.delete:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
 }
 
 /* Modal */
@@ -487,7 +519,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(5px);
 }
 
 .modal-content {
@@ -495,7 +527,7 @@ button:hover {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 0;
-  max-width: 500px;
+  max-width: 600px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
@@ -512,10 +544,10 @@ button:hover {
 }
 
 .modal-header h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: white;
   margin: 0;
+  color: white;
 }
 
 .close-button {
@@ -526,12 +558,12 @@ button:hover {
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .close-button:hover {
-  color: white;
   background: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
 .modal-body {
@@ -564,7 +596,7 @@ button:hover {
   word-break: break-word;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 1200px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -576,13 +608,12 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-  .prestamos-container {
+  .socios-container {
     padding: 0.5rem;
     padding-top: 20px;
   }
   
-  .prestamos-header {
-    max-width: 100%;
+  .socios-header {
     flex-direction: row !important;
     gap: 1rem;
     display: flex !important;
@@ -598,12 +629,12 @@ button:hover {
     align-items: center !important;
   }
   
-  .prestamos-header h1 {
+  .socios-header h1 {
     font-size: 2rem;
     text-align: left;
   }
   
-  .prestamos-header p {
+  .socios-header p {
     font-size: 0.9rem;
     text-align: left;
   }
@@ -631,7 +662,7 @@ button:hover {
     overflow-x: auto;
   }
   
-  .prestamos-table {
+  .socios-table {
     min-width: 600px;
   }
   
@@ -647,11 +678,11 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-  .prestamos-header h1 {
+  .socios-header h1 {
     font-size: 1.25rem;
   }
   
-  .prestamos-header p {
+  .socios-header p {
     font-size: 0.8rem;
   }
   
@@ -672,8 +703,8 @@ button:hover {
     padding: 1rem;
   }
   
-  .prestamos-table th,
-  .prestamos-table td {
+  .socios-table th,
+  .socios-table td {
     padding: 0.75rem 0.5rem;
     font-size: 0.8rem;
   }
