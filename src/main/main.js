@@ -110,6 +110,8 @@ function setupAppEvents() {
     event.preventDefault();
     
     try {
+      console.log('Cerrando aplicación...');
+      
       // Cerrar la base de datos
       if (databaseHandlers) {
         await databaseHandlers.db.close();
