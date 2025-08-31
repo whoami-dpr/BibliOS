@@ -1,62 +1,78 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const path = require('path');
-const { app } = require('electron');
+const { getDatabaseConfig, getFallbackConfig, isPostgreSQLAvailable, createDatabaseIfNotExists } = require('./config');
 
 class DatabaseService {
     constructor() {
         this.sequelize = null;
         this.models = {};
+        this.databaseType = 'unknown';
         this.init();
     }
 
     async init() {
         try {
-            // Configuración de PostgreSQL
-            this.sequelize = new Sequelize({
-                dialect: 'postgres',
-                host: 'localhost',
-                port: 5432,
-                username: 'postgres',
-                password: 'postgres',
-                database: 'biblios_db',
-                logging: false, // Desactivar logs SQL en producción
-                define: {
-                    timestamps: true, // Agregar createdAt y updatedAt automáticamente
-                    underscored: true, // Usar snake_case para nombres de columnas
-                    freezeTableName: true // No pluralizar nombres de tablas
-                }
-            });
-
+            console.log('Inicializando base de datos...');
+            
+            // Intentar conectar con PostgreSQL primero
+            if (await isPostgreSQLAvailable()) {
+                console.log('PostgreSQL disponible, configurando...');
+                
+                // Crear la base de datos si no existe
+                await createDatabaseIfNotExists();
+                
+                // Usar configuración de PostgreSQL
+                const config = getDatabaseConfig();
+                this.sequelize = new Sequelize(config);
+                this.databaseType = 'postgres';
+                
+                console.log('Conectando a PostgreSQL...');
+            } else {
+                console.log('PostgreSQL no disponible, usando SQLite como fallback...');
+                
+                // Usar configuración de SQLite
+                const config = getFallbackConfig();
+                this.sequelize = new Sequelize(config);
+                this.databaseType = 'sqlite';
+            }
+            
+            // Probar la conexión
+            await this.sequelize.authenticate();
+            console.log(`Conexión a ${this.databaseType} establecida correctamente`);
+            
             // Definir modelos
             this.defineModels();
             
             // Crear tablas si no existen
             await this.createTables();
             
-            console.log('Base de datos PostgreSQL inicializada correctamente');
+            console.log(`Base de datos ${this.databaseType} inicializada correctamente`);
+            
         } catch (error) {
-            console.error('Error al inicializar la base de datos PostgreSQL:', error);
-            // Fallback a SQLite si PostgreSQL no está disponible
-            await this.initSQLiteFallback();
+            console.error('Error al inicializar la base de datos:', error);
+            
+            // Si falla PostgreSQL, intentar con SQLite
+            if (this.databaseType === 'postgres') {
+                console.log('Fallback a SQLite...');
+                await this.initSQLiteFallback();
+            } else {
+                throw error;
+            }
         }
     }
 
     async initSQLiteFallback() {
         try {
-            console.log('Intentando conectar con SQLite como fallback...');
-            const userDataPath = app.getPath('userData');
-            const dbPath = path.join(userDataPath, 'biblios_fallback.db');
+            const config = getFallbackConfig();
+            this.sequelize = new Sequelize(config);
+            this.databaseType = 'sqlite';
             
-            this.sequelize = new Sequelize({
-                dialect: 'sqlite',
-                storage: dbPath,
-                logging: false
-            });
-
+            await this.sequelize.authenticate();
+            console.log('Conexión a SQLite establecida correctamente');
+            
             this.defineModels();
             await this.createTables();
             
-            console.log('Base de datos SQLite inicializada como fallback en:', dbPath);
+            console.log('Base de datos SQLite inicializada como fallback');
         } catch (error) {
             console.error('Error al inicializar SQLite fallback:', error);
             throw error;
@@ -456,11 +472,19 @@ class DatabaseService {
             const whereClause = { bibliotecaId };
             
             if (filters.search) {
-                whereClause[Sequelize.Op.or] = [
-                    { titulo: { [Sequelize.Op.iLike]: `%${filters.search}%` } },
-                    { autor: { [Sequelize.Op.iLike]: `%${filters.search}%` } },
-                    { isbn: { [Sequelize.Op.iLike]: `%${filters.search}%` } }
-                ];
+                if (this.databaseType === 'postgres') {
+                    whereClause[Sequelize.Op.or] = [
+                        { titulo: { [Sequelize.Op.iLike]: `%${filters.search}%` } },
+                        { autor: { [Sequelize.Op.iLike]: `%${filters.search}%` } },
+                        { isbn: { [Sequelize.Op.iLike]: `%${filters.search}%` } }
+                    ];
+                } else {
+                    whereClause[Sequelize.Op.or] = [
+                        { titulo: { [Sequelize.Op.like]: `%${filters.search}%` } },
+                        { autor: { [Sequelize.Op.like]: `%${filters.search}%` } },
+                        { isbn: { [Sequelize.Op.like]: `%${filters.search}%` } }
+                    ];
+                }
             }
             
             if (filters.categoria) {
@@ -534,10 +558,17 @@ class DatabaseService {
             const whereClause = { bibliotecaId };
             
             if (filters.search) {
-                whereClause[Sequelize.Op.or] = [
-                    { nombre: { [Sequelize.Op.iLike]: `%${filters.search}%` } },
-                    { email: { [Sequelize.Op.iLike]: `%${filters.search}%` } }
-                ];
+                if (this.databaseType === 'postgres') {
+                    whereClause[Sequelize.Op.or] = [
+                        { nombre: { [Sequelize.Op.iLike]: `%${filters.search}%` } },
+                        { email: { [Sequelize.Op.iLike]: `%${filters.search}%` } }
+                    ];
+                } else {
+                    whereClause[Sequelize.Op.or] = [
+                        { nombre: { [Sequelize.Op.like]: `%${filters.search}%` } },
+                        { email: { [Sequelize.Op.like]: `%${filters.search}%` } }
+                    ];
+                }
             }
             
             if (filters.estado) {
@@ -758,24 +789,46 @@ class DatabaseService {
             const fechaLimite = new Date();
             fechaLimite.setMonth(fechaLimite.getMonth() - meses);
             
-            const prestamos = await this.models.Prestamo.findAll({
-                where: {
-                    bibliotecaId,
-                    fechaPrestamo: {
-                        [Sequelize.Op.gte]: fechaLimite
-                    }
-                },
-                attributes: [
-                    [Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('fechaPrestamo')), 'mes'],
-                    [Sequelize.fn('COUNT', Sequelize.col('id')), 'prestamos'],
-                    [Sequelize.fn('SUM', Sequelize.literal("CASE WHEN estado = 'completado' THEN 1 ELSE 0 END")), 'devoluciones']
-                ],
-                group: [Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('fechaPrestamo'))],
-                order: [[Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('fechaPrestamo')), 'ASC']],
-                raw: true
-            });
-            
-            return prestamos;
+            if (this.databaseType === 'postgres') {
+                const prestamos = await this.models.Prestamo.findAll({
+                    where: {
+                        bibliotecaId,
+                        fechaPrestamo: {
+                            [Sequelize.Op.gte]: fechaLimite
+                        }
+                    },
+                    attributes: [
+                        [Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('fechaPrestamo')), 'mes'],
+                        [Sequelize.fn('COUNT', Sequelize.col('id')), 'prestamos'],
+                        [Sequelize.fn('SUM', Sequelize.literal("CASE WHEN estado = 'completado' THEN 1 ELSE 0 END")), 'devoluciones']
+                    ],
+                    group: [Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('fechaPrestamo'))],
+                    order: [[Sequelize.fn('DATE_TRUNC', 'month', Sequelize.col('fechaPrestamo')), 'ASC']],
+                    raw: true
+                });
+                
+                return prestamos;
+            } else {
+                // SQLite fallback
+                const prestamos = await this.models.Prestamo.findAll({
+                    where: {
+                        bibliotecaId,
+                        fechaPrestamo: {
+                            [Sequelize.Op.gte]: fechaLimite
+                        }
+                    },
+                    attributes: [
+                        [Sequelize.fn('strftime', '%Y-%m', Sequelize.col('fechaPrestamo')), 'mes'],
+                        [Sequelize.fn('COUNT', Sequelize.col('id')), 'prestamos'],
+                        [Sequelize.fn('SUM', Sequelize.literal("CASE WHEN estado = 'completado' THEN 1 ELSE 0 END")), 'devoluciones']
+                    ],
+                    group: [Sequelize.fn('strftime', '%Y-%m', Sequelize.col('fechaPrestamo'))],
+                    order: [[Sequelize.fn('strftime', '%Y-%m', Sequelize.col('fechaPrestamo')), 'ASC']],
+                    raw: true
+                });
+                
+                return prestamos;
+            }
         } catch (error) {
             console.error('Error al obtener préstamos por mes:', error);
             throw error;
@@ -812,9 +865,7 @@ class DatabaseService {
 
     async backup(destinationPath) {
         try {
-            // Para PostgreSQL, usar pg_dump
-            // Para SQLite, usar el método nativo
-            if (this.sequelize.getDialect() === 'postgres') {
+            if (this.databaseType === 'postgres') {
                 console.log('Backup de PostgreSQL requiere pg_dump manual');
                 return true;
             } else {
@@ -922,6 +973,18 @@ class DatabaseService {
             console.error('Error al insertar datos de ejemplo:', error);
             throw error;
         }
+    }
+
+    // ===== INFORMACIÓN DEL SISTEMA =====
+    
+    getDatabaseInfo() {
+        return {
+            type: this.databaseType,
+            host: this.sequelize?.config?.host || 'N/A',
+            port: this.sequelize?.config?.port || 'N/A',
+            database: this.sequelize?.config?.database || 'N/A',
+            dialect: this.sequelize?.config?.dialect || 'N/A'
+        };
     }
 }
 
