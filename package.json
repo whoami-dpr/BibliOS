@@ -23,6 +23,7 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
+    "better-sqlite3": "^12.2.0",
     "boolean": "^3.2.0",
     "buffer-crc32": "^0.2.13",
     "cacheable-lookup": "^5.0.4",
@@ -34,6 +35,7 @@
     "define-data-property": "^1.1.4",
     "define-properties": "^1.2.1",
     "detect-node": "^2.1.0",
+    "electron-store": "^10.1.0",
     "end-of-stream": "^1.4.4",
     "env-paths": "^2.2.1",
     "es-define-property": "^1.0.1",
