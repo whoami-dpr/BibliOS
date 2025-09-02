@@ -1,3 +1,4 @@
+import ThemeToggle from './components/ThemeToggle';
 import './App.css';
 import './welcome.css'; // Crearemos este archivo con los estilos migrados
 import logo2 from './assets/BibliOS_Logo2.png';
@@ -18,6 +19,7 @@ function App() {
   return (
     <div className="home-page">
       <Navbar />
+      <ThemeToggle />
       <main className="hero">
         <div className="hero-text">
           <span className="tagline">SISTEMA BIBLIOTECARIO</span>
