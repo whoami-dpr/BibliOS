@@ -1,7 +1,5 @@
-import ThemeToggle from './components/ThemeToggle';
 import './App.css';
-import './welcome.css'; // Crearemos este archivo con los estilos migrados
-import logo2 from './assets/BibliOS_Logo2.png';
+import './welcome.css';
 import libro from './assets/libro.png';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar.jsx';
@@ -10,16 +8,12 @@ import { useEffect } from 'react';
 function App() {
   useEffect(() => {
     document.body.classList.add('home-page-active');
-    
-    return () => {
-      document.body.classList.remove('home-page-active');
-    };
+    return () => { document.body.classList.remove('home-page-active'); };
   }, []);
 
   return (
     <div className="home-page">
       <Navbar />
-      <ThemeToggle />
       <main className="hero">
         <div className="hero-text">
           <span className="tagline">SISTEMA BIBLIOTECARIO</span>
