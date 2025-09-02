@@ -94,18 +94,25 @@ class DatabaseService {
             },
             direccion: {
                 type: DataTypes.TEXT,
-                allowNull: true
+                allowNull: false,
+                validate: {
+                    notEmpty: true
+                }
             },
             telefono: {
                 type: DataTypes.STRING(20),
-                allowNull: true
+                allowNull: true,
+                validate: {
+                    is: /^[\d\s\-\+\(\)]+$/
+                }
             },
             email: {
                 type: DataTypes.STRING(255),
                 allowNull: true,
                 validate: {
                     isEmail: true
-                }
+                },
+                unique: true
             },
             responsable: {
                 type: DataTypes.STRING(255),
@@ -140,16 +147,27 @@ class DatabaseService {
             },
             titulo: {
                 type: DataTypes.STRING(500),
-                allowNull: false
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    len: [1, 500]
+                }
             },
             autor: {
                 type: DataTypes.STRING(255),
-                allowNull: false
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    len: [1, 255]
+                }
             },
             isbn: {
                 type: DataTypes.STRING(20),
                 allowNull: true,
-                unique: true
+                unique: true,
+                validate: {
+                    len: [10, 20]
+                }
             },
             categoria: {
                 type: DataTypes.STRING(100),
@@ -169,15 +187,19 @@ class DatabaseService {
             },
             cantidad: {
                 type: DataTypes.INTEGER,
+                allowNull: false,
                 defaultValue: 1,
                 validate: {
+                    isInt: true,
                     min: 0
                 }
             },
             disponibles: {
                 type: DataTypes.INTEGER,
+                allowNull: false,
                 defaultValue: 1,
                 validate: {
+                    isInt: true,
                     min: 0
                 }
             },
@@ -195,6 +217,13 @@ class DatabaseService {
             }
         }, {
             tableName: 'libros',
+            validate: {
+                disponiblesNoExcedenCantidad() {
+                    if (this.disponibles != null && this.cantidad != null && this.disponibles > this.cantidad) {
+                        throw new Error('Los ejemplares disponibles no pueden exceder la cantidad total');
+                    }
+                }
+            },
             indexes: [
                 { fields: ['titulo'] },
                 { fields: ['autor'] },
@@ -213,7 +242,11 @@ class DatabaseService {
             },
             nombre: {
                 type: DataTypes.STRING(255),
-                allowNull: false
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    len: [1, 255]
+                }
             },
             email: {
                 type: DataTypes.STRING(255),
@@ -224,7 +257,10 @@ class DatabaseService {
             },
             telefono: {
                 type: DataTypes.STRING(20),
-                allowNull: true
+                allowNull: true,
+                validate: {
+                    is: /^[\d\s\-\+\(\)]+$/
+                }
             },
             direccion: {
                 type: DataTypes.TEXT,
@@ -243,6 +279,7 @@ class DatabaseService {
             indexes: [
                 { fields: ['nombre'] },
                 { fields: ['email'] },
+                { unique: true, fields: ['bibliotecaId', 'email'] },
                 { fields: ['estado'] }
             ]
         });
@@ -276,6 +313,13 @@ class DatabaseService {
             }
         }, {
             tableName: 'prestamos',
+            validate: {
+                fechaDevolucionPosterior() {
+                    if (this.fechaDevolucion && this.fechaPrestamo && this.fechaDevolucion < this.fechaPrestamo) {
+                        throw new Error('La fecha de devolución debe ser posterior a la fecha de préstamo');
+                    }
+                }
+            },
             indexes: [
                 { fields: ['estado'] },
                 { fields: ['fechaDevolucion'] },
