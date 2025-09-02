@@ -1,0 +1,34 @@
+.theme-toggle {
+  padding: 8px 12px;
+  border: 1px solid var(--border, #e5e7eb);
+  background: var(--card, #ffffff);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground, #000000);
+}
+
+.theme-toggle:hover {
+  background: var(--card-hover, #f9fafb);
+  border-color: var(--border-hover, #d1d5db);
+  transform: translateY(-1px);
+}
+
+.theme-toggle:active {
+  transform: translateY(0);
+}
+
+/* Estilos para tema oscuro */
+[data-theme="dark"] .theme-toggle {
+  background: var(--card, #1f2937);
+  border-color: var(--border, #374151);
+  color: var(--foreground, #ffffff);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: var(--card-hover, #374151);
+  border-color: var(--border-hover, #4b5563);
+}

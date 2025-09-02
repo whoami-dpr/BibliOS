@@ -1,3 +1,4 @@
+import ThemeToggle from "./components/ThemeToggle";
 import { Link } from 'react-router-dom';
 import './welcome.css';
 
@@ -13,6 +14,7 @@ export default function Navbar() {
         <li><Link to="/socios">Socios</Link></li>
         <li><Link to="/libros">Libros</Link></li>
       </ul>
+      <ThemeToggle />
     </header>
   );
 } 
