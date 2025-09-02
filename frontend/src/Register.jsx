@@ -30,7 +30,7 @@ function Register() {
     if (!formData.direccion.trim()) {
       newErrors.direccion = 'La dirección es requerida';
     }
-    
+
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'El email no es válido';
     }
