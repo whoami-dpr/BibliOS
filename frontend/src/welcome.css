@@ -254,4 +254,17 @@ body.home-page-active {
         background: var(--primary);
         border-radius: 3px;
     }
-} 
+}
+.theme-toggle-container {
+    display: flex;
+    justify-content: flex-end; /* lo manda a la derecha */
+    padding: 8px 16px;
+  }
+  
+  .theme-toggle-container .theme-toggle {
+    background: var(--card);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+   
