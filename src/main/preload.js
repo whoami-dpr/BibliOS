@@ -176,27 +176,32 @@ contextBridge.exposeInMainWorld('utils', {
         });
     },
 
-    // Validar email
+    // Validar email (con trim y verificación básica robusta)
     validateEmail: (email) => {
+        if (!email) return false;
+        const value = String(email).trim();
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        return re.test(value);
     },
 
-    // Validar ISBN
+    // Validar ISBN (incluye checksum para ISBN-10 e ISBN-13)
     validateISBN: (isbn) => {
-        // Remover guiones y espacios
-        const cleanISBN = isbn.replace(/[-\s]/g, '');
-        
-        // ISBN-10: 10 dígitos
-        if (cleanISBN.length === 10) {
-            return /^\d{9}[\dX]$/.test(cleanISBN);
+        if (!isbn) return false;
+        const s = String(isbn).replace(/[-\s]/g, '');
+        // ISBN-10
+        if (s.length === 10 && /^\d{9}[\dX]$/.test(s)) {
+            let sum = 0;
+            for (let i = 0; i < 9; i++) sum += (i + 1) * parseInt(s[i], 10);
+            sum += (s[9] === 'X' ? 10 : parseInt(s[9], 10)) * 10;
+            return sum % 11 === 0;
         }
-        
-        // ISBN-13: 13 dígitos
-        if (cleanISBN.length === 13) {
-            return /^\d{13}$/.test(cleanISBN);
+        // ISBN-13
+        if (s.length === 13 && /^\d{13}$/.test(s)) {
+            let sum = 0;
+            for (let i = 0; i < 12; i++) sum += parseInt(s[i], 10) * (i % 2 === 0 ? 1 : 3);
+            const check = (10 - (sum % 10)) % 10;
+            return check === parseInt(s[12], 10);
         }
-        
         return false;
     },
 
@@ -250,10 +255,11 @@ contextBridge.exposeInMainWorld('utils', {
         return phone;
     },
 
-    // Validar número de teléfono
+    // Validar número de teléfono (cuenta dígitos entre 10 y 15)
     validatePhone: (phone) => {
-        const cleaned = phone.replace(/\D/g, '');
-        return cleaned.length >= 10;
+        if (!phone) return false;
+        const cleaned = String(phone).replace(/\D/g, '');
+        return cleaned.length >= 10 && cleaned.length <= 15;
     },
 
     // Generar slug para URLs
