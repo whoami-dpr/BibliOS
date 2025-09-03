@@ -225,7 +225,7 @@ export default function Libros() {
   };
 
   return (
-    <>
+    <div className="page page-libros">
       <Navbar />
       <div className="libros-container">
         {/* Header */}
@@ -672,6 +672,6 @@ export default function Libros() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 } 

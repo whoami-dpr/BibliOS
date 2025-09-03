@@ -189,7 +189,7 @@ export default function Socios() {
   };
 
   return (
-    <>
+    <div className="page page-socios">
       <Navbar />
       <div className="socios-container">
         {/* Header */}
@@ -557,6 +557,6 @@ export default function Socios() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 } 
