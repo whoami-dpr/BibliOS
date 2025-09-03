@@ -18,6 +18,7 @@
 
   --primary: #c69443;            /* dorado de tu CTA */
   --primary-fg: #ffffff;
+  --muted: #6b7280;
 }
 
 :root[data-theme="dark"] {

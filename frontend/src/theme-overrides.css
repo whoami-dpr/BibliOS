@@ -127,14 +127,26 @@ svg, i {
   background: var(--card);
 }
 
-/* Cards: fondo y texto adaptados al tema con alta prioridad */
-.card,
-.card * {
+/* Cards: aplicar fondo a la card, y color a textos comunes,
+   sin tocar superficies de gráficos (canvas/svg) */
+.card {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
   color: var(--foreground) !important;
-  background-color: var(--card) !important;
 }
 
-/* Títulos y subtítulos dentro de las cards */
+/* Colorear SOLO textos habituales dentro de la card */
+.card :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,div,li,th,td,label) {
+  color: var(--foreground) !important;
+}
+
+/* No interferir con gráficos/superficies */
+.card :is(canvas, svg, .recharts-surface, .recharts-wrapper) {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* Títulos y subtítulos de cards (si se usan estas clases) */
 .card-title,
 .card-subtitle,
 .card-text {
