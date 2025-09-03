@@ -301,6 +301,23 @@ svg, i {
 .page .subtitle {
   color: var(--foreground) !important;
 }
+
+/* ===== Fix: bordes claros en modo light ===== */
+[data-theme="light"] .page [class*="card"],
+[data-theme="light"] .page [class*="panel"],
+[data-theme="light"] .page [class*="widget"],
+[data-theme="light"] .page [class*="stat"],
+[data-theme="light"] .page [class*="kpi"],
+[data-theme="light"] .page [class*="box"],
+[data-theme="light"] .page table,
+[data-theme="light"] .page .list,
+[data-theme="light"] .page input,
+[data-theme="light"] .page select,
+[data-theme="light"] .page textarea {
+  border: 1px solid var(--border) !important;
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+}
 /* Cards: aplicar fondo a la card, y color a textos comunes,
    sin tocar superficies de gráficos (canvas/svg) */
 .card {
