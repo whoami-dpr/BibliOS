@@ -378,6 +378,69 @@ svg, i {
   color: var(--foreground) !important;
   border: 1px solid var(--border) !important;
 }
+
+/* ==================== Botones primarios en modo claro ==================== */
+[data-theme="light"] .btn,
+[data-theme="light"] .button,
+[data-theme="light"] [class*="btn"],
+[data-theme="light"] [class*="button"],
+[data-theme="light"] .new-button,
+[data-theme="light"] .nuevo-btn {
+  background-color: #ffffff !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Hover en modo claro */
+[data-theme="light"] .btn:hover,
+[data-theme="light"] .button:hover,
+[data-theme="light"] [class*="btn"]:hover,
+[data-theme="light"] [class*="button"]:hover,
+[data-theme="light"] .new-button:hover,
+[data-theme="light"] .nuevo-btn:hover {
+  background-color: var(--card-hover) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border-hover) !important;
+}
+
+/* Mantener variantes verdes (success/green) en ambos temas */
+.page .btn-success,
+.page [class*="btn-success"],
+.page [class*="success"],
+.page [class*="green"] {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+}
+.page .btn-success:hover,
+.page [class*="btn-success"]:hover,
+.page [class*="success"]:hover,
+.page [class*="green"]:hover {
+  background-color: #0ea271 !important;
+  border-color: #0ea271 !important;
+}
+
+/* Evitar parpadeo en botones al cambiar de tema: transitions acotadas */
+[data-theme="dark"] .btn,
+[data-theme="dark"] .button,
+[data-theme="dark"] [class*="btn"],
+[data-theme="dark"] [class*="button"],
+[data-theme="dark"] .new-button,
+[data-theme="dark"] .nuevo-btn {
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease !important;
+}
+
+/* En modo oscuro, asegurar base estable (sin desaparecer) para botones neutros */
+[data-theme="dark"] .btn:not([class*="success"]):not([class*="green"]),
+[data-theme="dark"] .button:not([class*="success"]):not([class*="green"]),
+[data-theme="dark"] [class*="btn"]:not([class*="success"]):not([class*="green"]),
+[data-theme="dark"] [class*="button"]:not([class*="success"]):not([class*="green"]),
+[data-theme="dark"] .new-button,
+[data-theme="dark"] .nuevo-btn {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
 /* Cards: aplicar fondo a la card, y color a textos comunes,
    sin tocar superficies de gráficos (canvas/svg) */
 .card {
