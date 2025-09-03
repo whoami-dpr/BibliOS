@@ -318,6 +318,66 @@ svg, i {
   background: var(--card) !important;
   color: var(--foreground) !important;
 }
+
+/* ==================== MODO CLARO: fondo totalmente blanco ==================== */
+
+/* Asegurá que el viewport completo sea blanco */
+[data-theme="light"],
+[data-theme="light"] html,
+[data-theme="light"] body,
+[data-theme="light"] #root {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: var(--foreground) !important;
+}
+
+/* Forzá fondo blanco en contenedores raíz de cada página */
+[data-theme="light"] .dashboard,
+[data-theme="light"] .dashboard-page,
+[data-theme="light"] .dashboard-container,
+[data-theme="light"] .prestamos,
+[data-theme="light"] .prestamos-page,
+[data-theme="light"] .prestamos-container,
+[data-theme="light"] .socios,
+[data-theme="light"] .socios-page,
+[data-theme="light"] .socios-container,
+[data-theme="light"] .libros,
+[data-theme="light"] .libros-page,
+[data-theme="light"] .libros-container,
+[data-theme="light"] main,
+[data-theme="light"] .page,
+[data-theme="light"] .content,
+[data-theme="light"] .wrapper,
+[data-theme="light"] .container,
+[data-theme="light"] [class*="-page"],
+[data-theme="light"] [class*="-container"] {
+  background-color: #ffffff !important;
+  background-image: none !important;  /* mata gradientes oscuros */
+  color: var(--foreground) !important;
+}
+
+/* Las “bandas”/filas grandes que a veces ponen fondo propio */
+[data-theme="light"] .stats-row,
+[data-theme="light"] .alerts-section,
+[data-theme="light"] .table-wrapper,
+[data-theme="light"] .list-wrapper,
+[data-theme="light"] section {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Cards y elementos internos siguen respetando el tema */
+[data-theme="light"] .card,
+[data-theme="light"] [class*="card"],
+[data-theme="light"] [class*="panel"],
+[data-theme="light"] [class*="widget"],
+[data-theme="light"] [class*="stat"],
+[data-theme="light"] [class*="kpi"],
+[data-theme="light"] [class*="box"] {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
 /* Cards: aplicar fondo a la card, y color a textos comunes,
    sin tocar superficies de gráficos (canvas/svg) */
 .card {
