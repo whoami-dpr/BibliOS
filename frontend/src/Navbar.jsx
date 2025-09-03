@@ -17,7 +17,10 @@ export default function Navbar() {
         </ul>
       </header>
 
-     
+    
+      <div className="theme-toggle-container">
+        <ThemeToggle />
+      </div>
     </>
   );
 }
