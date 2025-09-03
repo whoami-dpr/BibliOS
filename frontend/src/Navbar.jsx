@@ -1,4 +1,4 @@
-import ThemeToggle from "./components/ThemeToggle";
+import ThemeToggle from "./ThemeToggle.jsx";
 import { Link } from 'react-router-dom';
 import './welcome.css';
 

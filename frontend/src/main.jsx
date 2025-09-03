@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { initTheme } from './theme';
 import './index.css';
 import './dashboard.css';
 import './socios.css';
@@ -15,6 +16,9 @@ import Dashboard from './Dashboard.jsx';
 import Socios from './Socios.jsx';
 import Libros from './Libros.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Aplicar tema antes de montar React
+initTheme();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

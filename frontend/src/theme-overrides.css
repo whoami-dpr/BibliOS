@@ -1,503 +1,383 @@
-/* ============== Theme overrides globales ============== */
-
-/* Fondo y texto base en toda la app */
-html, body, #root {
-  background: var(--background);
-  color: var(--foreground);
+/* ===== FIX: subtítulos invisibles al lado del H1 (todas las páginas) ===== */
+/* Captura el elemento INMEDIATO después del H1 (p, span, small) y lo hace legible */
+[data-theme="light"] :is(.page-header,.header,.title-row,.page-title,.libros-page,.page-libros,.prestamos-page,.socios-page,.dashboard-page)
+  :is(h1 + p, h1 + span, h1 + small) {
+  color: var(--foreground) !important;      /* negro/gris oscuro en claro */
+  opacity: 1 !important;                    /* por si había text-white/70 */
+  filter: none !important;
 }
 
-/* Contenedores principales comunes */
-main, .container, .page, .content, .wrapper {
-  background: var(--background);
-  color: var(--foreground);
+[data-theme="dark"] :is(.page-header,.header,.title-row,.page-title,.libros-page,.page-libros,.prestamos-page,.socios-page,.dashboard-page)
+  :is(h1 + p, h1 + span, h1 + small) {
+  color: color-mix(in srgb, var(--foreground) 80%, transparent) !important; /* gris claro en oscuro */
+  opacity: 1 !important;
 }
 
-/* “Tarjetas”/paneles/widgets/kpis (matchea muchas clases comunes) */
-[class*="card"],
-[class*="panel"],
-[class*="widget"],
-[class*="stat"],
-[class*="kpi"],
-[class*="box"] {
-  background: var(--card);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+/* Si alguien metió utilitarios text-white/xx dentro del subtítulo, los anulamos */
+:is(.page-header,.header,.title-row,.page-title) 
+  :is(h1 + p, h1 + span, h1 + small) [class*="text-white"] {
+  color: var(--foreground) !important;
+  opacity: 1 !important;
 }
 
-/* Forzar que todos los textos dentro de tarjetas respeten el tema */
-.card,
-[class*="card"],
-[class*="panel"],
-[class*="widget"],
-[class*="stat"],
-[class*="kpi"],
-[class*="box"] {
-  color: var(--foreground);
-}
-
-/* Títulos y textos internos de cards/paneles */
-[class*="card"] h1,
-[class*="card"] h2,
-[class*="card"] h3,
-[class*="card"] p,
-[class*="card"] span,
-[class*="card"] div,
-[class*="panel"] h1,
-[class*="panel"] h2,
-[class*="panel"] h3,
-[class*="panel"] p,
-[class*="panel"] span,
-[class*="panel"] div,
-[class*="widget"] *,
-[class*="stat"] *,
-[class*="kpi"] *,
-[class*="box"] * {
-  color: var(--foreground);
-}
-
-/* Hover/levemente resaltado de tarjetas */
-[class*="card"]:hover,
-[class*="panel"]:hover {
-  background: var(--card-hover);
-}
-
-/* Tablas */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  color: var(--foreground);
-}
-table th {
-  background: var(--card-hover);
-  color: var(--foreground);
-  border-bottom: 1px solid var(--border);
-}
-table td {
-  border-bottom: 1px solid var(--border);
-}
-
-/* Controles de filtro/busqueda/inputs */
-input, select, textarea {
-  background: var(--card);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
-input::placeholder,
-textarea::placeholder {
-  color: var(--muted, #6b7280);
-}
-
-/* Badges/chips */
-.badge, [class*="badge"], [class*="pill"] {
-  background: var(--card-hover);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-}
-
-/* Botones “neutros” (los que no tienen color propio) */
-.button, .btn, [class*="btn-"] {
-  color: var(--foreground);
-  border-color: var(--border);
-}
-
-/* Bordes suaves para separadores */
-hr {
-  border: none;
-  border-top: 1px solid var(--border);
-}
-
-/* Asegura que los iconos hereden color del texto */
-svg, i {
-  color: inherit;
-  fill: currentColor;
-}
-
-/* Scrollbar sutil que respeta el tema (Chromium/WebKit) */
-*::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
-}
-*::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 6px;
-}
-*::-webkit-scrollbar-track {
-  background: var(--card);
-}
-
-/* ============== Theme overrides (scope: .page) ============== */
-
-/* Fondo y color base de cada pantalla */
-.page {
-  background: var(--background) !important;
+/* Opcional: si ese subtítulo está envuelto en un contenedor, también cubrilo */
+[data-theme="light"] :is(.page-header,.header,.title-row,.page-title)
+  :is(h1 + p, h1 + span, h1 + small) * {
   color: var(--foreground) !important;
 }
 
-/* Cualquier contenedor común dentro de una página */
-.page main,
-.page .container,
-.page .content,
-.page .wrapper,
-.page .toolbar,
-.page .header,
-.page .section {
-  background: var(--background) !important;
-  color: var(--foreground) !important;
-}
-
-/* Tarjetas/paneles/widgets/kpis */
-.page [class*="card"],
-.page [class*="panel"],
-.page [class*="widget"],
-.page [class*="stat"],
-.page [class*="kpi"],
-.page [class*="box"] {
-  background: var(--card) !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 12px;
-}
-
-/* Títulos y textos dentro de tarjetas */
-.page [class*="card"] *,
-.page [class*="panel"] *,
-.page [class*="widget"] *,
-.page [class*="stat"] *,
-.page [class*="kpi"] *,
-.page [class*="box"] * {
-  color: var(--foreground) !important;
-}
-
-/* Hover suave en tarjetas/paneles */
-.page [class*="card"]:hover,
-.page [class*="panel"]:hover {
-  background: var(--card-hover) !important;
-}
-
-/* Tablas */
-.page table {
-  width: 100%;
-  border-collapse: collapse;
-  color: var(--foreground) !important;
-  background: var(--card) !important;
-}
-.page table th {
-  background: var(--card-hover) !important;
-  color: var(--foreground) !important;
-  border-bottom: 1px solid var(--border) !important;
-}
-.page table td {
-  border-bottom: 1px solid var(--border) !important;
-}
-
-/* Buscadores / inputs / selects */
-.page input,
-.page select,
-.page textarea {
-  background: var(--card) !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 8px;
-}
-.page input::placeholder,
-.page textarea::placeholder {
-  color: var(--muted, #6b7280) !important;
-}
-
-/* Badges / chips */
-.page .badge,
-.page [class*="badge"],
-.page [class*="pill"] {
-  background: var(--card-hover) !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-}
-
-/* Botones neutros (los que no son primarios de color) */
-.page .button,
-.page .btn,
-.page [class*="btn-"] {
-  color: var(--foreground) !important;
-  border-color: var(--border) !important;
-  background: var(--card) !important;
-}
-
-/* Separadores */
-.page hr {
-  border: none;
-  border-top: 1px solid var(--border) !important;
-}
-
-/* Iconos y textos SVG respetan el color */
-.page svg,
-.page i {
-  color: inherit !important;
-  fill: currentColor !important;
-}
-
-/* Scrollbar que sigue el tema (Chromium/WebKit) */
-.page *::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
-}
-.page *::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 6px;
-}
-.page *::-webkit-scrollbar-track {
-  background: var(--card);
-}
-
-/* ===== Ajustes específicos útiles ===== */
-
-/* KPI/s de Dashboard (clases típicas en tu UI) */
-.page-dashboard .stat-card,
-.page-dashboard .chart-card,
-.page-dashboard .alert-card {
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--foreground) !important;
-}
-
-/* Encabezados/KPIs superiores */
-.page [class*="kpi"],
-.page [class*="kpi"] * {
-  color: var(--foreground) !important;
-}
-
-/* Listas de Prestamos/Socios/Libros */
-.page-prestamos .list,
-.page-socios .list,
-.page-libros .list {
-  background: var(--card) !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-}
-
-/* Filtros/barras de búsqueda en listados */
-.page-prestamos .filters,
-.page-socios .filters,
-.page-libros .filters {
-  background: var(--card) !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-}
-
-/* Las leyendas/textos de gráficos suelen ser SVG */
-.page .recharts-text,           /* Recharts */
-.page .chartjs-render-monitor,  /* Chart.js canvas */
-.page .apexcharts-text,         /* ApexCharts */
-.page svg text {
-  fill: var(--foreground) !important;
-  color: var(--foreground) !important;
-}
-
-/* Evitar que algo con .text-white fije blanco en modo claro */
-.page .text-white,
-.page .text-gray-400,
-.page .muted,
-.page .subtitle {
-  color: var(--foreground) !important;
-}
-
-/* ===== Fix: bordes claros en modo light ===== */
-[data-theme="light"] .page [class*="card"],
-[data-theme="light"] .page [class*="panel"],
-[data-theme="light"] .page [class*="widget"],
-[data-theme="light"] .page [class*="stat"],
-[data-theme="light"] .page [class*="kpi"],
-[data-theme="light"] .page [class*="box"],
-[data-theme="light"] .page table,
-[data-theme="light"] .page .list,
-[data-theme="light"] .page input,
-[data-theme="light"] .page select,
-[data-theme="light"] .page textarea {
-  border: 1px solid var(--border) !important;
-  background: var(--card) !important;
-  color: var(--foreground) !important;
-}
-
-/* ==================== MODO CLARO: fondo totalmente blanco ==================== */
-
-/* Asegurá que el viewport completo sea blanco */
-[data-theme="light"],
-[data-theme="light"] html,
-[data-theme="light"] body,
-[data-theme="light"] #root {
-  background-color: #ffffff !important;
-  background-image: none !important;
-  color: var(--foreground) !important;
-}
-
-/* Forzá fondo blanco en contenedores raíz de cada página */
-[data-theme="light"] .dashboard,
-[data-theme="light"] .dashboard-page,
-[data-theme="light"] .dashboard-container,
-[data-theme="light"] .prestamos,
-[data-theme="light"] .prestamos-page,
-[data-theme="light"] .prestamos-container,
-[data-theme="light"] .socios,
-[data-theme="light"] .socios-page,
-[data-theme="light"] .socios-container,
-[data-theme="light"] .libros,
-[data-theme="light"] .libros-page,
-[data-theme="light"] .libros-container,
-[data-theme="light"] main,
-[data-theme="light"] .page,
-[data-theme="light"] .content,
-[data-theme="light"] .wrapper,
-[data-theme="light"] .container,
-[data-theme="light"] [class*="-page"],
-[data-theme="light"] [class*="-container"] {
-  background-color: #ffffff !important;
-  background-image: none !important;  /* mata gradientes oscuros */
-  color: var(--foreground) !important;
-}
-
-/* Las “bandas”/filas grandes que a veces ponen fondo propio */
-[data-theme="light"] .stats-row,
-[data-theme="light"] .alerts-section,
-[data-theme="light"] .table-wrapper,
-[data-theme="light"] .list-wrapper,
-[data-theme="light"] section {
-  background-color: #ffffff !important;
-  background-image: none !important;
-}
-
-/* Cards y elementos internos siguen respetando el tema */
-[data-theme="light"] .card,
-[data-theme="light"] [class*="card"],
-[data-theme="light"] [class*="panel"],
-[data-theme="light"] [class*="widget"],
-[data-theme="light"] [class*="stat"],
-[data-theme="light"] [class*="kpi"],
-[data-theme="light"] [class*="box"] {
+/* ===== Botón "Nuevo …" (Prestamos/Socios/Libros) siguiendo el tema ===== */
+[data-theme="light"] .add-button {
   background-color: var(--card) !important;
   color: var(--foreground) !important;
   border: 1px solid var(--border) !important;
+  box-shadow: none !important;
 }
-
-/* ==================== Botones primarios en modo claro ==================== */
-[data-theme="light"] .btn,
-[data-theme="light"] .button,
-[data-theme="light"] [class*="btn"],
-[data-theme="light"] [class*="button"],
-[data-theme="light"] .new-button,
-[data-theme="light"] .nuevo-btn {
-  background-color: #ffffff !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-}
-
-/* Hover en modo claro */
-[data-theme="light"] .btn:hover,
-[data-theme="light"] .button:hover,
-[data-theme="light"] [class*="btn"]:hover,
-[data-theme="light"] [class*="button"]:hover,
-[data-theme="light"] .new-button:hover,
-[data-theme="light"] .nuevo-btn:hover {
+[data-theme="light"] .add-button:hover {
   background-color: var(--card-hover) !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border-hover) !important;
+  border-color: var(--border-hover) !important;
 }
 
-/* Mantener variantes verdes (success/green) en ambos temas */
-.page .btn-success,
-.page [class*="btn-success"],
-.page [class*="success"],
-.page [class*="green"] {
-  background-color: #10b981 !important;
-  color: #ffffff !important;
-  border-color: #10b981 !important;
-}
-.page .btn-success:hover,
-.page [class*="btn-success"]:hover,
-.page [class*="success"]:hover,
-.page [class*="green"]:hover {
-  background-color: #0ea271 !important;
-  border-color: #0ea271 !important;
-}
-
-/* Evitar parpadeo en botones al cambiar de tema: transitions acotadas */
-[data-theme="dark"] .btn,
-[data-theme="dark"] .button,
-[data-theme="dark"] [class*="btn"],
-[data-theme="dark"] [class*="button"],
-[data-theme="dark"] .new-button,
-[data-theme="dark"] .nuevo-btn {
+[data-theme="dark"] .add-button {
+  background-color: var(--card) !important; /* superficie oscura */
+  color: var(--foreground) !important;      /* texto claro */
+  border: 1px solid var(--border) !important;
   transition: background-color .15s ease, color .15s ease, border-color .15s ease !important;
 }
+[data-theme="dark"] .add-button:hover {
+  background-color: var(--card-hover) !important;
+}
+/* ======================================================================
+   THEME OVERRIDES (drop-in replacement)
+   Hace que TODO respete las CSS variables del tema (light/dark)
+   ====================================================================== */
 
-/* En modo oscuro, asegurar base estable (sin desaparecer) para botones neutros */
-[data-theme="dark"] .btn:not([class*="success"]):not([class*="green"]),
-[data-theme="dark"] .button:not([class*="success"]):not([class*="green"]),
-[data-theme="dark"] [class*="btn"]:not([class*="success"]):not([class*="green"]),
-[data-theme="dark"] [class*="button"]:not([class*="success"]):not([class*="green"]),
-[data-theme="dark"] .new-button,
-[data-theme="dark"] .nuevo-btn {
-  background-color: var(--card) !important;
+/* ===== Base: que todo tome fondo y texto del tema ===== */
+html, body, #root {
+    background: var(--background);
+    color: var(--foreground);
+  }
+  
+  /* ===== Contenedores comunes ===== */
+  main, .page, .container, .content, .wrapper, .section, .toolbar, .header, .page-header {
+    background: var(--background);
+    color: var(--foreground);
+  }
+  
+  /* ===== Tarjetas/paneles/widgets/KPI ===== */
+  [class*="card"],
+  [class*="panel"],
+  [class*="widget"],
+  [class*="stat"],
+  [class*="kpi"],
+  [class*="box"] {
+    background: var(--card);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  
+  /* Textos dentro de tarjetas/paneles (sin tocar superficies de gráficos) */
+  :where([class*="card"],[class*="panel"],[class*="widget"],[class*="stat"],[class*="kpi"],[class*="box"])
+    :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,div,li,th,td,label) {
+    color: var(--foreground);
+  }
+  
+  /* No pintar fondos de superficies de gráfico */
+  [class*="card"] :is(canvas, svg, .recharts-surface, .recharts-wrapper) {
+    background: transparent !important;
+    color: inherit !important;
+  }
+  
+  /* Hover suave en tarjetas/paneles */
+  [class*="card"]:hover,
+  [class*="panel"]:hover {
+    background: var(--card-hover);
+  }
+  
+  /* ===== Tablas ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--foreground);
+    background: var(--card);
+  }
+  table th {
+    background: var(--card-hover);
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+  }
+  table td {
+    border-bottom: 1px solid var(--border);
+  }
+  
+  /* ===== Formularios/inputs ===== */
+  input, select, textarea {
+    background: var(--card);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--muted, #6b7280);
+  }
+  
+  /* ===== Badges/chips ===== */
+  .badge, [class*="badge"], [class*="pill"] {
+    background: var(--card-hover);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+  }
+  
+  /* ===== Botones neutrales ===== */
+  .button, .btn, [class*="btn-"] {
+    color: var(--foreground);
+    border-color: var(--border);
+    background: var(--card);
+  }
+  .button:hover, .btn:hover, [class*="btn-"]:hover {
+    background: var(--card-hover);
+    border-color: var(--border-hover);
+  }
+  
+  /* Mantener variantes “success/green” con su color propio */
+  [class*="btn-success"], [class*="success"], [class*="green"] {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+    border-color: #10b981 !important;
+  }
+  [class*="btn-success"]:hover, [class*="success"]:hover, [class*="green"]:hover {
+    background-color: #0ea271 !important;
+    border-color: #0ea271 !important;
+  }
+  
+  /* ===== Íconos siguen el color del texto ===== */
+  svg, i {
+    color: inherit;
+    fill: currentColor;
+  }
+  
+  /* ===== Scrollbar sutil ===== */
+  *::-webkit-scrollbar { height: 8px; width: 8px; }
+  *::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+  *::-webkit-scrollbar-track { background: var(--card); }
+  
+  /* ======================================================================
+     HEADERS / TITULARES
+     ====================================================================== */
+  
+  /* Barra de título / toolbars */
+  .page-header,
+  .section-header,
+  .header,
+  .page-title,
+  .title-row,
+  .header-bar {
+    background: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+  .page-header *, .section-header *, .header *, .title-row *, .header-bar * {
+    color: var(--foreground) !important;
+  }
+  
+  /* Subtítulo/leyenda al lado o debajo del H1 */
+  .page-subtitle,
+  .section-subtitle,
+  .header-subtitle,
+  .subtitle,
+  .description,
+  .lead,
+  .help,
+  .label,
+  h1 + p, h1 + small, h1 + span,
+  .page-header h1 + *, .header h1 + *, .title-row h1 + * {
+    color: var(--muted, #6b7280) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Divisor/barrita junto al título */
+  .title-divider,
+  .title-row .divider,
+  .page-header .divider {
+    background: var(--border) !important;
+    border-color: var(--border) !important;
+  }
+  
+  /* “Matar” utilitarios tipo text-white/60 que rompen el modo claro */
+  [class*="text-white/"], .text-white, .text-light, .text-gray, .text-gray-300, .text-gray-400, .text-secondary, .text-muted {
+    color: var(--foreground) !important;  /* en dark es claro; en light, oscuro */
+    opacity: 1 !important;
+  }
+  
+  /* ======================================================================
+     PÁGINAS (clases comodín para tus secciones)
+     ====================================================================== */
+  
+  /* Fondos de páginas y áreas comunes */
+  .page-dashboard, .dashboard, .dashboard-page, .dashboard-container,
+  .page-prestamos, .prestamos, .prestamos-page, .prestamos-container,
+  .page-socios, .socios, .socios-page, .socios-container,
+  .page-libros, .libros, .libros-page, .libros-container {
+    background: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+  
+  /* Listados y filtros */
+  .list, .table-wrapper, .list-wrapper, .filters, .filter-bar, .search-bar {
+    background: var(--card) !important;
+    color: var(--foreground) !important;
+    border: 1px solid var(--border) !important;
+  }
+  .filters *, .filter-bar *, .search-bar * {
+    color: var(--foreground) !important;
+  }
+  
+  /* Textos de gráficos (SVG/canvas) */
+  .recharts-text,
+  .chartjs-render-monitor,
+  .apexcharts-text,
+  svg text {
+    fill: var(--foreground) !important;
+    color: var(--foreground) !important;
+  }
+  
+  /* ======================================================================
+     MODO CLARO: fondo realmente BLANCO y primarios en blanco
+     ====================================================================== */
+  
+  [data-theme="light"], 
+  [data-theme="light"] html, 
+  [data-theme="light"] body, 
+  [data-theme="light"] #root {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: var(--foreground) !important;
+  }
+  
+  /* Forzar blanco en contenedores de página (por si traen gradientes) */
+  [data-theme="light"] .dashboard,
+  [data-theme="light"] .dashboard-page,
+  [data-theme="light"] .dashboard-container,
+  [data-theme="light"] .prestamos,
+  [data-theme="light"] .prestamos-page,
+  [data-theme="light"] .prestamos-container,
+  [data-theme="light"] .socios,
+  [data-theme="light"] .socios-page,
+  [data-theme="light"] .socios-container,
+  [data-theme="light"] .libros,
+  [data-theme="light"] .libros-page,
+  [data-theme="light"] .libros-container,
+  [data-theme="light"] main,
+  [data-theme="light"] .page,
+  [data-theme="light"] .content,
+  [data-theme="light"] .wrapper,
+  [data-theme="light"] .container,
+  [data-theme="light"] [class*="-page"],
+  [data-theme="light"] [class*="-container"],
+  [data-theme="light"] section {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: var(--foreground) !important;
+  }
+  
+  /* Bordes claros y superficies en light */
+  [data-theme="light"] :where([class*="card"],[class*="panel"],[class*="widget"],[class*="stat"],[class*="kpi"],[class*="box"], table, .list, input, select, textarea) {
+    border: 1px solid var(--border) !important;
+    background: var(--card) !important;
+    color: var(--foreground) !important;
+  }
+  
+  /* Botón “Nuevo …” (y primarios similares) en BLANCO en light */
+  [data-theme="light"] .btn,
+  [data-theme="light"] .button,
+  [data-theme="light"] [class*="btn"],
+  [data-theme="light"] [role="button"],
+  [data-theme="light"] .new-button,
+  [data-theme="light"] .nuevo-btn {
+    background-color: var(--card) !important;    /* blanco o casi */
+    color: var(--foreground) !important;         /* texto oscuro */
+    border: 1px solid var(--border) !important;
+  }
+  [data-theme="light"] .btn:hover,
+  [data-theme="light"] .button:hover,
+  [data-theme="light"] [class*="btn"]:hover,
+  [data-theme="light"] [role="button"]:hover,
+  [data-theme="light"] .new-button:hover,
+  [data-theme="light"] .nuevo-btn:hover {
+    background-color: var(--card-hover) !important;
+    border-color: var(--border-hover) !important;
+  }
+  
+  /* Subtítulo legible asegurado en light (gris) */
+  [data-theme="light"] .page-header h1 + *,
+  [data-theme="light"] .header h1 + *,
+  [data-theme="light"] .title-row h1 + *,
+  [data-theme="light"] h1 + p,
+  [data-theme="light"] h1 + small,
+  [data-theme="light"] h1 + span {
+    color: var(--muted, #6b7280) !important;
+    opacity: 1 !important;
+  }
+  
+  /* ======================================================================
+     MODO OSCURO: botones neutros no desaparecen
+     ====================================================================== */
+  
+  [data-theme="dark"] .btn,
+  [data-theme="dark"] .button,
+  [data-theme="dark"] [class*="btn"],
+  [data-theme="dark"] [role="button"],
+  [data-theme="dark"] .new-button,
+  [data-theme="dark"] .nuevo-btn {
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    border: 1px solid var(--border) !important;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease !important;
+  }
+  [data-theme="dark"] .btn:hover,
+  [data-theme="dark"] .button:hover,
+  [data-theme="dark"] [class*="btn"]:hover,
+  [data-theme="dark"] [role="button"]:hover {
+    background-color: var(--card-hover) !important;
+  }
+  
+  /* ----------------------------------------------------------
+   FIX A PRUEBA DE BALAS: subtítulo que va al lado del H1
+   (funciona aunque use utilitarios text-white/xx o estilos raros)
+-----------------------------------------------------------*/
+
+/* MODO CLARO: cualquier nodo que venga después del H1 se hace legible */
+[data-theme="light"] h1 + *,
+[data-theme="light"] h1 + * *,
+[data-theme="light"] h1 ~ p,
+[data-theme="light"] h1 ~ span,
+[data-theme="light"] h1 ~ small,
+[data-theme="light"] h1 ~ div {
+  color: var(--foreground) !important;   /* negro/gris oscuro */
+  opacity: 1 !important;                 /* anula text-white/70, etc. */
+  filter: none !important;
+}
+
+/* Si ese subtítulo o sus hijos tienen utilitarios tipo text-white/xx, forzamos igual */
+[data-theme="light"] h1 ~ * [class*="text-white"] {
   color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-}
-/* Cards: aplicar fondo a la card, y color a textos comunes,
-   sin tocar superficies de gráficos (canvas/svg) */
-.card {
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--foreground) !important;
+  opacity: 1 !important;
 }
 
-/* Colorear SOLO textos habituales dentro de la card */
-.card :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,div,li,th,td,label) {
-  color: var(--foreground) !important;
+/* MODO OSCURO: mismo truco pero en tono claro (gris legible) */
+[data-theme="dark"] h1 + *,
+[data-theme="dark"] h1 + * *,
+[data-theme="dark"] h1 ~ p,
+[data-theme="dark"] h1 ~ span,
+[data-theme="dark"] h1 ~ small,
+[data-theme="dark"] h1 ~ div {
+  color: color-mix(in srgb, var(--foreground) 85%, transparent) !important;
+  opacity: 1 !important;
 }
 
-/* No interferir con gráficos/superficies */
-.card :is(canvas, svg, .recharts-surface, .recharts-wrapper) {
-  background: transparent !important;
-  color: inherit !important;
+/* Por si el subtítulo está envuelto en un contenedor con utilitarios blancos */
+[data-theme="dark"] h1 ~ * [class*="text-white"] {
+  color: color-mix(in srgb, var(--foreground) 85%, transparent) !important;
+  opacity: 1 !important;
 }
-
-/* Títulos y subtítulos de cards (si se usan estas clases) */
-.card-title,
-.card-subtitle,
-.card-text {
-  color: var(--foreground) !important;
-}
-
-/* Overrides específicos para Dashboard que forzaban colores fijos */
-.dashboard-container {
-  background: var(--background) !important;
-  color: var(--foreground) !important;
-}
-
-.stat-card,
-.chart-card,
-.alert-card {
-  background: var(--card) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--foreground) !important;
-}
-
-.text-white,
-.text-lg,
-.stat-value,
-.chart-card h3,
-.alerts-section h3,
-.alert-card h4,
-.stat-content h3,
-.text-gray-400 {
-  color: var(--foreground) !important;
-}
-
-/* Subtexto/leyendas en gris deben respetar tono de tema */
-.text-gray-400,
-.stat-change,
-.alert-card p {
-  color: var(--muted, #6b7280) !important;
-}
-
-
-
