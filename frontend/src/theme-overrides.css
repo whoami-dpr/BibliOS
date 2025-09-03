@@ -127,5 +127,51 @@ svg, i {
   background: var(--card);
 }
 
+/* Cards: fondo y texto adaptados al tema con alta prioridad */
+.card,
+.card * {
+  color: var(--foreground) !important;
+  background-color: var(--card) !important;
+}
+
+/* Títulos y subtítulos dentro de las cards */
+.card-title,
+.card-subtitle,
+.card-text {
+  color: var(--foreground) !important;
+}
+
+/* Overrides específicos para Dashboard que forzaban colores fijos */
+.dashboard-container {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.stat-card,
+.chart-card,
+.alert-card {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.text-white,
+.text-lg,
+.stat-value,
+.chart-card h3,
+.alerts-section h3,
+.alert-card h4,
+.stat-content h3,
+.text-gray-400 {
+  color: var(--foreground) !important;
+}
+
+/* Subtexto/leyendas en gris deben respetar tono de tema */
+.text-gray-400,
+.stat-change,
+.alert-card p {
+  color: var(--muted, #6b7280) !important;
+}
+
 
 

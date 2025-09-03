@@ -1,6 +1,12 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './dashboard.css';
+import './socios.css';
+import './libros.css';
+import './prestamos.css';
+import './register.css';
+// Importar al final para que tenga mayor precedencia sobre estilos de páginas
 import './theme-overrides.css';
 import App from './App.jsx';
 import Register from './Register.jsx';
