@@ -44,3 +44,4 @@ El componente utiliza las siguientes variables CSS que se pueden personalizar:
 - Fondo: var(--card)
 - Border-radius: 10px
 - Transiciones suaves para mejor UX
+
