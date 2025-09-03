@@ -127,6 +127,180 @@ svg, i {
   background: var(--card);
 }
 
+/* ============== Theme overrides (scope: .page) ============== */
+
+/* Fondo y color base de cada pantalla */
+.page {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* Cualquier contenedor común dentro de una página */
+.page main,
+.page .container,
+.page .content,
+.page .wrapper,
+.page .toolbar,
+.page .header,
+.page .section {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* Tarjetas/paneles/widgets/kpis */
+.page [class*="card"],
+.page [class*="panel"],
+.page [class*="widget"],
+.page [class*="stat"],
+.page [class*="kpi"],
+.page [class*="box"] {
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px;
+}
+
+/* Títulos y textos dentro de tarjetas */
+.page [class*="card"] *,
+.page [class*="panel"] *,
+.page [class*="widget"] *,
+.page [class*="stat"] *,
+.page [class*="kpi"] *,
+.page [class*="box"] * {
+  color: var(--foreground) !important;
+}
+
+/* Hover suave en tarjetas/paneles */
+.page [class*="card"]:hover,
+.page [class*="panel"]:hover {
+  background: var(--card-hover) !important;
+}
+
+/* Tablas */
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground) !important;
+  background: var(--card) !important;
+}
+.page table th {
+  background: var(--card-hover) !important;
+  color: var(--foreground) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.page table td {
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* Buscadores / inputs / selects */
+.page input,
+.page select,
+.page textarea {
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px;
+}
+.page input::placeholder,
+.page textarea::placeholder {
+  color: var(--muted, #6b7280) !important;
+}
+
+/* Badges / chips */
+.page .badge,
+.page [class*="badge"],
+.page [class*="pill"] {
+  background: var(--card-hover) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Botones neutros (los que no son primarios de color) */
+.page .button,
+.page .btn,
+.page [class*="btn-"] {
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+  background: var(--card) !important;
+}
+
+/* Separadores */
+.page hr {
+  border: none;
+  border-top: 1px solid var(--border) !important;
+}
+
+/* Iconos y textos SVG respetan el color */
+.page svg,
+.page i {
+  color: inherit !important;
+  fill: currentColor !important;
+}
+
+/* Scrollbar que sigue el tema (Chromium/WebKit) */
+.page *::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.page *::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+}
+.page *::-webkit-scrollbar-track {
+  background: var(--card);
+}
+
+/* ===== Ajustes específicos útiles ===== */
+
+/* KPI/s de Dashboard (clases típicas en tu UI) */
+.page-dashboard .stat-card,
+.page-dashboard .chart-card,
+.page-dashboard .alert-card {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+/* Encabezados/KPIs superiores */
+.page [class*="kpi"],
+.page [class*="kpi"] * {
+  color: var(--foreground) !important;
+}
+
+/* Listas de Prestamos/Socios/Libros */
+.page-prestamos .list,
+.page-socios .list,
+.page-libros .list {
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Filtros/barras de búsqueda en listados */
+.page-prestamos .filters,
+.page-socios .filters,
+.page-libros .filters {
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Las leyendas/textos de gráficos suelen ser SVG */
+.page .recharts-text,           /* Recharts */
+.page .chartjs-render-monitor,  /* Chart.js canvas */
+.page .apexcharts-text,         /* ApexCharts */
+.page svg text {
+  fill: var(--foreground) !important;
+  color: var(--foreground) !important;
+}
+
+/* Evitar que algo con .text-white fije blanco en modo claro */
+.page .text-white,
+.page .text-gray-400,
+.page .muted,
+.page .subtitle {
+  color: var(--foreground) !important;
+}
 /* Cards: aplicar fondo a la card, y color a textos comunes,
    sin tocar superficies de gráficos (canvas/svg) */
 .card {
