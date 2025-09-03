@@ -25,6 +25,37 @@ main, .container, .page, .content, .wrapper {
   border-radius: 12px;
 }
 
+/* Forzar que todos los textos dentro de tarjetas respeten el tema */
+.card,
+[class*="card"],
+[class*="panel"],
+[class*="widget"],
+[class*="stat"],
+[class*="kpi"],
+[class*="box"] {
+  color: var(--foreground);
+}
+
+/* Títulos y textos internos de cards/paneles */
+[class*="card"] h1,
+[class*="card"] h2,
+[class*="card"] h3,
+[class*="card"] p,
+[class*="card"] span,
+[class*="card"] div,
+[class*="panel"] h1,
+[class*="panel"] h2,
+[class*="panel"] h3,
+[class*="panel"] p,
+[class*="panel"] span,
+[class*="panel"] div,
+[class*="widget"] *,
+[class*="stat"] *,
+[class*="kpi"] *,
+[class*="box"] * {
+  color: var(--foreground);
+}
+
 /* Hover/levemente resaltado de tarjetas */
 [class*="card"]:hover,
 [class*="panel"]:hover {
@@ -95,5 +126,6 @@ svg, i {
 *::-webkit-scrollbar-track {
   background: var(--card);
 }
+
 
 
