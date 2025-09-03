@@ -1,0 +1,99 @@
+/* ============== Theme overrides globales ============== */
+
+/* Fondo y texto base en toda la app */
+html, body, #root {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Contenedores principales comunes */
+main, .container, .page, .content, .wrapper {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* “Tarjetas”/paneles/widgets/kpis (matchea muchas clases comunes) */
+[class*="card"],
+[class*="panel"],
+[class*="widget"],
+[class*="stat"],
+[class*="kpi"],
+[class*="box"] {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+/* Hover/levemente resaltado de tarjetas */
+[class*="card"]:hover,
+[class*="panel"]:hover {
+  background: var(--card-hover);
+}
+
+/* Tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+}
+table th {
+  background: var(--card-hover);
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+}
+table td {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Controles de filtro/busqueda/inputs */
+input, select, textarea {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted, #6b7280);
+}
+
+/* Badges/chips */
+.badge, [class*="badge"], [class*="pill"] {
+  background: var(--card-hover);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+/* Botones “neutros” (los que no tienen color propio) */
+.button, .btn, [class*="btn-"] {
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+/* Bordes suaves para separadores */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* Asegura que los iconos hereden color del texto */
+svg, i {
+  color: inherit;
+  fill: currentColor;
+}
+
+/* Scrollbar sutil que respeta el tema (Chromium/WebKit) */
+*::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--card);
+}
+
+
