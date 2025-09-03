@@ -87,19 +87,19 @@ export default function Dashboard() {
   // Mostrar loading mientras se verifica la biblioteca activa
   if (loading) {
     return (
-      <>
+      <div className="page page-dashboard">
         <Navbar />
         <div className="dashboard-container">
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
             <p style={{ color: 'white', fontSize: '1.2rem' }}>Cargando dashboard...</p>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="page page-dashboard">
       <Navbar />
       <div className="dashboard-container">
         <section className="mt-8 mb-4">
@@ -299,6 +299,6 @@ export default function Dashboard() {
                  </div>
         </section>
       </div>
-    </>
+    </div>
   );
 } 
