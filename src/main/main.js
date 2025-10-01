@@ -1,10 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const DatabaseHandlers = require('./ipc/databaseHandlers');
 
 // Mantener una referencia global del objeto de ventana
 let mainWindow;
-let databaseHandlers;
 
 function createWindow() {
   // Crear la ventana del navegador
@@ -72,10 +70,6 @@ function createWindow() {
 // Inicializar la aplicación
 app.whenReady().then(() => {
   try {
-    // Inicializar los manejadores de base de datos
-    databaseHandlers = new DatabaseHandlers();
-    console.log('Manejadores de base de datos inicializados');
-    
     // Crear la ventana principal
     createWindow();
     
@@ -111,13 +105,6 @@ function setupAppEvents() {
     
     try {
       console.log('Cerrando aplicación...');
-      
-      // Cerrar la base de datos
-      if (databaseHandlers) {
-        await databaseHandlers.db.close();
-        databaseHandlers.cleanup();
-        console.log('Base de datos cerrada correctamente');
-      }
       
       // Cerrar la aplicación
       app.quit();
@@ -172,4 +159,4 @@ if (process.defaultApp) {
 }
 
 // Exportar para uso en otros módulos
-module.exports = { mainWindow, databaseHandlers }; 
+module.exports = { mainWindow }; 
