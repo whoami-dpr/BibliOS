@@ -222,8 +222,8 @@
 
 .back-button {
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
+  top: 0.25rem;
+  right: 0.25rem;
   background: rgba(55, 65, 81, 0.9);
   border: 1px solid rgba(201, 163, 104, 0.3);
   color: #9ca3af;
@@ -516,6 +516,7 @@
 @media (max-width: 1024px) {
   .login-container {
     overflow-y: auto;
+    padding-top: 80px;
   }
   
   .login-wrapper {
@@ -529,9 +530,9 @@
   
   .login-form-section {
     flex: none;
-    min-height: 100vh;
+    min-height: auto;
     padding: 1rem;
-    padding-top: 2rem;
+    padding-top: 0;
   }
   
   .login-content {

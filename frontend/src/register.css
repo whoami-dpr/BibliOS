@@ -61,8 +61,8 @@
 
 .back-button {
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
+  top: 0.25rem;
+  right: 0.25rem;
   background: rgba(0, 0, 0, 0.8);
   border: 1px solid rgba(201, 163, 104, 0.3);
   color: #c9a368;
@@ -438,10 +438,11 @@
   .register-container {
     overflow-y: auto;
     align-items: flex-start;
+    padding-top: 80px;
   }
   
   .register-content {
-    margin: 1.5rem auto 0 auto;
+    margin: 1rem auto 0 auto;
     padding: 1rem 1rem 3rem 1rem;
     min-height: auto;
   }
@@ -464,10 +465,11 @@
   .register-container {
     overflow-y: auto;
     align-items: flex-start;
+    padding-top: 80px;
   }
   
   .register-content {
-    margin: 1rem auto 0 auto;
+    margin: 0.75rem auto 0 auto;
     padding: 0.5rem 0.5rem 3rem 0.5rem;
     min-height: auto;
   }
@@ -500,6 +502,8 @@
   .back-button {
     width: 30px;
     height: 30px;
+    top: 0.25rem;
+    right: 0.25rem;
   }
   
   .form-row {
@@ -520,10 +524,11 @@
   .register-container {
     overflow-y: auto;
     align-items: flex-start;
+    padding-top: 80px;
   }
   
   .register-content {
-    margin: 0.75rem auto 0 auto;
+    margin: 0.5rem auto 0 auto;
     padding: 0.25rem 0.25rem 3rem 0.25rem;
     min-height: auto;
   }
@@ -576,6 +581,7 @@
   .register-container {
     overflow-y: auto;
     align-items: flex-start;
+    padding-top: 80px;
   }
   
   .register-content {

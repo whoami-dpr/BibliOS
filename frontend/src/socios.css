@@ -6,7 +6,7 @@
   min-height: 100vh;
   color: white;
   background: linear-gradient(to right, #121212, #1c1c1c);
-  padding-top: 20px;
+  padding-top: 80px;
 }
 
 /* Eliminar outline azul globalmente */
@@ -610,7 +610,7 @@ button:hover {
 @media (max-width: 768px) {
   .socios-container {
     padding: 0.5rem;
-    padding-top: 20px;
+    padding-top: 80px;
   }
   
   .socios-header {

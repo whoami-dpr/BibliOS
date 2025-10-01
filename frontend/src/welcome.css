@@ -103,6 +103,23 @@ header {
     color: #ffffff;
 }
 
+/* Toggle móvil */
+.menu-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
 .logout-btn {
     background-color: #dc2626;
     color: white;
@@ -295,26 +312,91 @@ body.home-page-active {
 }
 
 @media (max-width: 768px) {
-    .nav {
-        flex-direction: row;
-        overflow-x: auto;
+    header {
         padding: 0 1rem;
-        justify-content: flex-start;
-        -webkit-overflow-scrolling: touch; 
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        left: 0;
+        flex-direction: column;
+        background: rgba(18, 18, 18, 0.98);
+        backdrop-filter: blur(10px);
+        padding: 0.75rem 1rem 1rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        display: none;
+        gap: 0.5rem;
+    }
+
+    .nav.open {
+        display: flex;
+    }
+
+    .nav li { 
+        width: 100%;
     }
 
     .nav a {
-        margin: 0 12px;
-        padding-bottom: 6px;
+        margin: 0;
+        padding: 10px 0;
         font-size: 1rem;
-        white-space: nowrap;
+        display: block;
+        width: 100%;
+    }
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 1.25rem;
+        gap: 1.25rem;
+        align-items: start;
+        height: auto;
+        min-height: calc(100vh - 70px);
     }
 
-    .nav::-webkit-scrollbar {
-        height: 6px;
+    .hero-text {
+        align-items: flex-start;
     }
-    .nav::-webkit-scrollbar-thumb {
-        background: #c9a368;
-        border-radius: 3px;
+
+    .hero-text .hero-title {
+        font-size: 2.25rem;
+    }
+
+    .hero-text .hero-description {
+        font-size: 1rem;
+    }
+
+    .hero-img img {
+        max-width: 260px;
     }
 } 
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 1rem;
+        gap: 1rem;
+        min-height: auto;
+    }
+
+    .hero-text .tagline {
+        font-size: 0.8rem;
+    }
+
+    .hero-text .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-text .hero-description {
+        font-size: 0.95rem;
+    }
+
+    .cta-group {
+        width: 100%;
+    }
+}

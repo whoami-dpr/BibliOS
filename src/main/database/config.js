@@ -161,3 +161,5 @@ module.exports = {
     isPostgreSQLAvailable,
     createDatabaseIfNotExists
 };
+
+

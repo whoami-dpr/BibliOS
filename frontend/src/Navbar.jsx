@@ -1,14 +1,16 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, LogIn } from 'lucide-react';
+import { LogOut, LogIn, Menu, X } from 'lucide-react';
 import './welcome.css';
 import { useAuth } from './hooks/useAuth.js';
 import { useLibrary } from './hooks/useLibrary.js';
+import { useState } from 'react';
 
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
   const { libraries } = useLibrary();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const handleLogout = () => {
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
@@ -27,6 +29,9 @@ export default function Navbar() {
     }
   };
 
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const closeMenu = () => setIsMenuOpen(false);
+
   // Páginas que requieren navbar simple (sin autenticación)
   const isSimplePage = location.pathname === '/' || 
                        location.pathname === '/login' || 
@@ -35,14 +40,22 @@ export default function Navbar() {
   if (isSimplePage) {
     return (
       <header>
-        <Link to="/" className="logo">
+        <Link to="/" className="logo" onClick={closeMenu}>
           <span className="logo-text">BibliOS</span>
         </Link>
-        <ul className="nav">
-          <li><Link to="/registro">Registrar Biblioteca</Link></li>
+        <button 
+          className="menu-toggle"
+          aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={isMenuOpen}
+          onClick={toggleMenu}
+        >
+          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+        <ul className={`nav ${isMenuOpen ? 'open' : ''}`}>
+          <li><Link to="/registro" onClick={closeMenu}>Registrar Biblioteca</Link></li>
           <li>
             <button 
-              onClick={handleLogin}
+              onClick={() => { closeMenu(); handleLogin(); }}
               className="login-btn"
               title="Iniciar sesión"
             >
@@ -58,18 +71,26 @@ export default function Navbar() {
   // Navbar completo solo para páginas autenticadas
   return (
     <header>
-      <Link to="/" className="logo">
+      <Link to="/" className="logo" onClick={closeMenu}>
         <span className="logo-text">BibliOS</span>
       </Link>
-      <ul className="nav">
-        <li><Link to="/dashboard">Dashboard</Link></li>
-        <li><Link to="/prestamos">Prestamos</Link></li>
-        <li><Link to="/socios">Socios</Link></li>
-        <li><Link to="/libros">Libros</Link></li>
+      <button 
+        className="menu-toggle"
+        aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+        aria-expanded={isMenuOpen}
+        onClick={toggleMenu}
+      >
+        {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+      </button>
+      <ul className={`nav ${isMenuOpen ? 'open' : ''}`}>
+        <li><Link to="/dashboard" onClick={closeMenu}>Dashboard</Link></li>
+        <li><Link to="/prestamos" onClick={closeMenu}>Prestamos</Link></li>
+        <li><Link to="/socios" onClick={closeMenu}>Socios</Link></li>
+        <li><Link to="/libros" onClick={closeMenu}>Libros</Link></li>
         {isAuthenticated ? (
           <li>
             <button 
-              onClick={handleLogout}
+              onClick={() => { closeMenu(); handleLogout(); }}
               className="logout-btn"
               title="Cerrar sesión"
             >
@@ -80,7 +101,7 @@ export default function Navbar() {
         ) : (
           <li>
             <button 
-              onClick={handleLogin}
+              onClick={() => { closeMenu(); handleLogin(); }}
               className="login-btn"
               title="Iniciar sesión"
             >
