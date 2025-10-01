@@ -305,6 +305,21 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1400px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .header-content {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .text-lg {
+    max-width: 500px;
+  }
+}
+
 @media (max-width: 1200px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -317,6 +332,21 @@
   .alerts-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  .header-content {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+  
+  .header-separator {
+    display: none !important;
+  }
+  
+  .text-lg {
+    max-width: 100%;
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 768px) {
@@ -327,28 +357,36 @@
   
   .dashboard-header {
     max-width: 100%;
-    flex-direction: row !important;
+    flex-direction: column !important;
     gap: 1rem;
     display: flex !important;
-    align-items: center !important;
+    align-items: flex-start !important;
   }
   
   .header-content {
-    flex-direction: row !important;
+    flex-direction: column !important;
     text-align: left;
-    gap: 1rem;
+    gap: 0.5rem;
     flex: 1;
     display: flex !important;
-    align-items: center !important;
+    align-items: flex-start !important;
+    width: 100%;
   }
   
-  .dashboard-header h1 {
+  .text-4xl {
     font-size: 2rem;
+    text-align: left;
+  }
+  
+  .text-lg {
+    font-size: 0.9rem;
     text-align: left;
   }
   
   .new-library-button {
     align-self: flex-start;
+    width: 100%;
+    justify-content: center;
   }
   
   .stats-grid {
@@ -376,34 +414,75 @@
   .alert-card {
     padding: 1rem;
   }
+  
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .chart-header h3 {
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .dashboard-header h1 {
-    font-size: 1.25rem;
+  .dashboard-container {
+    padding: 0.25rem;
+    padding-top: 15px;
   }
   
-  .dashboard-header p {
-    font-size: 0.9rem;
-    text-align: left;
+  .text-4xl {
+    font-size: 1.5rem;
   }
   
-  .header-separator {
-    font-size: 1.25rem;
+  .text-lg {
+    font-size: 0.85rem;
+  }
+  
+  .new-library-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.85rem;
   }
   
   .stat-card {
     flex-direction: column;
     text-align: center;
+    padding: 0.75rem;
   }
   
   .stat-icon {
     margin-bottom: 0.5rem;
   }
   
+  .stat-content h3 {
+    font-size: 0.8rem;
+  }
+  
+  .stat-value {
+    font-size: 1.25rem;
+  }
+  
+  .chart-card {
+    padding: 0.75rem;
+  }
+  
+  .chart-header h3 {
+    font-size: 1rem;
+  }
+  
   .alert-card {
     flex-direction: column;
     text-align: center;
+    padding: 0.75rem;
+  }
+  
+  .alert-card h4 {
+    font-size: 0.9rem;
+  }
+  
+  .alert-card p {
+    font-size: 0.8rem;
   }
 }
 

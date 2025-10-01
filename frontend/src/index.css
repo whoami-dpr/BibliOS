@@ -64,3 +64,34 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Responsive Global Styles */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 2.5em;
+  }
+  
+  button {
+    padding: 0.5em 1em;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+  
+  button {
+    padding: 0.4em 0.8em;
+    font-size: 0.85em;
+  }
+}

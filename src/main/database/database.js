@@ -552,7 +552,6 @@ class DatabaseService {
             throw error;
         }
     }
-
     async getSocios(bibliotecaId, filters = {}) {
         try {
             const whereClause = { bibliotecaId };
