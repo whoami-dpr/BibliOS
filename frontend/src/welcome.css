@@ -169,8 +169,8 @@ body {
 }
 
 body.home-page-active {
-    overflow: hidden;
-    height: 100vh;
+    overflow: auto;
+    height: auto;
 }
 
 .hero {

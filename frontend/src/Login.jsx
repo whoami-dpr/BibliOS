@@ -15,16 +15,16 @@ function Login() {
   const [isChanging, setIsChanging] = useState(false);
 
   const inspirationTexts = [
-    "We work for us",
-    "Knowledge is power",
-    "Books change lives",
-    "Learning never ends",
-    "Education is freedom",
-    "Read, learn, grow",
-    "Knowledge shared is knowledge multiplied",
-    "Every book is a journey",
-    "Libraries are the future",
-    "Reading opens minds"
+    "Trabajamos para nosotros",
+    "El conocimiento es poder",
+    "Los libros cambian vidas",
+    "El aprendizaje nunca termina",
+    "La educación es libertad",
+    "Lee, aprende, crece",
+    "El conocimiento compartido se multiplica",
+    "Cada libro es un viaje",
+    "Las bibliotecas son el futuro",
+    "La lectura abre mentes"
   ];
 
   // Efecto para cambiar el texto cada 3 segundos con transición
