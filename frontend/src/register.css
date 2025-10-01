@@ -1,48 +1,87 @@
 /* Register Page Styles */
 .register-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #121212 0%, #1c1c1c 100%);
-  padding: 0.5rem;
-  padding-top: 20px;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.register-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(201, 163, 104, 0.06) 0%, rgba(201, 163, 104, 0.02) 40%, transparent 70%),
+    radial-gradient(circle at 80% 80%, rgba(201, 163, 104, 0.05) 0%, rgba(201, 163, 104, 0.015) 40%, transparent 70%),
+    radial-gradient(circle at 50% 50%, rgba(201, 163, 104, 0.04) 0%, rgba(201, 163, 104, 0.01) 50%, transparent 80%),
+    radial-gradient(circle at 30% 70%, rgba(201, 163, 104, 0.03) 0%, rgba(201, 163, 104, 0.01) 50%, transparent 75%),
+    radial-gradient(circle at 70% 30%, rgba(201, 163, 104, 0.025) 0%, rgba(201, 163, 104, 0.01) 50%, transparent 75%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .register-content {
   width: 100%;
+  max-width: 1200px;
+  margin: 5rem auto 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  padding: 2rem 2rem 4rem 2rem;
+  min-height: 100vh;
 }
 
 .register-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   width: 100%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 2rem;
+  gap: 1rem;
+  padding-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .back-button {
   position: absolute;
-  top: -10px;
-  right: 0;
-  background: transparent;
-  border: none;
-  color: white;
+  top: -0.5rem;
+  right: -0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(201, 163, 104, 0.3);
+  color: #c9a368;
   padding: 0.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
 }
 
 .back-button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(201, 163, 104, 0.2);
   border-color: #c9a368;
+  transform: scale(1.05);
 }
 
 .header-content {
@@ -52,7 +91,8 @@
   gap: 1rem;
   flex: 1;
   width: 100%;
-  flex-wrap: nowrap !important;
+  flex-wrap: wrap !important;
+  min-width: 0;
 }
 
 .header-separator {
@@ -66,25 +106,25 @@
 }
 
 .register-header h1 {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #c9a368 0%, #e6c27d 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #c9a368;
   white-space: nowrap;
   display: inline-block !important;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  text-shadow: 0 0 20px rgba(201, 163, 104, 0.3);
+  min-width: 0;
 }
 
 .register-header p {
-  font-size: 1rem;
-  color: white;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: #d1d5db;
   margin: 0;
   max-width: 600px;
   display: inline-block !important;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .register-sections {
@@ -97,24 +137,26 @@
 
 /* Form Section */
 .register-form-section {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+  border: 1px solid rgba(201, 163, 104, 0.2);
   border-radius: 16px;
-  padding: 1.5rem;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 2rem 2rem 3rem 2rem;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   width: 100%;
   height: fit-content;
+  margin-bottom: 2rem;
 }
 
 .register-form-section h2 {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 1.5rem 0;
-  color: white;
+  color: #c9a368;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  text-shadow: 0 0 15px rgba(201, 163, 104, 0.3);
 }
 
 .register-form {
@@ -160,28 +202,30 @@
 .form-group input,
 .form-group textarea {
   padding: 1rem 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(201, 163, 104, 0.3);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   font-size: 1rem;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   width: 100%;
   box-sizing: border-box;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: #c9a368;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(201, 163, 104, 0.1);
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 0 3px rgba(201, 163, 104, 0.2);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: #6b7280;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .form-group input.error,
@@ -194,6 +238,50 @@
   font-size: 0.8rem;
   color: #ef4444;
   margin-top: 0.25rem;
+}
+
+/* Estilos para el campo de contraseña */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  padding-right: 3rem;
+  width: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #c9a368;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  background: rgba(201, 163, 104, 0.1);
+  color: #d4af37;
+}
+
+.password-toggle:active {
+  transform: scale(0.95);
+}
+
+.password-hint {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.5rem;
+  font-style: italic;
+  font-family: 'Inter', sans-serif;
 }
 
 .submit-button {
@@ -210,7 +298,7 @@
   justify-content: center;
   gap: 0.5rem;
   transition: all 0.3s ease;
-  margin-top: 2rem;
+  margin-top: 3rem;
   width: 100%;
   max-width: 300px;
   margin-left: auto;
@@ -347,8 +435,19 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .register-container {
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+  
+  .register-content {
+    margin: 1.5rem auto 0 auto;
+    padding: 1rem 1rem 3rem 1rem;
+    min-height: auto;
+  }
+  
   .form-row {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
   
@@ -357,88 +456,95 @@
   }
   
   .register-header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 768px) {
   .register-container {
-    padding: 1rem;
-    padding-top: 20px;
+    overflow-y: auto;
+    align-items: flex-start;
   }
   
   .register-content {
-    align-items: stretch;
-    width: 100%;
-  }
-  
-  .register-sections {
-    width: 100%;
+    margin: 1rem auto 0 auto;
+    padding: 0.5rem 0.5rem 3rem 0.5rem;
+    min-height: auto;
   }
   
   .register-header {
-    max-width: 100%;
-    flex-direction: row !important;
-    gap: 1rem;
-    display: flex !important;
-    align-items: center !important;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding-top: 0.5rem;
   }
   
   .header-content {
-    flex-direction: row !important;
-    text-align: left;
-    gap: 1rem;
-    flex: 1;
-    display: flex !important;
-    align-items: center !important;
-  }
-  
-  .header-separator {
-    display: inline;
-    white-space: nowrap;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
+    width: 100%;
   }
   
   .register-header h1 {
-    font-size: 2rem;
-    text-align: left;
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    white-space: normal;
+    word-break: break-word;
   }
   
   .register-header p {
-    font-size: 0.9rem;
-    text-align: left;
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    white-space: normal;
   }
   
   .back-button {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
   }
   
   .form-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
   
   .form-row-2 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
   
-  .register-form {
-    width: 100%;
+  .register-form-section {
+    padding: 1.5rem 1.5rem 2.5rem 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .register-form-section,
-  .existing-libraries-section {
-    padding: 1.5rem;
+  .register-container {
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+  
+  .register-content {
+    margin: 0.75rem auto 0 auto;
+    padding: 0.25rem 0.25rem 3rem 0.25rem;
+    min-height: auto;
+  }
+  
+  .register-header {
+    padding-top: 0.25rem;
+  }
+  
+  .register-form-section {
+    padding: 1rem 1rem 2rem 1rem;
   }
   
   .register-header h1 {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 6vw, 1.5rem);
+    white-space: normal;
+    word-break: break-word;
   }
   
   .register-header p {
-    font-size: 0.8rem;
+    font-size: clamp(0.6rem, 3vw, 0.8rem);
+    white-space: normal;
   }
   
   .header-separator {
@@ -456,10 +562,56 @@
   .submit-button {
     padding: 1rem 2rem;
     font-size: 1rem;
+    margin-top: 2rem;
   }
   
   .form-group input,
   .form-group textarea {
     padding: 0.875rem 1rem;
+  }
+}
+
+/* Pantallas muy pequeñas (ventanas minimizadas) */
+@media (max-width: 400px) {
+  .register-container {
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+  
+  .register-content {
+    margin: 0.5rem auto 0 auto;
+    padding: 0.25rem 0.25rem 3rem 0.25rem;
+    min-height: auto;
+  }
+  
+  .register-header {
+    padding-top: 0.25rem;
+  }
+  
+  .register-form-section {
+    padding: 0.75rem 0.75rem 2rem 0.75rem;
+  }
+  
+  .register-header h1 {
+    font-size: clamp(0.9rem, 7vw, 1.2rem);
+    white-space: normal;
+    word-break: break-word;
+  }
+  
+  .register-header p {
+    font-size: clamp(0.5rem, 3.5vw, 0.75rem);
+    white-space: normal;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+  }
+  
+  .submit-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
   }
 } 

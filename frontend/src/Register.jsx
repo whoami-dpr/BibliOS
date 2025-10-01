@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Library, MapPin, Phone, Mail, User, Building, Save, X } from 'lucide-react';
+import { Library, MapPin, Phone, Mail, User, Building, Save, X, Lock, Eye, EyeOff } from 'lucide-react';
 import './register.css';
 import Navbar from './Navbar.jsx';
 import { useLibrary } from './hooks/useLibrary.js';
+import { useAuth } from './hooks/useAuth.js';
 
 function Register() {
   const navigate = useNavigate();
   const { libraries, createLibrary, selectLibrary, deleteLibrary } = useLibrary();
+  const { createLibraryAuth } = useAuth();
   const [formData, setFormData] = useState({
     nombre: '',
     direccion: '',
@@ -19,6 +21,11 @@ function Register() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Estados para autenticación
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
   const validateForm = () => {
     const newErrors = {};
@@ -39,7 +46,19 @@ function Register() {
       newErrors.telefono = 'El teléfono no es válido';
     }
 
+    // Validar contraseña
+    if (!password.trim()) {
+      setPasswordError('La contraseña es requerida');
+      return false;
+    }
+
+    if (password.length < 6) {
+      setPasswordError('La contraseña debe tener al menos 6 caracteres');
+      return false;
+    }
+
     setErrors(newErrors);
+    setPasswordError('');
     return Object.keys(newErrors).length === 0;
   };
 
@@ -70,10 +89,13 @@ function Register() {
 
     try {
       // Crear nueva biblioteca usando el hook
-      createLibrary(formData);
+      const newLibrary = createLibrary(formData);
+      
+      // Configurar autenticación para la biblioteca (solo contraseña)
+      createLibraryAuth(newLibrary, 'password', password);
       
       // Mostrar mensaje de éxito
-      alert('¡Biblioteca registrada exitosamente!');
+      alert('¡Biblioteca registrada exitosamente! Ya puedes acceder con tus credenciales.');
       
       // Redirigir al dashboard
       navigate('/dashboard');
@@ -238,6 +260,39 @@ function Register() {
                     placeholder="Breve descripción de la biblioteca..."
                     rows="3"
                   />
+                </div>
+
+                {/* Campo de contraseña */}
+                <div className="form-group">
+                  <label htmlFor="password">
+                    <Lock size={16} />
+                    Contraseña de acceso *
+                  </label>
+                  <div className="password-input-container">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      name="password"
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        if (passwordError) {
+                          setPasswordError('');
+                        }
+                      }}
+                      placeholder="Ingresa una contraseña segura"
+                      className={passwordError ? 'error' : ''}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                  {passwordError && <span className="error-message">{passwordError}</span>}
+                  <p className="password-hint">Usa al menos 6 caracteres con letras y números</p>
                 </div>
 
                 <button 

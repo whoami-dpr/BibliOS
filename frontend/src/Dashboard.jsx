@@ -6,15 +6,14 @@ import {
 } from 'recharts';
 import { 
   BookOpen, Users, CalendarDays, TrendingUp, Clock, AlertTriangle,
-  CheckCircle, X, Activity, Library, BarChart3, PieChart as PieChartIcon
+  CheckCircle, X, Activity, Library, BarChart3, PieChart as PieChartIcon, LogOut
 } from 'lucide-react';
 import Navbar from './Navbar.jsx';
 import './dashboard.css';
-import { useLibrary } from './hooks/useLibrary.js';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { activeLibrary, hasActiveLibrary, getLibraryStats, loading } = useLibrary();
+  const [activeLibrary, setActiveLibrary] = useState(null);
   const [stats, setStats] = useState({
     totalLibros: 0,
     totalSocios: 0,
@@ -51,21 +50,25 @@ export default function Dashboard() {
   ];
 
   useEffect(() => {
-    // Esperar a que termine de cargar antes de verificar
-    if (loading) return;
-
-    // TEMPORALMENTE COMENTADO: Verificar si hay una biblioteca activa
-    // if (!hasActiveLibrary()) {
-    //   navigate('/registro');
-    //   return;
-    // }
-
-    // Cargar estadísticas de la biblioteca activa
-    const libraryStats = getLibraryStats();
-    if (libraryStats) {
-      setStats(libraryStats);
+    // Cargar biblioteca activa desde localStorage
+    const storedLibrary = localStorage.getItem('bibliotecaActiva');
+    if (storedLibrary) {
+      const library = JSON.parse(storedLibrary);
+      setActiveLibrary(library);
+      
+      // Cargar estadísticas mock
+      setStats({
+        totalLibros: 1250,
+        totalSocios: 342,
+        prestamosActivos: 89,
+        prestamosVencidos: 12,
+        prestamosCompletados: 156
+      });
+    } else {
+      // Si no hay biblioteca activa, redirigir al login
+      navigate('/login');
     }
-  }, [loading, hasActiveLibrary, getLibraryStats, navigate]);
+  }, [navigate]);
 
   const StatCard = ({ icon: Icon, title, value, color, change }) => (
     <div className="stat-card">
@@ -84,8 +87,16 @@ export default function Dashboard() {
     </div>
   );
 
-  // Mostrar loading mientras se verifica la biblioteca activa
-  if (loading) {
+  const handleLogout = () => {
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+      localStorage.removeItem('bibliotecaActiva');
+      localStorage.removeItem('authData');
+      navigate('/');
+    }
+  };
+
+  // Mostrar loading si no hay biblioteca activa
+  if (!activeLibrary) {
     return (
       <>
         <Navbar />

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getMockLibraryStats } from '../utils/mockData.js';
 
 export const useLibrary = () => {
   const [activeLibrary, setActiveLibrary] = useState(null);
@@ -105,8 +106,12 @@ export const useLibrary = () => {
   const getLibraryStats = () => {
     if (!activeLibrary) return null;
 
-    // Aquí podrías agregar lógica para obtener estadísticas específicas de la biblioteca
-    // Por ahora retornamos datos de ejemplo
+    // Usar estadísticas mock si es una biblioteca mock
+    if (activeLibrary.id.startsWith('mock-library-')) {
+      return getMockLibraryStats(activeLibrary.id);
+    }
+
+    // Para bibliotecas reales, retornar datos de ejemplo
     return {
       totalLibros: 1250,
       totalSocios: 172,
