@@ -147,7 +147,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getAppVersion: () => process.env.npm_package_version || '1.0.0',
 
     // Verificar si estamos en desarrollo
-    isDevelopment: () => process.env.NODE_ENV === 'development'
+    isDevelopment: () => process.env.NODE_ENV === 'development',
+
+    // ===== APIS DE VENTANA =====
+    
+    // Forzar focus de la ventana
+    focusWindow: () => 
+        ipcRenderer.invoke('window:focus')
 });
 
 // Exponer utilidades adicionales
@@ -283,3 +289,4 @@ ipcRenderer.on('error', (event, error) => {
 
 // Log de inicialización
 console.log('Preload script cargado correctamente');
+console.log('Exponiendo electronAPI con focusWindow disponible');

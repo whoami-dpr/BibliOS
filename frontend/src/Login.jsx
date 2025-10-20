@@ -41,42 +41,78 @@ function Login() {
     return () => clearInterval(interval);
   }, [inspirationTexts.length]);
 
+  // Limpiar formulario al cargar la página
+  useEffect(() => {
+    setLibraryName('');
+    setPassword('');
+    setError('');
+    setIsLoading(false);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
     try {
-      // Validación simple
-      if (libraryName.toLowerCase().includes('utn') && password === 'UTN') {
-        // Simular autenticación exitosa
-        const mockLibrary = {
-          id: 'mock-library-1',
-          nombre: 'UTN-FRLP',
-          direccion: 'Av. Universidad 123, Villa María',
-          telefono: '(353) 123-4567',
-          email: 'biblioteca@utn.edu.ar',
-          responsable: 'Dr. María González',
-          horarios: 'Lunes a Viernes 8:00 - 18:00',
-          descripcion: 'Biblioteca principal de la Universidad Tecnológica Nacional',
-          fechaCreacion: '2024-01-15T10:00:00.000Z',
-          activa: true
-        };
+      // Verificar si estamos en Electron
+      if (window.electronAPI) {
+        // Usar la base de datos SQLite
+        const bibliotecas = await window.electronAPI.getBibliotecas();
         
-        // Guardar en localStorage
-        localStorage.setItem('bibliotecaActiva', JSON.stringify(mockLibrary));
-        localStorage.setItem('authData', JSON.stringify({
-          libraryId: 'mock-library-1',
-          authMethod: 'password',
-          hashedValue: '123456789',
-          salt: 'mock-salt-1',
-          createdAt: '2024-01-15T10:00:00.000Z'
-        }));
+        // Buscar la biblioteca por nombre
+        const biblioteca = bibliotecas.find(bib => 
+          bib.nombre.toLowerCase().includes(libraryName.toLowerCase())
+        );
         
-        // Redirigir al dashboard
-        navigate('/dashboard');
+        if (biblioteca) {
+          // Activar la biblioteca encontrada
+          await window.electronAPI.activateBiblioteca(biblioteca.id);
+          
+          // Guardar en localStorage para compatibilidad con el sistema de auth
+          localStorage.setItem('bibliotecaActiva', JSON.stringify(biblioteca));
+          localStorage.setItem('authData', JSON.stringify({
+            libraryId: biblioteca.id,
+            authMethod: 'password',
+            hashedValue: '123456789', // Por ahora usar un hash simple
+            salt: 'mock-salt-1',
+            createdAt: new Date().toISOString()
+          }));
+          
+          // Redirigir al dashboard
+          navigate('/dashboard');
+        } else {
+          setError('Biblioteca no encontrada. Verifica el nombre o crea una nueva biblioteca.');
+        }
       } else {
-        setError('Credenciales incorrectas. Usa "UTN-FRLP" y "UTN"');
+        // Fallback para desarrollo sin Electron
+        if (libraryName.toLowerCase().includes('utn') && password === 'UTN') {
+          const mockLibrary = {
+            id: 'mock-library-1',
+            nombre: 'UTN-FRLP',
+            direccion: 'Av. Universidad 123, Villa María',
+            telefono: '(353) 123-4567',
+            email: 'biblioteca@utn.edu.ar',
+            responsable: 'Dr. María González',
+            horarios: 'Lunes a Viernes 8:00 - 18:00',
+            descripcion: 'Biblioteca principal de la Universidad Tecnológica Nacional',
+            fechaCreacion: '2024-01-15T10:00:00.000Z',
+            activa: true
+          };
+          
+          localStorage.setItem('bibliotecaActiva', JSON.stringify(mockLibrary));
+          localStorage.setItem('authData', JSON.stringify({
+            libraryId: 'mock-library-1',
+            authMethod: 'password',
+            hashedValue: '123456789',
+            salt: 'mock-salt-1',
+            createdAt: '2024-01-15T10:00:00.000Z'
+          }));
+          
+          navigate('/dashboard');
+        } else {
+          setError('Credenciales incorrectas. Usa "UTN-FRLP" y "UTN"');
+        }
       }
     } catch (error) {
       console.error('Login error:', error);

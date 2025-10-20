@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Library, MapPin, Phone, Mail, User, Building, Save, X, Lock, Eye, EyeOff } from 'lucide-react';
 import './register.css';
@@ -26,6 +26,7 @@ function Register() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+
 
   const validateForm = () => {
     const newErrors = {};
@@ -68,7 +69,7 @@ function Register() {
       ...prev,
       [name]: value
     }));
-    
+
     // Limpiar error del campo cuando el usuario empiece a escribir
     if (errors[name]) {
       setErrors(prev => ({
@@ -78,9 +79,25 @@ function Register() {
     }
   };
 
+  const clearForm = () => {
+    setFormData({
+      nombre: '',
+      direccion: '',
+      telefono: '',
+      email: '',
+      responsable: '',
+      horarios: '',
+      descripcion: ''
+    });
+    setPassword('');
+    setErrors({});
+    setPasswordError('');
+    setIsSubmitting(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -89,41 +106,196 @@ function Register() {
 
     try {
       // Crear nueva biblioteca usando el hook
-      const newLibrary = createLibrary(formData);
-      
+      const newLibrary = await createLibrary(formData);
+
       // Configurar autenticación para la biblioteca (solo contraseña)
       createLibraryAuth(newLibrary, 'password', password);
+
+      // Limpiar el formulario COMPLETAMENTE
+      clearForm();
       
-      // Mostrar mensaje de éxito
-      alert('¡Biblioteca registrada exitosamente! Ya puedes acceder con tus credenciales.');
+      // FORZAR LIMPIEZA ADICIONAL DEL ESTADO
+      setFormData({
+        nombre: '',
+        direccion: '',
+        telefono: '',
+        email: '',
+        responsable: '',
+        horarios: '',
+        descripcion: ''
+      });
+      setPassword('');
+      setErrors({});
+      setPasswordError('');
+      setIsSubmitting(false);
       
-      // Redirigir al dashboard
-      navigate('/dashboard');
+      // LOG PARA VERIFICAR LIMPIEZA
+      console.log('🧹 FORMULARIO LIMPIADO COMPLETAMENTE');
+
+      // SOLUCIÓN DEFINITIVA: NO usar diálogos nativos que roben el focus
+      // En su lugar, mostrar un mensaje temporal en pantalla
+      const successMessage = document.createElement('div');
+      successMessage.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        max-width: 300px;
+      `;
+      successMessage.textContent = '¡Biblioteca registrada exitosamente!';
+      document.body.appendChild(successMessage);
+
+      // Remover el mensaje después de 3 segundos
+      setTimeout(() => {
+        if (successMessage.parentNode) {
+          successMessage.parentNode.removeChild(successMessage);
+        }
+      }, 3000);
+
+      // SOLUCIÓN DEFINITIVA: NO navegar automáticamente, dejar al usuario en la página
+      // Y usar un enfoque diferente para el focus
       
+      // Crear un input temporal invisible para capturar el focus
+      const tempInput = document.createElement('input');
+      tempInput.style.cssText = 'position: absolute; left: -9999px; opacity: 0;';
+      document.body.appendChild(tempInput);
+      
+      // Forzar focus en el input temporal primero
+      tempInput.focus();
+      
+      // Luego mover el focus al input real
+      setTimeout(() => {
+        const firstInput = document.querySelector('input[name="nombre"]');
+        if (firstInput) {
+          firstInput.focus();
+          firstInput.select(); // Seleccionar todo el texto
+        }
+        
+        // Remover el input temporal
+        document.body.removeChild(tempInput);
+      }, 100);
+
+      // NO navegar automáticamente - dejar al usuario en la página para seguir usando
+      // setTimeout(() => {
+      //   navigate('/dashboard');
+      // }, 1000);
+
     } catch (error) {
       console.error('Error al registrar biblioteca:', error);
-      alert('Error al registrar la biblioteca. Inténtalo de nuevo.');
+
+      // Mostrar mensaje de error más específico SIN usar alert
+      const errorMessage = document.createElement('div');
+      errorMessage.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #f44336;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        max-width: 300px;
+      `;
+      
+      if (error.message && error.message.includes('Ya existe una biblioteca')) {
+        errorMessage.textContent = `Error: ${error.message}`;
+        // Limpiar solo el nombre para que pueda cambiarlo
+        setFormData(prev => ({ ...prev, nombre: '' }));
+        setErrors(prev => ({ ...prev, nombre: '' }));
+      } else {
+        errorMessage.textContent = 'Error al registrar la biblioteca. Inténtalo de nuevo.';
+        // Limpiar todo el formulario en caso de otros errores
+        clearForm();
+        // FORZAR LIMPIEZA ADICIONAL DEL ESTADO
+        setFormData({
+          nombre: '',
+          direccion: '',
+          telefono: '',
+          email: '',
+          responsable: '',
+          horarios: '',
+          descripcion: ''
+        });
+        setPassword('');
+        setErrors({});
+        setPasswordError('');
+        setIsSubmitting(false);
+        
+        // LOG PARA VERIFICAR LIMPIEZA
+        console.log('🧹 FORMULARIO LIMPIADO COMPLETAMENTE (ERROR)');
+      }
+      
+      document.body.appendChild(errorMessage);
+
+      // Remover el mensaje después de 4 segundos
+      setTimeout(() => {
+        if (errorMessage.parentNode) {
+          errorMessage.parentNode.removeChild(errorMessage);
+        }
+      }, 4000);
+
+      // SOLUCIÓN DEFINITIVA: Usar input temporal para capturar el focus
+      const tempInput = document.createElement('input');
+      tempInput.style.cssText = 'position: absolute; left: -9999px; opacity: 0;';
+      document.body.appendChild(tempInput);
+      
+      // Forzar focus en el input temporal primero
+      tempInput.focus();
+      
+      // Luego mover el focus al input real
+      setTimeout(() => {
+        const targetInput = document.querySelector('input[name="nombre"]');
+        if (targetInput) {
+          targetInput.focus();
+          targetInput.select(); // Seleccionar todo el texto
+        }
+        
+        // Remover el input temporal
+        document.body.removeChild(tempInput);
+      }, 100);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleSelectLibrary = (biblioteca) => {
-    selectLibrary(biblioteca);
-    navigate('/dashboard');
+  const handleSelectLibrary = async (biblioteca) => {
+    try {
+      await selectLibrary(biblioteca);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error selecting library:', error);
+      alert('Error al seleccionar la biblioteca.');
+    }
   };
 
-  const handleDeleteLibrary = (bibliotecaId) => {
+  const handleDeleteLibrary = async (bibliotecaId) => {
     if (!confirm('¿Estás seguro de que quieres eliminar esta biblioteca? Esta acción no se puede deshacer.')) {
       return;
     }
 
-    deleteLibrary(bibliotecaId);
+    try {
+      await deleteLibrary(bibliotecaId);
+    } catch (error) {
+      console.error('Error deleting library:', error);
+      alert('Error al eliminar la biblioteca.');
+    }
   };
 
   return (
     <>
       <Navbar />
+      
+      
       <div className="register-container">
         <div className="register-content">
           <div className="register-header">
@@ -303,6 +475,8 @@ function Register() {
                   <Save size={18} />
                   {isSubmitting ? 'Registrando...' : 'Registrar Biblioteca'}
                 </button>
+                
+                {/* Debug info */}
               </form>
             </section>
 

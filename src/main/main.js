@@ -108,7 +108,11 @@ function setupAppEvents() {
 
   // Manejar el cierre de la aplicación
   app.on('before-quit', async (event) => {
+    // Solo procesar el cierre si no estamos ya cerrando
+    if (app.isQuiting) return;
+    
     event.preventDefault();
+    app.isQuiting = true;
     
     try {
       console.log('Cerrando aplicación...');
@@ -121,10 +125,10 @@ function setupAppEvents() {
       }
       
       // Cerrar la aplicación
-      app.quit();
+      app.exit(0);
     } catch (error) {
       console.error('Error al cerrar la aplicación:', error);
-      app.quit();
+      app.exit(1);
     }
   });
 

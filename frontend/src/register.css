@@ -204,22 +204,25 @@
   padding: 1rem 1.25rem;
   border: 1px solid rgba(201, 163, 104, 0.3);
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff !important;
   font-size: 1rem;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   width: 100%;
   box-sizing: border-box;
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  opacity: 1;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: #c9a368;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   box-shadow: 0 0 0 3px rgba(201, 163, 104, 0.2);
+  color: #ffffff !important;
+  opacity: 1;
 }
 
 .form-group input::placeholder,

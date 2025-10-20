@@ -265,6 +265,24 @@ class DatabaseHandlers {
                 throw error;
             }
         });
+
+        // ===== MANEJADORES DE VENTANA =====
+        
+        ipcMain.handle('window:focus', async () => {
+            try {
+                const { BrowserWindow } = require('electron');
+                const mainWindow = BrowserWindow.getFocusedWindow();
+                if (mainWindow) {
+                    mainWindow.focus();
+                    mainWindow.show();
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error en focusWindow:', error);
+                throw error;
+            }
+        });
     }
 
     // Método para limpiar todos los manejadores
@@ -302,6 +320,8 @@ class DatabaseHandlers {
         ipcMain.removeHandler('database:backup');
         ipcMain.removeHandler('database:close');
         ipcMain.removeHandler('database:insertSampleData');
+        
+        ipcMain.removeHandler('window:focus');
     }
 }
 
