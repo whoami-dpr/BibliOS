@@ -31,6 +31,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Activar biblioteca
     activateBiblioteca: (id) => 
         ipcRenderer.invoke('database:activateBiblioteca', id),
+    
+    // Crear biblioteca UTN-FRLP con datos de muestra
+    createUTNLibrary: () => 
+        ipcRenderer.invoke('database:createUTNLibrary'),
 
     // ===== APIS DE LIBROS =====
     

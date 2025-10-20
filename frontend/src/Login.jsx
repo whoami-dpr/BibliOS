@@ -215,6 +215,50 @@ function Login() {
               <Library size={16} />
               Registrar Nueva Biblioteca
             </button>
+            
+            {window.electronAPI && (
+              <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #e5e7eb' }}>
+                <p style={{ marginBottom: '10px', fontSize: '14px', color: '#6b7280' }}>
+                  ¿Quieres probar con datos de muestra?
+                </p>
+                <button 
+                  className="register-link-btn"
+                  style={{ backgroundColor: '#3b82f6', color: 'white' }}
+                  onClick={async () => {
+                    try {
+                      setIsLoading(true);
+                      setError('');
+                      const result = await window.electronAPI.createUTNLibrary();
+                      
+                      if (result.exists) {
+                        setError('La biblioteca UTN-FRLP ya existe. Usa "UTN-FRLP" como nombre y "UTN" como contraseña.');
+                      } else {
+                        // Activar la biblioteca creada
+                        await window.electronAPI.activateBiblioteca(result.biblioteca.id);
+                        localStorage.setItem('bibliotecaActiva', JSON.stringify(result.biblioteca));
+                        localStorage.setItem('authData', JSON.stringify({
+                          libraryId: result.biblioteca.id,
+                          authMethod: 'password',
+                          hashedValue: '123456789',
+                          salt: 'mock-salt-1',
+                          createdAt: new Date().toISOString()
+                        }));
+                        navigate('/dashboard');
+                      }
+                    } catch (error) {
+                      console.error('Error creating UTN library:', error);
+                      setError('Error al crear la biblioteca de muestra: ' + error.message);
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  <Library size={16} />
+                  Crear Biblioteca de Muestra UTN-FRLP
+                </button>
+              </div>
+            )}
           </div>
 
                             <div className="login-help">

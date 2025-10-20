@@ -168,7 +168,7 @@ export const useLibrary = () => {
     return activeLibrary !== null;
   };
 
-  const getLibraryStats = () => {
+  const getLibraryStats = async () => {
     if (!activeLibrary) return null;
 
     // Usar estadísticas mock si es una biblioteca mock
@@ -176,13 +176,30 @@ export const useLibrary = () => {
       return getMockLibraryStats(activeLibrary.id);
     }
 
-    // Para bibliotecas reales, retornar datos de ejemplo
+    // Para bibliotecas reales, obtener estadísticas reales desde la base de datos
+    if (window.electronAPI && activeLibrary.id) {
+      try {
+        return await window.electronAPI.getBibliotecaStats(activeLibrary.id);
+      } catch (error) {
+        console.error('Error al obtener estadísticas:', error);
+        // Retornar valores en 0 si hay error
+        return {
+          totalLibros: 0,
+          totalSocios: 0,
+          prestamosActivos: 0,
+          prestamosVencidos: 0,
+          prestamosCompletados: 0
+        };
+      }
+    }
+
+    // Fallback: valores en 0
     return {
-      totalLibros: 1250,
-      totalSocios: 172,
-      prestamosActivos: 45,
-      prestamosVencidos: 8,
-      prestamosCompletados: 1247
+      totalLibros: 0,
+      totalSocios: 0,
+      prestamosActivos: 0,
+      prestamosVencidos: 0,
+      prestamosCompletados: 0
     };
   };
 

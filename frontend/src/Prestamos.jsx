@@ -29,63 +29,67 @@ export default function Prestamos() {
     observaciones: ''
   });
 
-  // Cargar datos de ejemplo al montar el componente
+  // Cargar datos REALES desde la base de datos
   useEffect(() => {
-    // Datos de ejemplo para libros
-    const librosEjemplo = [
-      { id: 1, titulo: 'El Señor de los Anillos', autor: 'J.R.R. Tolkien', isbn: '978-84-450-0000-1', categoria: 'Ficción', disponible: true },
-      { id: 2, titulo: '1984', autor: 'George Orwell', isbn: '978-84-450-0000-2', categoria: 'Ficción', disponible: true },
-      { id: 3, titulo: 'Cien años de soledad', autor: 'Gabriel García Márquez', isbn: '978-84-450-0000-3', categoria: 'Ficción', disponible: false },
-      { id: 4, titulo: 'Don Quijote', autor: 'Miguel de Cervantes', isbn: '978-84-450-0000-4', categoria: 'Clásico', disponible: true },
-      { id: 5, titulo: 'El Principito', autor: 'Antoine de Saint-Exupéry', isbn: '978-84-450-0000-5', categoria: 'Ficción', disponible: true }
-    ];
-
-    // Datos de ejemplo para socios
-    const sociosEjemplo = [
-      { id: 1, nombre: 'María González', email: 'maria@email.com', telefono: '123-456-789', activo: true },
-      { id: 2, nombre: 'Juan Pérez', email: 'juan@email.com', telefono: '123-456-790', activo: true },
-      { id: 3, nombre: 'Ana López', email: 'ana@email.com', telefono: '123-456-791', activo: false },
-      { id: 4, nombre: 'Carlos Rodríguez', email: 'carlos@email.com', telefono: '123-456-792', activo: true },
-      { id: 5, nombre: 'Laura Martínez', email: 'laura@email.com', telefono: '123-456-793', activo: true }
-    ];
-
-    // Datos de ejemplo para préstamos
-    const prestamosEjemplo = [
-      {
-        id: 1,
-        libroId: 1,
-        socioId: 1,
-        fechaPrestamo: '2024-01-15',
-        fechaDevolucion: '2024-02-15',
-        fechaDevolucionReal: null,
-        estado: 'activo',
-        observaciones: 'Préstamo regular'
-      },
-      {
-        id: 2,
-        libroId: 2,
-        socioId: 2,
-        fechaPrestamo: '2024-01-10',
-        fechaDevolucion: '2024-02-10',
-        fechaDevolucionReal: '2024-02-08',
-        estado: 'completado',
-        observaciones: 'Devolución anticipada'
-      },
-      {
-        id: 3,
-        libroId: 3,
-        socioId: 3,
-        fechaPrestamo: '2024-01-05',
-        fechaDevolucion: '2024-02-05',
-        fechaDevolucionReal: null,
-        estado: 'vencido',
-        observaciones: 'Sin contacto'
+    const loadData = async () => {
+      try {
+        // Obtener biblioteca activa
+        const storedLibrary = localStorage.getItem('bibliotecaActiva');
+        if (storedLibrary && window.electronAPI) {
+          const library = JSON.parse(storedLibrary);
+          
+          // Cargar libros REALES de la biblioteca
+          const librosReales = await window.electronAPI.getLibros(library.id, {});
+          const librosFormateados = librosReales.map(libro => ({
+            id: libro.id,
+            titulo: libro.titulo,
+            autor: libro.autor,
+            isbn: libro.isbn || '',
+            categoria: libro.categoria || '',
+            disponible: libro.disponibles > 0
+          }));
+          
+          // Cargar socios REALES de la biblioteca
+          const sociosReales = await window.electronAPI.getSocios(library.id, {});
+          const sociosFormateados = sociosReales.map(socio => ({
+            id: socio.id,
+            nombre: socio.nombre,
+            email: socio.email || '',
+            telefono: socio.telefono || '',
+            activo: socio.estado === 'activo'
+          }));
+          
+          // Cargar préstamos REALES de la biblioteca
+          const prestamosReales = await window.electronAPI.getPrestamos(library.id, {});
+          const prestamosFormateados = prestamosReales.map(prestamo => ({
+            id: prestamo.id,
+            libroId: prestamo.libroId,
+            socioId: prestamo.socioId,
+            fechaPrestamo: prestamo.fechaPrestamo ? prestamo.fechaPrestamo.split('T')[0] : '',
+            fechaDevolucion: prestamo.fechaDevolucion ? prestamo.fechaDevolucion.split('T')[0] : '',
+            fechaDevolucionReal: prestamo.fechaDevolucionReal ? prestamo.fechaDevolucionReal.split('T')[0] : null,
+            estado: prestamo.estado || 'activo',
+            observaciones: prestamo.observaciones || ''
+          }));
+          
+          setLibros(librosFormateados);
+          setSocios(sociosFormateados);
+          setPrestamos(prestamosFormateados);
+        } else {
+          // Si no hay biblioteca activa, no mostrar datos
+          setLibros([]);
+          setSocios([]);
+          setPrestamos([]);
+        }
+      } catch (error) {
+        console.error('Error al cargar datos:', error);
+        setLibros([]);
+        setSocios([]);
+        setPrestamos([]);
       }
-    ];
+    };
 
-    setLibros(librosEjemplo);
-    setSocios(sociosEjemplo);
-    setPrestamos(prestamosEjemplo);
+    loadData();
   }, []);
 
   // Funciones auxiliares
@@ -116,55 +120,107 @@ export default function Prestamos() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const nuevoPrestamo = {
-      id: prestamos.length + 1,
-      ...formData,
-      estado: 'activo',
-      fechaDevolucionReal: null
-    };
+    try {
+      // Obtener biblioteca activa
+      const storedLibrary = localStorage.getItem('bibliotecaActiva');
+      if (!storedLibrary) {
+        alert('No hay biblioteca activa');
+        return;
+      }
+      
+      const library = JSON.parse(storedLibrary);
+      
+      // Crear préstamo en la base de datos
+      if (window.electronAPI) {
+        const nuevoPrestamo = await window.electronAPI.createPrestamo({
+          libroId: parseInt(formData.libroId),
+          socioId: parseInt(formData.socioId),
+          bibliotecaId: library.id,
+          fechaDevolucion: formData.fechaDevolucion,
+          observaciones: formData.observaciones || null
+        });
+        
+        // Agregar a la lista local
+        setPrestamos([...prestamos, {
+          ...nuevoPrestamo,
+          fechaPrestamo: nuevoPrestamo.fechaPrestamo ? nuevoPrestamo.fechaPrestamo.split('T')[0] : '',
+          fechaDevolucion: nuevoPrestamo.fechaDevolucion ? nuevoPrestamo.fechaDevolucion.split('T')[0] : '',
+          fechaDevolucionReal: null
+        }]);
+        
+        // Marcar libro como no disponible
+        setLibros(libros.map(libro => 
+          libro.id === parseInt(formData.libroId) 
+            ? { ...libro, disponible: false }
+            : libro
+        ));
+      } else {
+        // Fallback local
+        const nuevoPrestamo = {
+          id: prestamos.length + 1,
+          ...formData,
+          estado: 'activo',
+          fechaDevolucionReal: null
+        };
+        
+        setPrestamos([...prestamos, nuevoPrestamo]);
+        
+        // Marcar libro como no disponible
+        setLibros(libros.map(libro => 
+          libro.id === parseInt(formData.libroId) 
+            ? { ...libro, disponible: false }
+            : libro
+        ));
+      }
 
-    setPrestamos([...prestamos, nuevoPrestamo]);
-    
-    // Marcar libro como no disponible
-    setLibros(libros.map(libro => 
-      libro.id === parseInt(formData.libroId) 
-        ? { ...libro, disponible: false }
-        : libro
-    ));
-
-    setFormData({
-      libroId: '',
-      socioId: '',
-      fechaPrestamo: '',
-      fechaDevolucion: '',
-      observaciones: ''
-    });
-    setShowForm(false);
+      setFormData({
+        libroId: '',
+        socioId: '',
+        fechaPrestamo: '',
+        fechaDevolucion: '',
+        observaciones: ''
+      });
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error al crear préstamo:', error);
+      alert('Error al crear préstamo: ' + error.message);
+    }
   };
 
   // Acciones de préstamos
-  const handleDevolver = (prestamoId) => {
-    setPrestamos(prestamos.map(prestamo => {
-      if (prestamo.id === prestamoId) {
-        return {
-          ...prestamo,
-          estado: 'completado',
-          fechaDevolucionReal: new Date().toISOString().split('T')[0]
-        };
+  const handleDevolver = async (prestamoId) => {
+    try {
+      // Devolver libro en la base de datos
+      if (window.electronAPI) {
+        await window.electronAPI.devolverLibro(prestamoId);
       }
-      return prestamo;
-    }));
+      
+      // Actualizar en la lista local
+      setPrestamos(prestamos.map(prestamo => {
+        if (prestamo.id === prestamoId) {
+          return {
+            ...prestamo,
+            estado: 'completado',
+            fechaDevolucionReal: new Date().toISOString().split('T')[0]
+          };
+        }
+        return prestamo;
+      }));
 
-    // Marcar libro como disponible
-    const prestamo = prestamos.find(p => p.id === prestamoId);
-    setLibros(libros.map(libro => 
-      libro.id === prestamo.libroId 
-        ? { ...libro, disponible: true }
-        : libro
-    ));
+      // Marcar libro como disponible
+      const prestamo = prestamos.find(p => p.id === prestamoId);
+      setLibros(libros.map(libro => 
+        libro.id === prestamo.libroId 
+          ? { ...libro, disponible: true }
+          : libro
+      ));
+    } catch (error) {
+      console.error('Error al devolver libro:', error);
+      alert('Error al devolver libro: ' + error.message);
+    }
   };
 
   const handleRenovar = (prestamoId) => {

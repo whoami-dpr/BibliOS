@@ -32,103 +32,47 @@ export default function Libros() {
     descripcion: ''
   });
 
-  // Cargar datos de ejemplo al montar el componente
+  // Cargar datos REALES desde la base de datos
   useEffect(() => {
-    // Datos de ejemplo para libros
-    const librosEjemplo = [
-      { 
-        id: 1, 
-        titulo: 'El Señor de los Anillos', 
-        autor: 'J.R.R. Tolkien', 
-        isbn: '978-84-450-7054-9',
-        categoria: 'Fantasía',
-        editorial: 'Minotauro',
-        anioPublicacion: '1954',
-        cantidad: 3,
-        disponibles: 1,
-        prestamosTotales: 25,
-        ubicacion: 'Estante A-1',
-        estado: 'disponible',
-        descripcion: 'Trilogía épica de fantasía'
-      },
-      { 
-        id: 2, 
-        titulo: 'Cien años de soledad', 
-        autor: 'Gabriel García Márquez', 
-        isbn: '978-84-397-2071-7',
-        categoria: 'Literatura',
-        editorial: 'Editorial Sudamericana',
-        anioPublicacion: '1967',
-        cantidad: 2,
-        disponibles: 0,
-        prestamosTotales: 18,
-        ubicacion: 'Estante B-3',
-        estado: 'prestado',
-        descripcion: 'Obra maestra del realismo mágico'
-      },
-      { 
-        id: 3, 
-        titulo: '1984', 
-        autor: 'George Orwell', 
-        isbn: '978-84-206-0000-0',
-        categoria: 'Ciencia Ficción',
-        editorial: 'Debolsillo',
-        anioPublicacion: '1949',
-        cantidad: 4,
-        disponibles: 3,
-        prestamosTotales: 32,
-        ubicacion: 'Estante C-2',
-        estado: 'disponible',
-        descripcion: 'Distopía clásica'
-      },
-      { 
-        id: 4, 
-        titulo: 'Don Quijote de la Mancha', 
-        autor: 'Miguel de Cervantes', 
-        isbn: '978-84-376-0494-7',
-        categoria: 'Clásico',
-        editorial: 'Cátedra',
-        anioPublicacion: '1605',
-        cantidad: 2,
-        disponibles: 2,
-        prestamosTotales: 12,
-        ubicacion: 'Estante A-5',
-        estado: 'disponible',
-        descripcion: 'Obra cumbre de la literatura española'
-      },
-      { 
-        id: 5, 
-        titulo: 'Harry Potter y la piedra filosofal', 
-        autor: 'J.K. Rowling', 
-        isbn: '978-84-9838-095-8',
-        categoria: 'Fantasía',
-        editorial: 'Salamandra',
-        anioPublicacion: '1997',
-        cantidad: 5,
-        disponibles: 2,
-        prestamosTotales: 45,
-        ubicacion: 'Estante D-1',
-        estado: 'disponible',
-        descripcion: 'Primera entrega de la saga'
-      },
-      { 
-        id: 6, 
-        titulo: 'El Principito', 
-        autor: 'Antoine de Saint-Exupéry', 
-        isbn: '978-84-206-0000-1',
-        categoria: 'Infantil',
-        editorial: 'Salamandra',
-        anioPublicacion: '1943',
-        cantidad: 3,
-        disponibles: 0,
-        prestamosTotales: 28,
-        ubicacion: 'Estante E-4',
-        estado: 'prestado',
-        descripcion: 'Clásico de la literatura infantil'
+    const loadLibros = async () => {
+      try {
+        // Obtener biblioteca activa
+        const storedLibrary = localStorage.getItem('bibliotecaActiva');
+        if (storedLibrary && window.electronAPI) {
+          const library = JSON.parse(storedLibrary);
+          
+          // Cargar libros REALES de la biblioteca
+          const librosReales = await window.electronAPI.getLibros(library.id, {});
+          
+          // Formatear los datos para el componente
+          const librosFormateados = librosReales.map(libro => ({
+            id: libro.id,
+            titulo: libro.titulo,
+            autor: libro.autor,
+            isbn: libro.isbn || '',
+            categoria: libro.categoria || '',
+            editorial: libro.editorial || '',
+            anioPublicacion: libro.anioPublicacion || '',
+            cantidad: libro.cantidad || 1,
+            disponibles: libro.disponibles || 0,
+            prestamosTotales: 0, // TODO: Calcular desde préstamos
+            ubicacion: libro.ubicacion || '',
+            estado: libro.estado || 'disponible',
+            descripcion: libro.descripcion || ''
+          }));
+          
+          setLibros(librosFormateados);
+        } else {
+          // Si no hay biblioteca activa, no mostrar libros
+          setLibros([]);
+        }
+      } catch (error) {
+        console.error('Error al cargar libros:', error);
+        setLibros([]);
       }
-    ];
+    };
 
-    setLibros(librosEjemplo);
+    loadLibros();
   }, []);
 
   // Funciones auxiliares
@@ -158,32 +102,70 @@ export default function Libros() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const newLibro = {
-      id: Date.now(),
-      ...formData,
-      cantidad: parseInt(formData.cantidad),
-      disponibles: parseInt(formData.cantidad),
-      prestamosTotales: 0,
-      estado: 'disponible',
-      anioPublicacion: formData.anioPublicacion || new Date().getFullYear().toString()
-    };
-
-    setLibros([...libros, newLibro]);
-    setFormData({
-      titulo: '',
-      autor: '',
-      isbn: '',
-      categoria: '',
-      editorial: '',
-      anioPublicacion: '',
-      cantidad: '',
-      ubicacion: '',
-      descripcion: ''
-    });
-    setShowForm(false);
+    try {
+      // Obtener biblioteca activa
+      const storedLibrary = localStorage.getItem('bibliotecaActiva');
+      if (!storedLibrary) {
+        alert('No hay biblioteca activa');
+        return;
+      }
+      
+      const library = JSON.parse(storedLibrary);
+      
+      // Crear libro en la base de datos
+      if (window.electronAPI) {
+        const newLibro = await window.electronAPI.createLibro({
+          titulo: formData.titulo,
+          autor: formData.autor,
+          isbn: formData.isbn || null,
+          categoria: formData.categoria || null,
+          editorial: formData.editorial || null,
+          anioPublicacion: formData.anioPublicacion ? parseInt(formData.anioPublicacion) : null,
+          cantidad: parseInt(formData.cantidad) || 1,
+          ubicacion: formData.ubicacion || null,
+          descripcion: formData.descripcion || null,
+          bibliotecaId: library.id
+        });
+        
+        // Agregar a la lista local
+        setLibros([...libros, {
+          ...newLibro,
+          prestamosTotales: 0
+        }]);
+      } else {
+        // Fallback local
+        const newLibro = {
+          id: Date.now(),
+          ...formData,
+          cantidad: parseInt(formData.cantidad),
+          disponibles: parseInt(formData.cantidad),
+          prestamosTotales: 0,
+          estado: 'disponible',
+          anioPublicacion: formData.anioPublicacion || new Date().getFullYear().toString()
+        };
+        setLibros([...libros, newLibro]);
+      }
+      
+      // Limpiar formulario
+      setFormData({
+        titulo: '',
+        autor: '',
+        isbn: '',
+        categoria: '',
+        editorial: '',
+        anioPublicacion: '',
+        cantidad: '',
+        ubicacion: '',
+        descripcion: ''
+      });
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error al crear libro:', error);
+      alert('Error al crear libro: ' + error.message);
+    }
   };
 
   const handleEliminar = (libroId) => {
@@ -191,10 +173,21 @@ export default function Libros() {
     setShowDeleteConfirm(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (libroToDelete) {
-      setLibros(libros.filter(libro => libro.id !== libroToDelete));
-      setLibroToDelete(null);
+      try {
+        // Eliminar de la base de datos
+        if (window.electronAPI) {
+          await window.electronAPI.deleteLibro(libroToDelete);
+        }
+        
+        // Eliminar de la lista local
+        setLibros(libros.filter(libro => libro.id !== libroToDelete));
+        setLibroToDelete(null);
+      } catch (error) {
+        console.error('Error al eliminar libro:', error);
+        alert('Error al eliminar libro: ' + error.message);
+      }
     }
     setShowDeleteConfirm(false);
   };

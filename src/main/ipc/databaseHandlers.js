@@ -73,6 +73,15 @@ class DatabaseHandlers {
             }
         });
 
+        ipcMain.handle('database:createUTNLibrary', async () => {
+            try {
+                return await this.db.createUTNLibrary();
+            } catch (error) {
+                console.error('Error en createUTNLibrary:', error);
+                throw error;
+            }
+        });
+
         // ===== MANEJADORES DE LIBROS =====
         
         ipcMain.handle('database:createLibro', async (event, libroData) => {

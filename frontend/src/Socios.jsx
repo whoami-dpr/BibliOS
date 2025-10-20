@@ -28,73 +28,44 @@ export default function Socios() {
     observaciones: ''
   });
 
-  // Cargar datos de ejemplo al montar el componente
+  // Cargar datos REALES desde la base de datos
   useEffect(() => {
-    // Datos de ejemplo para socios
-    const sociosEjemplo = [
-      { 
-        id: 1, 
-        nombre: 'María González', 
-        email: 'maria@email.com', 
-        telefono: '123-456-789', 
-        direccion: 'Av. San Martín 123',
-        fechaRegistro: '2024-01-15',
-        estado: 'activo',
-        prestamosActivos: 2,
-        prestamosTotales: 15,
-        observaciones: 'Socia frecuente'
-      },
-      { 
-        id: 2, 
-        nombre: 'Juan Pérez', 
-        email: 'juan@email.com', 
-        telefono: '123-456-790', 
-        direccion: 'Belgrano 456',
-        fechaRegistro: '2024-01-20',
-        estado: 'activo',
-        prestamosActivos: 1,
-        prestamosTotales: 8,
-        observaciones: ''
-      },
-      { 
-        id: 3, 
-        nombre: 'Ana López', 
-        email: 'ana@email.com', 
-        telefono: '123-456-791', 
-        direccion: 'Rivadavia 789',
-        fechaRegistro: '2023-12-10',
-        estado: 'inactivo',
-        prestamosActivos: 0,
-        prestamosTotales: 5,
-        observaciones: 'Socio inactivo'
-      },
-      { 
-        id: 4, 
-        nombre: 'Carlos Rodríguez', 
-        email: 'carlos@email.com', 
-        telefono: '123-456-792', 
-        direccion: 'Mitre 321',
-        fechaRegistro: '2024-02-01',
-        estado: 'activo',
-        prestamosActivos: 3,
-        prestamosTotales: 12,
-        observaciones: 'Nuevo socio'
-      },
-      { 
-        id: 5, 
-        nombre: 'Laura Martínez', 
-        email: 'laura@email.com', 
-        telefono: '123-456-793', 
-        direccion: 'Sarmiento 654',
-        fechaRegistro: '2024-01-05',
-        estado: 'activo',
-        prestamosActivos: 0,
-        prestamosTotales: 3,
-        observaciones: ''
+    const loadSocios = async () => {
+      try {
+        // Obtener biblioteca activa
+        const storedLibrary = localStorage.getItem('bibliotecaActiva');
+        if (storedLibrary && window.electronAPI) {
+          const library = JSON.parse(storedLibrary);
+          
+          // Cargar socios REALES de la biblioteca
+          const sociosReales = await window.electronAPI.getSocios(library.id, {});
+          
+          // Formatear los datos para el componente
+          const sociosFormateados = sociosReales.map(socio => ({
+            id: socio.id,
+            nombre: socio.nombre,
+            email: socio.email || '',
+            telefono: socio.telefono || '',
+            direccion: socio.direccion || '',
+            fechaRegistro: socio.fechaRegistro || new Date().toISOString().split('T')[0],
+            estado: socio.estado || 'activo',
+            prestamosActivos: 0, // TODO: Calcular desde préstamos
+            prestamosTotales: 0, // TODO: Calcular desde préstamos
+            observaciones: socio.observaciones || ''
+          }));
+          
+          setSocios(sociosFormateados);
+        } else {
+          // Si no hay biblioteca activa, no mostrar socios
+          setSocios([]);
+        }
+      } catch (error) {
+        console.error('Error al cargar socios:', error);
+        setSocios([]);
       }
-    ];
+    };
 
-    setSocios(sociosEjemplo);
+    loadSocios();
   }, []);
 
   // Funciones auxiliares
@@ -122,28 +93,67 @@ export default function Socios() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const newSocio = {
-      id: Date.now(),
-      ...formData,
-      estado: 'activo',
-      prestamosActivos: 0,
-      prestamosTotales: 0,
-      fechaRegistro: new Date().toISOString().split('T')[0]
-    };
-
-    setSocios([...socios, newSocio]);
-    setFormData({
-      nombre: '',
-      email: '',
-      telefono: '',
-      direccion: '',
-      fechaRegistro: '',
-      observaciones: ''
-    });
-    setShowForm(false);
+    try {
+      // Obtener biblioteca activa
+      const storedLibrary = localStorage.getItem('bibliotecaActiva');
+      if (!storedLibrary) {
+        alert('No hay biblioteca activa');
+        return;
+      }
+      
+      const library = JSON.parse(storedLibrary);
+      
+      // Crear socio en la base de datos
+      if (window.electronAPI) {
+        const socioData = {
+          nombre: formData.nombre,
+          email: formData.email,
+          telefono: formData.telefono,
+          direccion: formData.direccion,
+          observaciones: formData.observaciones,
+          bibliotecaId: library.id
+        };
+        
+        console.log('📧 Datos del socio a crear:', socioData);
+        
+        const newSocio = await window.electronAPI.createSocio(socioData);
+        
+        // Agregar a la lista local
+        setSocios([...socios, {
+          ...newSocio,
+          prestamosActivos: 0,
+          prestamosTotales: 0
+        }]);
+      } else {
+        // Fallback local
+        const newSocio = {
+          id: Date.now(),
+          ...formData,
+          estado: 'activo',
+          prestamosActivos: 0,
+          prestamosTotales: 0,
+          fechaRegistro: new Date().toISOString().split('T')[0]
+        };
+        setSocios([...socios, newSocio]);
+      }
+      
+      // Limpiar formulario
+      setFormData({
+        nombre: '',
+        email: '',
+        telefono: '',
+        direccion: '',
+        fechaRegistro: '',
+        observaciones: ''
+      });
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error al crear socio:', error);
+      alert('Error al crear socio: ' + error.message);
+    }
   };
 
   const handleEliminar = (socioId) => {
@@ -151,10 +161,21 @@ export default function Socios() {
     setShowDeleteConfirm(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (socioToDelete) {
-      setSocios(socios.filter(socio => socio.id !== socioToDelete));
-      setSocioToDelete(null);
+      try {
+        // Eliminar de la base de datos
+        if (window.electronAPI) {
+          await window.electronAPI.deleteSocio(socioToDelete);
+        }
+        
+        // Eliminar de la lista local
+        setSocios(socios.filter(socio => socio.id !== socioToDelete));
+        setSocioToDelete(null);
+      } catch (error) {
+        console.error('Error al eliminar socio:', error);
+        alert('Error al eliminar socio: ' + error.message);
+      }
     }
     setShowDeleteConfirm(false);
   };

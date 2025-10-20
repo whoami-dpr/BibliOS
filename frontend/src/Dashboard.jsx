@@ -22,52 +22,121 @@ export default function Dashboard() {
     prestamosCompletados: 0
   });
 
-  // Datos de ejemplo para los gráficos
-  const prestamosPorMes = [
-    { mes: 'Ene', prestamos: 45, devoluciones: 42 },
-    { mes: 'Feb', prestamos: 52, devoluciones: 48 },
-    { mes: 'Mar', prestamos: 38, devoluciones: 35 },
-    { mes: 'Abr', prestamos: 61, devoluciones: 58 },
-    { mes: 'May', prestamos: 55, devoluciones: 52 },
-    { mes: 'Jun', prestamos: 48, devoluciones: 45 }
-  ];
-
-  const librosPorCategoria = [
-    { name: 'Ficción', value: 35, color: '#8884d8' },
-    { name: 'No Ficción', value: 25, color: '#82ca9d' },
-    { name: 'Ciencia', value: 20, color: '#ffc658' },
-    { name: 'Historia', value: 15, color: '#ff7300' },
-    { name: 'Otros', value: 5, color: '#8dd1e1' }
-  ];
-
-  const sociosActivos = [
-    { mes: 'Ene', activos: 120 },
-    { mes: 'Feb', activos: 135 },
-    { mes: 'Mar', activos: 142 },
-    { mes: 'Abr', activos: 158 },
-    { mes: 'May', activos: 165 },
-    { mes: 'Jun', activos: 172 }
-  ];
+  // Estados para los gráficos con datos reales
+  const [prestamosPorMes, setPrestamosPorMes] = useState([]);
+  const [librosPorCategoria, setLibrosPorCategoria] = useState([]);
+  const [sociosActivos, setSociosActivos] = useState([]);
+  
+  // Estado para préstamos próximos a vencer
+  const [prestamosProximosAVencer, setPrestamosProximosAVencer] = useState(0);
 
   useEffect(() => {
-    // Cargar biblioteca activa desde localStorage
-    const storedLibrary = localStorage.getItem('bibliotecaActiva');
-    if (storedLibrary) {
-      const library = JSON.parse(storedLibrary);
-      setActiveLibrary(library);
-      
-      // Cargar estadísticas mock
-      setStats({
-        totalLibros: 1250,
-        totalSocios: 342,
-        prestamosActivos: 89,
-        prestamosVencidos: 12,
-        prestamosCompletados: 156
-      });
-    } else {
-      // Si no hay biblioteca activa, redirigir al login
-      navigate('/login');
-    }
+    const loadDashboardData = async () => {
+      try {
+        // Cargar biblioteca activa desde localStorage
+        const storedLibrary = localStorage.getItem('bibliotecaActiva');
+        if (storedLibrary) {
+          const library = JSON.parse(storedLibrary);
+          setActiveLibrary(library);
+          
+          // Cargar estadísticas REALES desde la base de datos
+          if (window.electronAPI && library.id) {
+            try {
+              // Cargar estadísticas generales
+              const realStats = await window.electronAPI.getBibliotecaStats(library.id);
+              setStats({
+                totalLibros: realStats.totalLibros || 0,
+                totalSocios: realStats.totalSocios || 0,
+                prestamosActivos: realStats.prestamosActivos || 0,
+                prestamosVencidos: realStats.prestamosVencidos || 0,
+                prestamosCompletados: realStats.prestamosCompletados || 0
+              });
+
+              // Cargar datos para gráficos
+              try {
+                // Préstamos por mes
+                const prestamosMes = await window.electronAPI.getPrestamosPorMes(library.id, 6);
+                const prestamosFormateados = prestamosMes.map(item => ({
+                  mes: item.mes,
+                  prestamos: item.prestamos || 0,
+                  devoluciones: item.devoluciones || 0
+                }));
+                setPrestamosPorMes(prestamosFormateados);
+
+                // Libros por categoría
+                const librosCategoria = await window.electronAPI.getLibrosPorCategoria(library.id);
+                const categoriasFormateadas = librosCategoria.map((item, index) => ({
+                  name: item.categoria || 'Sin categoría',
+                  value: item.cantidad || 0,
+                  color: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#8dd1e1'][index % 5]
+                }));
+                setLibrosPorCategoria(categoriasFormateadas);
+
+                // Socios activos (simulado con datos de préstamos)
+                setSociosActivos(prestamosFormateados.map(item => ({
+                  mes: item.mes,
+                  activos: item.prestamos || 0
+                })));
+
+                // Calcular préstamos próximos a vencer (próximos 3 días)
+                const prestamos = await window.electronAPI.getPrestamos(library.id, { estado: 'activo' });
+                const hoy = new Date();
+                const en3Dias = new Date();
+                en3Dias.setDate(hoy.getDate() + 3);
+                
+                const proximosAVencer = prestamos.filter(prestamo => {
+                  if (!prestamo.fechaDevolucion) return false;
+                  const fechaDevolucion = new Date(prestamo.fechaDevolucion);
+                  return fechaDevolucion >= hoy && fechaDevolucion <= en3Dias;
+                }).length;
+                
+                setPrestamosProximosAVencer(proximosAVencer);
+              } catch (error) {
+                console.error('Error al cargar datos de gráficos:', error);
+                // Si hay error, usar arrays vacíos
+                setPrestamosPorMes([]);
+                setLibrosPorCategoria([]);
+                setSociosActivos([]);
+                setPrestamosProximosAVencer(0);
+              }
+            } catch (error) {
+              console.error('Error al cargar estadísticas:', error);
+              // Si hay error, usar valores en 0
+              setStats({
+                totalLibros: 0,
+                totalSocios: 0,
+                prestamosActivos: 0,
+                prestamosVencidos: 0,
+                prestamosCompletados: 0
+              });
+              setPrestamosPorMes([]);
+              setLibrosPorCategoria([]);
+              setSociosActivos([]);
+            }
+          } else {
+            // Fallback: valores en 0 si no hay electronAPI
+            setStats({
+              totalLibros: 0,
+              totalSocios: 0,
+              prestamosActivos: 0,
+              prestamosVencidos: 0,
+              prestamosCompletados: 0
+            });
+            setPrestamosPorMes([]);
+            setLibrosPorCategoria([]);
+            setSociosActivos([]);
+          }
+        } else {
+          // Si no hay biblioteca activa, redirigir al login
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Error al cargar datos del dashboard:', error);
+        navigate('/login');
+      }
+    };
+
+    loadDashboardData();
   }, [navigate]);
 
   const StatCard = ({ icon: Icon, title, value, color, change }) => (
@@ -134,14 +203,12 @@ export default function Dashboard() {
             title="Total Libros" 
             value={stats.totalLibros} 
             color="#3b82f6"
-            change={12}
           />
           <StatCard 
             icon={Users} 
             title="Socios Registrados" 
             value={stats.totalSocios} 
             color="#10b981"
-            change={8}
           />
           <StatCard 
             icon={CalendarDays} 
@@ -160,125 +227,149 @@ export default function Dashboard() {
         {/* Gráficos principales */}
         <section className="charts-grid">
           {/* Gráfico de préstamos por mes */}
-                           <div className="chart-card">
-                   <div className="chart-header">
-                     <BarChart3 size={18} strokeWidth={1.5} />
-                     <h3>Préstamos y Devoluciones por Mes</h3>
-                   </div>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={prestamosPorMes}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="mes" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#23272b', 
-                    border: '1px solid #333',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                />
-                <Legend />
-                <Bar dataKey="prestamos" fill="#3b82f6" name="Préstamos" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="devoluciones" fill="#10b981" name="Devoluciones" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="chart-card">
+            <div className="chart-header">
+              <BarChart3 size={18} strokeWidth={1.5} />
+              <h3>Préstamos y Devoluciones por Mes</h3>
+            </div>
+            {prestamosPorMes.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={prestamosPorMes}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="mes" stroke="#9ca3af" />
+                  <YAxis stroke="#9ca3af" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#23272b', 
+                      border: '1px solid #333',
+                      borderRadius: '8px',
+                      color: 'white'
+                    }}
+                  />
+                  <Legend />
+                  <Bar dataKey="prestamos" fill="#3b82f6" name="Préstamos" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="devoluciones" fill="#10b981" name="Devoluciones" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', color: '#9ca3af' }}>
+                <p>No hay datos de préstamos para mostrar</p>
+              </div>
+            )}
           </div>
 
           {/* Gráfico de libros por categoría */}
-                           <div className="chart-card">
-                   <div className="chart-header">
-                     <PieChartIcon size={18} strokeWidth={1.5} />
-                     <h3>Distribución de Libros por Categoría</h3>
-                   </div>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={librosPorCategoria}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {librosPorCategoria.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#23272b', 
-                    border: '1px solid #333',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="chart-card">
+            <div className="chart-header">
+              <PieChartIcon size={18} strokeWidth={1.5} />
+              <h3>Distribución de Libros por Categoría</h3>
+            </div>
+            {librosPorCategoria.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={librosPorCategoria}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {librosPorCategoria.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#23272b', 
+                      border: '1px solid #333',
+                      borderRadius: '8px',
+                      color: 'white'
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', color: '#9ca3af' }}>
+                <p>No hay libros registrados</p>
+              </div>
+            )}
           </div>
 
           {/* Gráfico de socios activos */}
-                           <div className="chart-card">
-                   <div className="chart-header">
-                     <TrendingUp size={18} strokeWidth={1.5} />
-                     <h3>Evolución de Socios Activos</h3>
-                   </div>
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={sociosActivos}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="mes" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#23272b', 
-                    border: '1px solid #333',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="activos" 
-                  stroke="#8b5cf6" 
-                  fill="#8b5cf6" 
-                  fillOpacity={0.3}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div className="chart-card">
+            <div className="chart-header">
+              <TrendingUp size={18} strokeWidth={1.5} />
+              <h3>Evolución de Socios Activos</h3>
+            </div>
+            {sociosActivos.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={sociosActivos}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="mes" stroke="#9ca3af" />
+                  <YAxis stroke="#9ca3af" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#23272b', 
+                      border: '1px solid #333',
+                      borderRadius: '8px',
+                      color: 'white'
+                    }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="activos" 
+                    stroke="#8b5cf6" 
+                    fill="#8b5cf6" 
+                    fillOpacity={0.3}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', color: '#9ca3af' }}>
+                <p>No hay datos de socios para mostrar</p>
+              </div>
+            )}
           </div>
 
           {/* Gráfico de tendencia de préstamos */}
-                           <div className="chart-card">
-                   <div className="chart-header">
-                     <Activity size={18} strokeWidth={1.5} />
-                     <h3>Tendencia de Préstamos</h3>
-                   </div>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={prestamosPorMes}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="mes" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: '#23272b', 
-                    border: '1px solid #333',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                />
-                <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="prestamos" 
-                  stroke="#3b82f6" 
-                  strokeWidth={3}
-                  dot={{ fill: '#3b82f6', strokeWidth: 2, r: 5 }}
-                  activeDot={{ r: 8, stroke: '#3b82f6', strokeWidth: 2, fill: '#fff' }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="chart-card">
+            <div className="chart-header">
+              <Activity size={18} strokeWidth={1.5} />
+              <h3>Tendencia de Préstamos</h3>
+            </div>
+            {prestamosPorMes.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={prestamosPorMes}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="mes" stroke="#9ca3af" />
+                  <YAxis stroke="#9ca3af" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#23272b', 
+                      border: '1px solid #333',
+                      borderRadius: '8px',
+                      color: 'white'
+                    }}
+                  />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="prestamos" 
+                    stroke="#3b82f6" 
+                    strokeWidth={3}
+                    dot={{ fill: '#3b82f6', strokeWidth: 2, r: 5 }}
+                    activeDot={{ r: 8, stroke: '#3b82f6', strokeWidth: 2, fill: '#fff' }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px', color: '#9ca3af' }}>
+                <p>No hay datos de préstamos para mostrar</p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -297,7 +388,7 @@ export default function Dashboard() {
                      <Clock size={18} strokeWidth={1.5} />
                      <div>
                        <h4>Próximos a Vencer</h4>
-                       <p>15 préstamos vencen en los próximos 3 días</p>
+                       <p>{prestamosProximosAVencer} préstamos vencen en los próximos 3 días</p>
                      </div>
                    </div>
                    <div className="alert-card success">
