@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Library, LogIn, X, AlertCircle, Lock, Eye, EyeOff } from 'lucide-react';
+import { Library, LogIn, X, AlertCircle, Lock, Eye, EyeOff, Sparkles, Activity } from 'lucide-react';
 import './Login.css';
 import Navbar from './Navbar.jsx';
 
@@ -13,6 +13,7 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentText, setCurrentText] = useState(0);
   const [isChanging, setIsChanging] = useState(false);
+  const [isCreatingDemo, setIsCreatingDemo] = useState(false);
 
   const inspirationTexts = [
     "Trabajamos para nosotros",
@@ -122,6 +123,75 @@ function Login() {
     }
   };
 
+  const handleCreateAndLoginUTN = async () => {
+    setIsCreatingDemo(true);
+    setError('');
+    
+    try {
+      if (window.electronAPI) {
+        // Crear la biblioteca UTN-FRLP con datos de muestra
+        const result = await window.electronAPI.createUTNLibrary();
+        
+        // Obtener la biblioteca activa
+        const bibliotecaActiva = await window.electronAPI.getBibliotecaActiva();
+        
+        if (bibliotecaActiva) {
+          // Guardar en localStorage
+          localStorage.setItem('bibliotecaActiva', JSON.stringify(bibliotecaActiva));
+          localStorage.setItem('authData', JSON.stringify({
+            libraryId: bibliotecaActiva.id,
+            authMethod: 'password',
+            hashedValue: 'UTN', // Contraseña simple
+            salt: 'utn-salt',
+            createdAt: new Date().toISOString()
+          }));
+          
+          // Mostrar mensaje de éxito
+          if (result.exists) {
+            alert('✅ Sesión iniciada con la biblioteca UTN-FRLP existente.\n\n📚 ' + result.datos.librosInsertados + ' libros\n👥 ' + result.datos.sociosInsertados + ' socios\n📋 ' + result.datos.prestamosInsertados + ' préstamos');
+          } else {
+            alert('✅ ¡Biblioteca UTN-FRLP creada e iniciada!\n\n📚 ' + result.datos.librosInsertados + ' libros insertados\n👥 ' + result.datos.sociosInsertados + ' socios insertados\n📋 ' + result.datos.prestamosInsertados + ' préstamos creados');
+          }
+          
+          // Redirigir al dashboard
+          navigate('/dashboard');
+        } else {
+          setError('Error al obtener la biblioteca activa');
+        }
+      } else {
+        // Fallback sin Electron
+        const mockLibrary = {
+          id: 'mock-library-1',
+          nombre: 'UTN-FRLP',
+          direccion: 'Av. Universidad 123, Villa María',
+          telefono: '(353) 123-4567',
+          email: 'biblioteca@utn.edu.ar',
+          responsable: 'Dr. María González',
+          horarios: 'Lunes a Viernes 8:00 - 18:00',
+          descripcion: 'Biblioteca principal de la Universidad Tecnológica Nacional',
+          fechaCreacion: '2024-01-15T10:00:00.000Z',
+          activa: true
+        };
+        
+        localStorage.setItem('bibliotecaActiva', JSON.stringify(mockLibrary));
+        localStorage.setItem('authData', JSON.stringify({
+          libraryId: 'mock-library-1',
+          authMethod: 'password',
+          hashedValue: 'UTN',
+          salt: 'utn-salt',
+          createdAt: '2024-01-15T10:00:00.000Z'
+        }));
+        
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Error al crear biblioteca UTN:', error);
+      setError('Error al crear la biblioteca de demostración: ' + error.message);
+    } finally {
+      setIsCreatingDemo(false);
+    }
+  };
+
 
   return (
     <div className="full-width-page">
@@ -217,11 +287,40 @@ function Login() {
             </button>
           </div>
 
-                            <div className="login-help">
-                    <h4>🔑 Credenciales de Prueba</h4>
-                    <p><strong>Biblioteca:</strong> UTN-FRLP</p>
-                    <p><strong>Contraseña:</strong> UTN</p>
-                  </div>
+          {/* Botón de acceso rápido UTN-FRLP */}
+          {window.electronAPI && (
+            <div className="utn-quick-access">
+              <div className="utn-divider">
+                <span>Acceso Rápido</span>
+              </div>
+              <button 
+                onClick={handleCreateAndLoginUTN}
+                disabled={isCreatingDemo || isLoading}
+                className="utn-quick-btn"
+              >
+                {isCreatingDemo ? (
+                  <>
+                    <Activity className="animate-spin" size={18} />
+                    Creando biblioteca...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={18} />
+                    Crear e Iniciar con UTN-FRLP
+                  </>
+                )}
+              </button>
+              <p className="utn-description">
+                Crea automáticamente una biblioteca de demostración completa con datos de prueba y accede inmediatamente.
+              </p>
+            </div>
+          )}
+
+          <div className="login-help">
+            <h4>🔑 Credenciales de Prueba</h4>
+            <p><strong>Biblioteca:</strong> UTN-FRLP</p>
+            <p><strong>Contraseña:</strong> UTN</p>
+          </div>
             </div>
           </div>
           

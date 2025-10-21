@@ -18,6 +18,9 @@ export default function Libros() {
   const [showDetails, setShowDetails] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [libroToDelete, setLibroToDelete] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [libroToEdit, setLibroToEdit] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
 
   // Estado del formulario
   const [formData, setFormData] = useState({
@@ -195,6 +198,65 @@ export default function Libros() {
   const cancelDelete = () => {
     setLibroToDelete(null);
     setShowDeleteConfirm(false);
+  };
+
+  // Funciones de edición
+  const handleEditClick = (libro) => {
+    setLibroToEdit(libro);
+    setEditFormData({
+      titulo: libro.titulo,
+      autor: libro.autor,
+      isbn: libro.isbn || '',
+      categoria: libro.categoria || '',
+      editorial: libro.editorial || '',
+      anioPublicacion: libro.anioPublicacion || '',
+      cantidad: libro.cantidad || 1,
+      ubicacion: libro.ubicacion || '',
+      descripcion: libro.descripcion || ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      if (window.electronAPI && libroToEdit) {
+        await window.electronAPI.updateLibro(libroToEdit.id, {
+          titulo: editFormData.titulo,
+          autor: editFormData.autor,
+          isbn: editFormData.isbn || null,
+          categoria: editFormData.categoria || null,
+          editorial: editFormData.editorial || null,
+          anioPublicacion: editFormData.anioPublicacion ? parseInt(editFormData.anioPublicacion) : null,
+          cantidad: parseInt(editFormData.cantidad) || 1,
+          ubicacion: editFormData.ubicacion || null,
+          descripcion: editFormData.descripcion || null
+        });
+        
+        // Actualizar lista local
+        setLibros(libros.map(libro => 
+          libro.id === libroToEdit.id 
+            ? { ...libro, ...editFormData, cantidad: parseInt(editFormData.cantidad) }
+            : libro
+        ));
+      }
+      
+      setShowEditModal(false);
+      setLibroToEdit(null);
+      setEditFormData({});
+    } catch (error) {
+      console.error('Error al actualizar libro:', error);
+      alert('Error al actualizar libro: ' + error.message);
+    }
   };
 
   // Filtrado y búsqueda
@@ -528,6 +590,7 @@ export default function Libros() {
                           </button>
                           <button 
                             className="action-btn edit"
+                            onClick={() => handleEditClick(libro)}
                             title="Editar libro"
                           >
                             <Edit size={14} />
@@ -660,6 +723,142 @@ export default function Libros() {
                     Eliminar
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de edición */}
+        {showEditModal && libroToEdit && (
+          <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Editar Libro #{libroToEdit.id}</h3>
+                <button 
+                  className="close-button"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={handleUpdateSubmit} className="libro-form">
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="edit-titulo">Título *</label>
+                      <input
+                        type="text"
+                        id="edit-titulo"
+                        name="titulo"
+                        value={editFormData.titulo}
+                        onChange={handleEditInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-autor">Autor *</label>
+                      <input
+                        type="text"
+                        id="edit-autor"
+                        name="autor"
+                        value={editFormData.autor}
+                        onChange={handleEditInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-isbn">ISBN</label>
+                      <input
+                        type="text"
+                        id="edit-isbn"
+                        name="isbn"
+                        value={editFormData.isbn}
+                        onChange={handleEditInputChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-categoria">Categoría</label>
+                      <input
+                        type="text"
+                        id="edit-categoria"
+                        name="categoria"
+                        value={editFormData.categoria}
+                        onChange={handleEditInputChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="edit-editorial">Editorial</label>
+                      <input
+                        type="text"
+                        id="edit-editorial"
+                        name="editorial"
+                        value={editFormData.editorial}
+                        onChange={handleEditInputChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-anioPublicacion">Año de Publicación</label>
+                      <input
+                        type="number"
+                        id="edit-anioPublicacion"
+                        name="anioPublicacion"
+                        value={editFormData.anioPublicacion}
+                        onChange={handleEditInputChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-cantidad">Cantidad Total</label>
+                      <input
+                        type="number"
+                        id="edit-cantidad"
+                        name="cantidad"
+                        value={editFormData.cantidad}
+                        onChange={handleEditInputChange}
+                        min="1"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-ubicacion">Ubicación</label>
+                      <input
+                        type="text"
+                        id="edit-ubicacion"
+                        name="ubicacion"
+                        value={editFormData.ubicacion}
+                        onChange={handleEditInputChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group full-width">
+                      <label htmlFor="edit-descripcion">Descripción</label>
+                      <textarea
+                        id="edit-descripcion"
+                        name="descripcion"
+                        value={editFormData.descripcion}
+                        onChange={handleEditInputChange}
+                        rows="3"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-actions">
+                    <button 
+                      type="button"
+                      className="cancel-btn"
+                      onClick={() => setShowEditModal(false)}
+                    >
+                      Cancelar
+                    </button>
+                    <button 
+                      type="submit"
+                      className="submit-btn"
+                    >
+                      Guardar Cambios
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

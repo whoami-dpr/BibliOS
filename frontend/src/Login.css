@@ -664,3 +664,106 @@
     font-size: 1.4rem;
   }
 }
+
+/* Estilos para el botón de acceso rápido UTN-FRLP */
+.utn-quick-access {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.utn-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  color: #c9a368;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.utn-divider::before,
+.utn-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 163, 104, 0.3), transparent);
+  margin: 0 0.5rem;
+}
+
+.utn-quick-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  margin-bottom: 0.75rem;
+}
+
+.utn-quick-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.utn-quick-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.utn-quick-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.utn-description {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Animación de rotación */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive para el botón UTN */
+@media (max-width: 768px) {
+  .utn-quick-access {
+    margin-top: 1rem;
+    padding: 0.75rem;
+  }
+  
+  .utn-quick-btn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .utn-description {
+    font-size: 0.75rem;
+  }
+}

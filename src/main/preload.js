@@ -98,6 +98,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     devolverLibro: (prestamoId) => 
         ipcRenderer.invoke('database:devolverLibro', prestamoId),
 
+    // Actualizar préstamo
+    updatePrestamo: (id, updates) => 
+        ipcRenderer.invoke('database:updatePrestamo', { id, updates }),
+
+    // Eliminar préstamo
+    deletePrestamo: (id) => 
+        ipcRenderer.invoke('database:deletePrestamo', id),
+
     // ===== APIS DE ESTADÍSTICAS =====
     
     // Obtener estadísticas de la biblioteca

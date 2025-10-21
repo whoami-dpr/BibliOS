@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Plus, Search, Filter, BookOpen, User, Calendar, 
-  CheckCircle, AlertTriangle, Clock, Eye, Edit, Trash2,
+  CheckCircle, AlertTriangle, Clock, Eye, Trash2,
   ArrowUpDown, Book, Users, FileText, Circle, Triangle, CheckCircle2
 } from 'lucide-react';
 import './prestamos.css';
@@ -97,17 +97,17 @@ export default function Prestamos() {
   const getSocioById = (id) => socios.find(socio => socio.id === id);
   const getEstadoColor = (estado) => {
     switch (estado) {
-      case 'activo': return '#10b981';
+      case 'activo': return '#3b82f6';
       case 'vencido': return '#ef4444';
-      case 'completado': return '#3b82f6';
+      case 'completado': return '#10b981';
       default: return '#6b7280';
     }
   };
   const getEstadoIcon = (estado) => {
     switch (estado) {
-      case 'activo': return <CheckCircle size={16} />;
+      case 'activo': return <Clock size={16} />;
       case 'vencido': return <AlertTriangle size={16} />;
-      case 'completado': return <Clock size={16} />;
+      case 'completado': return <CheckCircle size={16} />;
       default: return <Clock size={16} />;
     }
   };
@@ -223,30 +223,26 @@ export default function Prestamos() {
     }
   };
 
-  const handleRenovar = (prestamoId) => {
-    const nuevaFecha = new Date();
-    nuevaFecha.setDate(nuevaFecha.getDate() + 30); // Renovar por 30 días
-
-    setPrestamos(prestamos.map(prestamo => {
-      if (prestamo.id === prestamoId) {
-        return {
-          ...prestamo,
-          fechaDevolucion: nuevaFecha.toISOString().split('T')[0]
-        };
-      }
-      return prestamo;
-    }));
-  };
-
   const handleEliminar = (prestamoId) => {
     setPrestamoToDelete(prestamoId);
     setShowDeleteConfirm(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (prestamoToDelete) {
-      setPrestamos(prestamos.filter(prestamo => prestamo.id !== prestamoToDelete));
-      setPrestamoToDelete(null);
+      try {
+        // Eliminar de la base de datos
+        if (window.electronAPI) {
+          await window.electronAPI.deletePrestamo(prestamoToDelete);
+        }
+        
+        // Eliminar de la lista local
+        setPrestamos(prestamos.filter(prestamo => prestamo.id !== prestamoToDelete));
+        setPrestamoToDelete(null);
+      } catch (error) {
+        console.error('Error al eliminar préstamo:', error);
+        alert('Error al eliminar préstamo: ' + error.message);
+      }
     }
     setShowDeleteConfirm(false);
   };
@@ -522,22 +518,13 @@ export default function Prestamos() {
                             <Eye size={14} />
                           </button>
                           {prestamo.estado === 'activo' && (
-                            <>
-                              <button 
-                                className="action-btn edit"
-                                onClick={() => handleRenovar(prestamo.id)}
-                                title="Renovar préstamo"
-                              >
-                                <Edit size={14} />
-                              </button>
-                              <button 
-                                className="action-btn complete"
-                                onClick={() => handleDevolver(prestamo.id)}
-                                title="Marcar como devuelto"
-                              >
-                                <CheckCircle size={14} />
-                              </button>
-                            </>
+                            <button 
+                              className="action-btn complete"
+                              onClick={() => handleDevolver(prestamo.id)}
+                              title="Marcar como devuelto"
+                            >
+                              <CheckCircle size={14} />
+                            </button>
                           )}
                           <button 
                             className="action-btn delete"

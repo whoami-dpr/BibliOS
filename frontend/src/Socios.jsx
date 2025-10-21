@@ -17,6 +17,9 @@ export default function Socios() {
   const [showDetails, setShowDetails] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [socioToDelete, setSocioToDelete] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [socioToEdit, setSocioToEdit] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
 
   // Estado del formulario
   const [formData, setFormData] = useState({
@@ -183,6 +186,57 @@ export default function Socios() {
   const cancelDelete = () => {
     setSocioToDelete(null);
     setShowDeleteConfirm(false);
+  };
+
+  // Funciones de edición
+  const handleEditClick = (socio) => {
+    setSocioToEdit(socio);
+    setEditFormData({
+      nombre: socio.nombre,
+      email: socio.email,
+      telefono: socio.telefono || '',
+      direccion: socio.direccion || '',
+      observaciones: socio.observaciones || ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      if (window.electronAPI && socioToEdit) {
+        await window.electronAPI.updateSocio(socioToEdit.id, {
+          nombre: editFormData.nombre,
+          email: editFormData.email,
+          telefono: editFormData.telefono || null,
+          direccion: editFormData.direccion || null,
+          observaciones: editFormData.observaciones || null
+        });
+        
+        // Actualizar lista local
+        setSocios(socios.map(socio => 
+          socio.id === socioToEdit.id 
+            ? { ...socio, ...editFormData }
+            : socio
+        ));
+      }
+      
+      setShowEditModal(false);
+      setSocioToEdit(null);
+      setEditFormData({});
+    } catch (error) {
+      console.error('Error al actualizar socio:', error);
+      alert('Error al actualizar socio: ' + error.message);
+    }
   };
 
   // Filtrado y búsqueda
@@ -457,6 +511,7 @@ export default function Socios() {
                           </button>
                           <button 
                             className="action-btn edit"
+                            onClick={() => handleEditClick(socio)}
                             title="Editar socio"
                           >
                             <Edit size={14} />
@@ -573,6 +628,98 @@ export default function Socios() {
                     Eliminar
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de edición */}
+        {showEditModal && socioToEdit && (
+          <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Editar Socio #{socioToEdit.id}</h3>
+                <button 
+                  className="close-button"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  ×
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={handleUpdateSubmit} className="socio-form">
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label htmlFor="edit-nombre">Nombre Completo *</label>
+                      <input
+                        type="text"
+                        id="edit-nombre"
+                        name="nombre"
+                        value={editFormData.nombre}
+                        onChange={handleEditInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-email">Email *</label>
+                      <input
+                        type="email"
+                        id="edit-email"
+                        name="email"
+                        value={editFormData.email}
+                        onChange={handleEditInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-telefono">Teléfono</label>
+                      <input
+                        type="tel"
+                        id="edit-telefono"
+                        name="telefono"
+                        value={editFormData.telefono}
+                        onChange={handleEditInputChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="edit-direccion">Dirección</label>
+                      <input
+                        type="text"
+                        id="edit-direccion"
+                        name="direccion"
+                        value={editFormData.direccion}
+                        onChange={handleEditInputChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group full-width">
+                      <label htmlFor="edit-observaciones">Observaciones</label>
+                      <textarea
+                        id="edit-observaciones"
+                        name="observaciones"
+                        value={editFormData.observaciones}
+                        onChange={handleEditInputChange}
+                        rows="3"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-actions">
+                    <button 
+                      type="button"
+                      className="cancel-btn"
+                      onClick={() => setShowEditModal(false)}
+                    >
+                      Cancelar
+                    </button>
+                    <button 
+                      type="submit"
+                      className="submit-btn"
+                    >
+                      Guardar Cambios
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

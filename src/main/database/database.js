@@ -973,6 +973,68 @@ class DatabaseService {
         }
     }
 
+    async updatePrestamo(id, updates) {
+        try {
+            const fields = [];
+            const values = [];
+            
+            Object.keys(updates).forEach(key => {
+                if (updates[key] !== undefined) {
+                    fields.push(`${key} = ?`);
+                    values.push(updates[key]);
+                }
+            });
+            
+            if (fields.length === 0) return false;
+            
+            values.push(id);
+            const stmt = this.db.prepare(`UPDATE prestamos SET ${fields.join(', ')} WHERE id = ?`);
+            const result = stmt.run(...values);
+            
+            return result.changes > 0;
+        } catch (error) {
+            console.error('Error al actualizar préstamo:', error);
+            throw error;
+        }
+    }
+
+    async deletePrestamo(id) {
+        // TRANSACCIÓN: Usar transacción para garantizar consistencia
+        const transaction = this.db.transaction((id) => {
+            // Obtener el préstamo para verificar su estado
+            const prestamo = this.db.prepare('SELECT * FROM prestamos WHERE id = ?').get(id);
+            
+            if (!prestamo) {
+                throw new Error('Préstamo no encontrado');
+            }
+            
+            // Si el préstamo está activo, devolver el libro antes de eliminar
+            if (prestamo.estado === 'activo' && prestamo.libroId) {
+                // Aumentar disponibilidad del libro
+                const updateLibro = this.db.prepare(`
+                    UPDATE libros 
+                    SET disponibles = disponibles + 1, 
+                        estado = 'disponible'
+                    WHERE id = ?
+                `);
+                updateLibro.run(prestamo.libroId);
+            }
+            
+            // Eliminar el préstamo
+            const stmt = this.db.prepare('DELETE FROM prestamos WHERE id = ?');
+            const result = stmt.run(id);
+            
+            return result.changes > 0;
+        });
+        
+        try {
+            return transaction(id);
+        } catch (error) {
+            console.error('Error al eliminar préstamo:', error);
+            throw error;
+        }
+    }
+
     // ===== ESTADÍSTICAS Y REPORTES =====
     
     async getBibliotecaStats(bibliotecaId) {

@@ -214,6 +214,24 @@ class DatabaseHandlers {
             }
         });
 
+        ipcMain.handle('database:updatePrestamo', async (event, { id, updates }) => {
+            try {
+                return await this.db.updatePrestamo(id, updates);
+            } catch (error) {
+                console.error('Error en updatePrestamo:', error);
+                throw error;
+            }
+        });
+
+        ipcMain.handle('database:deletePrestamo', async (event, id) => {
+            try {
+                return await this.db.deletePrestamo(id);
+            } catch (error) {
+                console.error('Error en deletePrestamo:', error);
+                throw error;
+            }
+        });
+
         // ===== MANEJADORES DE ESTADÍSTICAS =====
         
         ipcMain.handle('database:getBibliotecaStats', async (event, bibliotecaId) => {
@@ -321,6 +339,8 @@ class DatabaseHandlers {
         ipcMain.removeHandler('database:getPrestamos');
         ipcMain.removeHandler('database:getPrestamoById');
         ipcMain.removeHandler('database:devolverLibro');
+        ipcMain.removeHandler('database:updatePrestamo');
+        ipcMain.removeHandler('database:deletePrestamo');
         
         ipcMain.removeHandler('database:getBibliotecaStats');
         ipcMain.removeHandler('database:getPrestamosPorMes');
