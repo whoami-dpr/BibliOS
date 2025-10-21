@@ -1,4 +1,28 @@
 /* Login.css - Responsive Design */
+/* Scrollbar personalizado para Login */
+.login-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.login-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.login-container::-webkit-scrollbar-thumb {
+    background: rgba(201, 163, 104, 0.3);
+    border-radius: 3px;
+}
+
+.login-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 163, 104, 0.5);
+}
+
+/* Para Firefox */
+.login-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201, 163, 104, 0.3) transparent;
+}
+
 .login-container {
   min-height: 100vh;
   background: #121212;

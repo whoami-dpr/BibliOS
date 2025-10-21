@@ -8,10 +8,43 @@
 
 html, body {
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
     font-family: "Roboto Flex", sans-serif;
     background: #121212;
+}
+
+/* Solo la página principal sin scroll */
+body.home-page-active {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Otras páginas pueden tener scroll */
+body:not(.home-page-active) {
+    overflow-y: auto;
+}
+
+/* Ocultar barra de scroll cuando no sea necesaria */
+body:not(.home-page-active)::-webkit-scrollbar {
+    width: 8px;
+}
+
+body:not(.home-page-active)::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body:not(.home-page-active)::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+body:not(.home-page-active)::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Para Firefox */
+body:not(.home-page-active) {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 header {
@@ -169,11 +202,6 @@ body {
     padding-top: 70px;
 }
 
-body.home-page-active {
-    overflow: auto;
-    height: auto;
-}
-
 .hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -183,13 +211,13 @@ body.home-page-active {
     margin: 0 auto;
     padding: 2rem 6rem;
     gap: 3rem;
-    overflow-y: auto;
-    min-height: calc(100vh - 70px);
+    overflow: hidden;
+    height: calc(100vh - 70px);
 }
 
 .home-page {
-    min-height: 100vh;
-    overflow-y: auto;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;

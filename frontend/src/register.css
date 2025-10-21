@@ -1,4 +1,28 @@
 /* Register Page Styles */
+/* Scrollbar personalizado para Register */
+.register-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.register-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.register-container::-webkit-scrollbar-thumb {
+    background: rgba(201, 163, 104, 0.3);
+    border-radius: 3px;
+}
+
+.register-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 163, 104, 0.5);
+}
+
+/* Para Firefox */
+.register-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201, 163, 104, 0.3) transparent;
+}
+
 .register-container {
   min-height: 100vh;
   background: #121212;
@@ -87,7 +111,7 @@
 
 .header-separator {
   color: #c9a368;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 300;
   margin: 0 0.5rem;
   white-space: nowrap;
@@ -96,7 +120,7 @@
 }
 
 .register-header h1 {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   margin: 0;
   color: #c9a368;
@@ -108,7 +132,7 @@
 }
 
 .register-header p {
-  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-size: clamp(1rem, 2vw, 1.2rem);
   color: #d1d5db;
   margin: 0;
   max-width: 600px;
@@ -139,7 +163,7 @@
 }
 
 .register-form-section h2 {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 0 0 1.5rem 0;
   color: #c9a368;
@@ -176,7 +200,7 @@
 }
 
 .form-group label {
-  font-size: 0.9rem;
+  font-size: 1.3rem;
   font-weight: 500;
   color: #d1d5db;
   display: flex;
@@ -196,7 +220,7 @@
   border-radius: 10px;
   background: transparent;
   color: #ffffff !important;
-  font-size: 1rem;
+  font-size: 1.3rem;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   width: 100%;
@@ -228,7 +252,7 @@
 }
 
 .error-message {
-  font-size: 0.8rem;
+  font-size: 1.3rem;
   color: #ef4444;
   margin-top: 0.25rem;
 }
@@ -270,7 +294,7 @@
 }
 
 .password-hint {
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   color: #888;
   margin-top: 0.5rem;
   font-style: italic;
@@ -283,7 +307,7 @@
   border: none;
   padding: 1.25rem 2.5rem;
   border-radius: 10px;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -322,7 +346,7 @@
 }
 
 .existing-libraries-section h2 {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 0 0 2rem 0;
   color: white;
@@ -356,7 +380,7 @@
 }
 
 .library-info h3 {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
   color: white;
@@ -365,7 +389,7 @@
 .library-address,
 .library-responsible,
 .library-date {
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   color: #9ca3af;
   margin: 0.25rem 0;
   display: flex;
@@ -390,7 +414,7 @@
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.95rem;
   font-weight: 500;
 }
 
@@ -400,7 +424,7 @@
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -416,7 +440,7 @@
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -450,7 +474,7 @@
   }
   
   .register-header h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 }
 
@@ -482,13 +506,13 @@
   }
   
   .register-header h1 {
-    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
     white-space: normal;
     word-break: break-word;
   }
   
   .register-header p {
-    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
     white-space: normal;
   }
   
@@ -535,18 +559,18 @@
   }
   
   .register-header h1 {
-    font-size: clamp(1rem, 6vw, 1.5rem);
+    font-size: clamp(1.2rem, 6vw, 1.7rem);
     white-space: normal;
     word-break: break-word;
   }
   
   .register-header p {
-    font-size: clamp(0.6rem, 3vw, 0.8rem);
+    font-size: clamp(0.8rem, 3vw, 1rem);
     white-space: normal;
   }
   
   .header-separator {
-    font-size: 1.25rem;
+    font-size: 1.45rem;
   }
   
   .form-row {
@@ -559,7 +583,7 @@
   
   .submit-button {
     padding: 1rem 2rem;
-    font-size: 1rem;
+    font-size: 1.3rem;
     margin-top: 2rem;
   }
   
@@ -592,25 +616,25 @@
   }
   
   .register-header h1 {
-    font-size: clamp(0.9rem, 7vw, 1.2rem);
+    font-size: clamp(1.1rem, 7vw, 1.4rem);
     white-space: normal;
     word-break: break-word;
   }
   
   .register-header p {
-    font-size: clamp(0.5rem, 3.5vw, 0.75rem);
+    font-size: clamp(0.7rem, 3.5vw, 0.95rem);
     white-space: normal;
   }
   
   .form-group input,
   .form-group textarea {
     padding: 0.75rem 0.875rem;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
   }
   
   .submit-button {
     padding: 0.875rem 1.5rem;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     margin-top: 1.5rem;
   }
 } 
