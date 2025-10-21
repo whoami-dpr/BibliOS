@@ -1,7 +1,7 @@
 /* Login.css - Responsive Design */
 .login-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 30%, #1a1a1a 70%, #0f0f0f 100%);
+  background: #121212;
   padding: 96px 0 0 0;
   display: flex;
   align-items: center;
@@ -9,72 +9,42 @@
   overflow-y: auto;
   width: 100%;
   margin: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.login-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(201, 163, 104, 0.03) 0%, rgba(201, 163, 104, 0.01) 40%, transparent 70%),
-    radial-gradient(circle at 80% 80%, rgba(201, 163, 104, 0.025) 0%, rgba(201, 163, 104, 0.008) 40%, transparent 70%),
-    radial-gradient(circle at 50% 50%, rgba(201, 163, 104, 0.02) 0%, rgba(201, 163, 104, 0.006) 50%, transparent 80%),
-    radial-gradient(circle at 30% 70%, rgba(201, 163, 104, 0.015) 0%, rgba(201, 163, 104, 0.006) 50%, transparent 75%),
-    radial-gradient(circle at 70% 30%, rgba(201, 163, 104, 0.012) 0%, rgba(201, 163, 104, 0.006) 50%, transparent 75%);
-  pointer-events: none;
-  z-index: 1;
 }
 
 .login-wrapper {
   display: flex;
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   min-height: calc(100vh - 120px);
   max-height: none;
   position: relative;
   z-index: 2;
+  padding: 0 2rem;
 }
 
 .login-form-section {
-  flex: 1;
+  flex: 0 0 45%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 0.5rem 1rem 1rem 1rem;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
   position: relative;
   padding-top: 3rem;
+  background: transparent;
 }
 
 .login-inspiration-section {
-  flex: 0 0 60%;
+  flex: 0 0 55%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem 1rem 1rem;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
   overflow: hidden;
   padding-top: 0;
   max-height: 75vh;
-}
-
-.login-inspiration-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 80% 20%, rgba(201, 163, 104, 0.06) 0%, transparent 70%),
-    radial-gradient(circle at 20% 80%, rgba(201, 163, 104, 0.04) 0%, transparent 70%),
-    radial-gradient(circle at 50% 50%, rgba(201, 163, 104, 0.02) 0%, transparent 80%);
-  pointer-events: none;
+  position: relative;
+  background: transparent;
 }
 
 .inspiration-content {
@@ -82,37 +52,44 @@
   z-index: 1;
   position: relative;
   padding: 0.5rem;
-  max-width: 300px;
+  max-width: 500px;
   margin-top: 0;
   animation: float 6s ease-in-out infinite;
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .inspiration-text {
-  font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 800;
   margin: 0;
-  line-height: 1.1;
-  background: linear-gradient(45deg, #c9a368, #e6c47a, #d4af37, #c9a368, #f4e4bc, #c9a368);
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: colorShift 4s ease-in-out infinite;
+  line-height: 1.2;
+  color: #c9a368;
   text-shadow: 0 0 15px rgba(201, 163, 104, 0.2);
   transition: all 0.8s ease-in-out;
   opacity: 1;
   transform: translateY(0);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+  display: block;
 }
 
 .inspiration-subtitle {
-  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
   color: #d1d5db;
-  margin: 0.75rem 0 0 0;
+  margin: 1rem 0 0 0;
   font-weight: 500;
   opacity: 0.9;
   letter-spacing: 0.3px;
   transition: all 0.8s ease-in-out;
   transform: translateY(0);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  display: block;
 }
 
 /* Estados de transición para cambio de texto */
@@ -187,10 +164,10 @@
 
 .login-content {
   width: 100%;
-  max-width: 380px;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 2rem;
   box-shadow: 
     0 25px 50px rgba(0, 0, 0, 0.6),
     0 0 0 1px rgba(201, 163, 104, 0.3),
@@ -216,46 +193,43 @@
   transform: translateX(-50%);
   width: 120px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #c9a368, transparent);
+  background: #121212;
   border-radius: 2px;
 }
 
-.back-button {
-  position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  background: rgba(55, 65, 81, 0.9);
-  border: 1px solid rgba(201, 163, 104, 0.3);
+.close-login-button {
+  position: fixed;
+  top: 100px;
+  right: 2rem;
+  background: #121212;
+  border: none;
   color: #9ca3af;
-  padding: 4px;
-  border-radius: 6px;
+  padding: 10px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
-  z-index: 2;
-  width: 24px;
-  height: 24px;
+  backdrop-filter: none;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  box-shadow: none;
 }
 
-.back-button:hover {
-  background: rgba(201, 163, 104, 0.2);
+.close-login-button:hover {
+  background: #121212;
   color: #c9a368;
   border-color: #c9a368;
   transform: scale(1.1);
 }
 
 .header-content h1 {
-  color: white;
+  color: #c9a368;
   font-size: clamp(1.5rem, 3vw, 1.8rem);
   font-weight: 800;
   margin: 0 0 0.25rem 0;
-  background: linear-gradient(135deg, #ffffff 0%, #c9a368 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   letter-spacing: -0.02em;
 }
 
@@ -296,17 +270,15 @@
 .form-input {
   width: 100%;
   padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(201, 163, 104, 0.3);
+  background: transparent;
+  border: none;
   border-radius: 12px;
   color: white;
   font-size: 0.9rem;
   font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
-  backdrop-filter: blur(15px);
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.2),
-    0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: none;
+  box-shadow: none;
 }
 
 .form-input:focus {
@@ -316,7 +288,7 @@
     0 0 0 4px rgba(201, 163, 104, 0.2),
     inset 0 2px 4px rgba(0, 0, 0, 0.2),
     0 1px 0 rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.8);
+  background: transparent;
 }
 
 .form-input:disabled {
@@ -364,7 +336,7 @@
 .login-submit-btn {
   width: 100%;
   background: linear-gradient(135deg, #c9a368 0%, #b58b4a 100%);
-  color: #111;
+  color: white;
   border: none;
   padding: 10px 18px;
   border-radius: 8px;
@@ -393,12 +365,13 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: transparent;
   transition: left 0.5s ease;
 }
 
 .login-submit-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #b58b4a 0%, #a67c3a 100%);
+  background: #121212;
+  color: white;
   transform: translateY(-1px);
   box-shadow: 
     0 6px 20px rgba(201, 163, 104, 0.4),
@@ -413,6 +386,7 @@
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  color: white;
 }
 
 .login-error {
@@ -420,7 +394,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  background: #fef2f2;
+  background: #121212;
   border: 1px solid #fecaca;
   border-radius: 8px;
   color: #dc2626;
@@ -448,33 +422,40 @@
 }
 
 .register-link-btn {
-  background-color: #c9a368;
-  color: #111;
+  background: linear-gradient(135deg, #c9a368 0%, #b58b4a 100%);
+  color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  box-shadow: 
+    0 3px 12px rgba(201, 163, 104, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .register-link-btn:hover {
-  background-color: #b58b4a;
-  color: #111;
+  background: linear-gradient(135deg, #b58b4a 0%, #a67c3a 100%);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 20px rgba(201, 163, 104, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .login-help {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(20, 20, 20, 0.7) 100%);
-  border: 1px solid rgba(201, 163, 104, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(201, 163, 104, 0.3);
   border-radius: 12px;
   padding: 0.75rem;
   margin-top: 1rem;
   text-align: center;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(10px);
   box-shadow: 
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
     inset 0 -1px 0 rgba(201, 163, 104, 0.1),
@@ -497,23 +478,40 @@
   font-weight: 500;
 }
 
+.login-help p strong {
+  color: #c9a368;
+  font-weight: 700;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1366px) {
+  .login-wrapper {
+    max-width: 1200px;
+    padding: 0 1.5rem;
+  }
+  
   .login-content {
     max-width: 400px;
     padding: 1.75rem;
   }
   
   .inspiration-text {
-    font-size: 2.8rem;
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
   }
   
   .inspiration-subtitle {
-    font-size: 1.2rem;
+    font-size: clamp(0.95rem, 1.8vw, 1.4rem);
   }
+  
+  .close-login-button {
+    top: 90px;
+    right: 1.5rem;
+  }
+  
   .login-container {
     padding-top: 120px;
   }
+  
   .login-form-section {
     padding-top: 1.25rem;
   }
@@ -528,6 +526,7 @@
   .login-wrapper {
     flex-direction: column;
     max-height: none;
+    padding: 0 1rem;
   }
   
   .login-inspiration-section {
@@ -542,7 +541,7 @@
   }
   
   .login-content {
-    max-width: 400px;
+    max-width: 450px;
   }
 }
 
@@ -552,6 +551,14 @@
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
+  
+  .close-login-button {
+    top: 85px;
+    right: 1rem;
+    width: 38px;
+    height: 38px;
+  }
+  
   .login-form-section {
     padding-top: 0.5rem;
   }
@@ -581,6 +588,13 @@
 }
 
 @media (max-width: 480px) {
+  .close-login-button {
+    top: 75px;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+  }
+  
   .login-header {
     margin-bottom: 1rem;
   }
@@ -657,11 +671,11 @@
   }
   
   .inspiration-text {
-    font-size: 3.5rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
   }
   
   .inspiration-subtitle {
-    font-size: 1.4rem;
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
   }
 }
 
@@ -669,10 +683,10 @@
 .utn-quick-access {
   margin-top: 1.5rem;
   padding: 1rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: #121212;
   border: 1px solid rgba(102, 126, 234, 0.3);
   border-radius: 12px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: none;
 }
 
 .utn-divider {
@@ -692,14 +706,14 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(201, 163, 104, 0.3), transparent);
+  background: transparent;
   margin: 0 0.5rem;
 }
 
 .utn-quick-btn {
   width: 100%;
   padding: 14px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #c9a368 0%, #b58b4a 100%);
   border: none;
   border-radius: 8px;
   color: white;
@@ -711,13 +725,15 @@
   justify-content: center;
   gap: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 
+    0 4px 15px rgba(201, 163, 104, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   margin-bottom: 0.75rem;
 }
 
 .utn-quick-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  box-shadow: none;
 }
 
 .utn-quick-btn:active:not(:disabled) {

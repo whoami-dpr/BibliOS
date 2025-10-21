@@ -20,11 +20,19 @@ export default function Prestamos() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [prestamoToDelete, setPrestamoToDelete] = useState(null);
 
+  // Estados para los buscadores
+  const [libroSearch, setLibroSearch] = useState('');
+  const [socioSearch, setSocioSearch] = useState('');
+  const [showLibroResults, setShowLibroResults] = useState(false);
+  const [showSocioResults, setShowSocioResults] = useState(false);
+  const [selectedLibro, setSelectedLibro] = useState(null);
+  const [selectedSocio, setSelectedSocio] = useState(null);
+
   // Estado del formulario
   const [formData, setFormData] = useState({
     libroId: '',
     socioId: '',
-    fechaPrestamo: '',
+    fechaPrestamo: new Date().toISOString().split('T')[0],
     fechaDevolucion: '',
     observaciones: ''
   });
@@ -92,6 +100,34 @@ export default function Prestamos() {
     loadData();
   }, []);
 
+  // Limpiar campos de búsqueda cuando se cierra el formulario
+  useEffect(() => {
+    if (!showForm) {
+      setLibroSearch('');
+      setSocioSearch('');
+      setSelectedLibro(null);
+      setSelectedSocio(null);
+      setShowLibroResults(false);
+      setShowSocioResults(false);
+    }
+  }, [showForm]);
+
+  // Cerrar resultados cuando se hace clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.searchable-dropdown')) {
+        setShowLibroResults(false);
+        setShowSocioResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
   // Funciones auxiliares
   const getLibroById = (id) => libros.find(libro => libro.id === id);
   const getSocioById = (id) => socios.find(socio => socio.id === id);
@@ -112,11 +148,60 @@ export default function Prestamos() {
     }
   };
 
+  // Funciones para los buscadores
+  const handleLibroSearch = (e) => {
+    const value = e.target.value;
+    setLibroSearch(value);
+    setShowLibroResults(value.length > 0);
+  };
+
+  const handleSocioSearch = (e) => {
+    const value = e.target.value;
+    setSocioSearch(value);
+    setShowSocioResults(value.length > 0);
+  };
+
+  const selectLibro = (libro) => {
+    setSelectedLibro(libro);
+    setLibroSearch(`${libro.titulo} - ${libro.autor}`);
+    setShowLibroResults(false);
+    setFormData({ ...formData, libroId: libro.id });
+  };
+
+  const selectSocio = (socio) => {
+    setSelectedSocio(socio);
+    setSocioSearch(socio.nombre);
+    setShowSocioResults(false);
+    setFormData({ ...formData, socioId: socio.id });
+  };
+
+  const filteredLibros = libros.filter(libro => 
+    libro.disponible && 
+    (libro.titulo.toLowerCase().includes(libroSearch.toLowerCase()) ||
+     libro.autor.toLowerCase().includes(libroSearch.toLowerCase()))
+  );
+
+  const filteredSocios = socios.filter(socio => 
+    socio.activo && 
+    socio.nombre.toLowerCase().includes(socioSearch.toLowerCase())
+  );
+
   // Manejo del formulario
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Validar que el año no tenga más de 4 dígitos para campos de fecha
+    if ((name === 'fechaPrestamo' || name === 'fechaDevolucion') && value) {
+      const year = value.split('-')[0];
+      if (year && year.length > 4) {
+        // No actualizar si el año tiene más de 4 dígitos
+        return;
+      }
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
@@ -124,6 +209,21 @@ export default function Prestamos() {
     e.preventDefault();
     
     try {
+      // Validar fechas
+      const today = new Date().toISOString().split('T')[0];
+      const fechaPrestamo = formData.fechaPrestamo || today;
+      const fechaDevolucion = formData.fechaDevolucion;
+      
+      if (fechaPrestamo < today) {
+        alert('La fecha de préstamo no puede ser anterior a la fecha actual');
+        return;
+      }
+      
+      if (fechaDevolucion < fechaPrestamo) {
+        alert('La fecha de devolución no puede ser anterior a la fecha de préstamo');
+        return;
+      }
+      
       // Obtener biblioteca activa
       const storedLibrary = localStorage.getItem('bibliotecaActiva');
       if (!storedLibrary) {
@@ -139,7 +239,8 @@ export default function Prestamos() {
           libroId: parseInt(formData.libroId),
           socioId: parseInt(formData.socioId),
           bibliotecaId: library.id,
-          fechaDevolucion: formData.fechaDevolucion,
+          fechaPrestamo: fechaPrestamo,
+          fechaDevolucion: fechaDevolucion,
           observaciones: formData.observaciones || null
         });
         
@@ -179,7 +280,7 @@ export default function Prestamos() {
       setFormData({
         libroId: '',
         socioId: '',
-        fechaPrestamo: '',
+        fechaPrestamo: new Date().toISOString().split('T')[0],
         fechaDevolucion: '',
         observaciones: ''
       });
@@ -340,37 +441,64 @@ export default function Prestamos() {
             <h3>Nuevo Préstamo</h3>
             <form onSubmit={handleSubmit} className="prestamo-form">
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group searchable-dropdown">
                   <label htmlFor="libroId">Libro *</label>
-                  <select 
-                    name="libroId" 
-                    value={formData.libroId} 
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Seleccionar libro</option>
-                    {libros.filter(libro => libro.disponible).map(libro => (
-                      <option key={libro.id} value={libro.id}>
-                        {libro.titulo} - {libro.autor}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="search-wrapper">
+                    <input
+                      type="text"
+                      id="libroId"
+                      placeholder="Buscar libro..."
+                      value={libroSearch}
+                      onChange={handleLibroSearch}
+                      onFocus={() => setShowLibroResults(libroSearch.length > 0)}
+                      required
+                    />
+                    {showLibroResults && filteredLibros.length > 0 && (
+                      <div className="search-results">
+                        {filteredLibros.map(libro => (
+                          <div
+                            key={libro.id}
+                            className="search-result-item"
+                            onClick={() => selectLibro(libro)}
+                          >
+                            <Book size={16} />
+                            <div>
+                              <strong>{libro.titulo}</strong>
+                              <span>por {libro.autor}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="form-group">
+                <div className="form-group searchable-dropdown">
                   <label htmlFor="socioId">Socio *</label>
-                  <select 
-                    name="socioId" 
-                    value={formData.socioId} 
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Seleccionar socio</option>
-                    {socios.filter(socio => socio.activo).map(socio => (
-                      <option key={socio.id} value={socio.id}>
-                        {socio.nombre}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="search-wrapper">
+                    <input
+                      type="text"
+                      id="socioId"
+                      placeholder="Buscar socio..."
+                      value={socioSearch}
+                      onChange={handleSocioSearch}
+                      onFocus={() => setShowSocioResults(socioSearch.length > 0)}
+                      required
+                    />
+                    {showSocioResults && filteredSocios.length > 0 && (
+                      <div className="search-results">
+                        {filteredSocios.map(socio => (
+                          <div
+                            key={socio.id}
+                            className="search-result-item"
+                            onClick={() => selectSocio(socio)}
+                          >
+                            <User size={16} />
+                            <span>{socio.nombre}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="fechaPrestamo">Fecha Préstamo *</label>
@@ -379,6 +507,8 @@ export default function Prestamos() {
                     name="fechaPrestamo" 
                     value={formData.fechaPrestamo} 
                     onChange={handleInputChange}
+                    min={new Date().toISOString().split('T')[0]}
+                    max="2100-12-31"
                     required
                   />
                 </div>
@@ -389,6 +519,8 @@ export default function Prestamos() {
                     name="fechaDevolucion" 
                     value={formData.fechaDevolucion} 
                     onChange={handleInputChange}
+                    min={formData.fechaPrestamo || new Date().toISOString().split('T')[0]}
+                    max="2100-12-31"
                     required
                   />
                 </div>

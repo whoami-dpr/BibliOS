@@ -261,6 +261,15 @@ class DatabaseHandlers {
             }
         });
 
+        ipcMain.handle('database:getSociosPorMes', async (event, { bibliotecaId, meses = 6 }) => {
+            try {
+                return await this.db.getSociosPorMes(bibliotecaId, meses);
+            } catch (error) {
+                console.error('Error en getSociosPorMes:', error);
+                throw error;
+            }
+        });
+
         // ===== MANEJADORES DE UTILIDADES =====
         
         ipcMain.handle('database:backup', async (event, destinationPath) => {
@@ -345,6 +354,7 @@ class DatabaseHandlers {
         ipcMain.removeHandler('database:getBibliotecaStats');
         ipcMain.removeHandler('database:getPrestamosPorMes');
         ipcMain.removeHandler('database:getLibrosPorCategoria');
+        ipcMain.removeHandler('database:getSociosPorMes');
         
         ipcMain.removeHandler('database:backup');
         ipcMain.removeHandler('database:close');

@@ -17,7 +17,7 @@ button:hover {
   margin: 0 auto;
   min-height: 100vh;
   color: white;
-  background: linear-gradient(to right, #121212, #1c1c1c);
+  background: #121212;
   padding-top: 80px;
 }
 
@@ -74,7 +74,7 @@ button:hover {
   margin-top: 0.35rem;
   white-space: normal;
   word-wrap: break-word;
-}image.png
+}
 
 .add-button {
   background: #1f2937;
@@ -131,7 +131,7 @@ button:hover {
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.25rem;
@@ -145,7 +145,7 @@ button:hover {
 
 .stat-card:hover {
   border-color: #c9a368;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
 }
 
 .stat-icon {
@@ -156,7 +156,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   color: #c9a368;
@@ -178,7 +178,7 @@ button:hover {
 
 /* Form Section */
 .form-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.5rem;
@@ -224,17 +224,145 @@ button:hover {
   gap: 0.5rem;
 }
 
+/* Searchable Dropdown Styles */
+.searchable-dropdown {
+  position: relative;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.search-wrapper input {
+  width: 100%;
+  cursor: text;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-top: 0.25rem;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: rgba(201, 163, 104, 0.15);
+  color: #c9a368;
+}
+
+.search-result-item svg {
+  color: #c9a368;
+  flex-shrink: 0;
+}
+
+.search-result-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.search-result-item strong {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.search-result-item span {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
 .form-group input,
 .form-group select,
 .form-group textarea {
   padding: 0.75rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   color: white;
   font-size: 0.9rem;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+}
+
+/* Estilos para el calendario (input type="date") */
+.form-group input[type="date"] {
+  cursor: pointer;
+  position: relative;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.form-group input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  color: white;
+}
+
+.form-group input[type="date"]::-webkit-datetime-edit-text {
+  color: #9ca3af;
+  padding: 0 0.25rem;
+}
+
+.form-group input[type="date"]::-webkit-datetime-edit-month-field,
+.form-group input[type="date"]::-webkit-datetime-edit-day-field,
+.form-group input[type="date"]::-webkit-datetime-edit-year-field {
+  color: white;
+}
+
+.form-group input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+/* Estilos para Firefox y otros navegadores */
+.form-group input[type="date"]::-moz-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.form-group input[type="date"]::-moz-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Estilos para Edge */
+.form-group input[type="date"]::-ms-clear {
+  display: none;
+}
+
+.form-group input[type="date"]::-ms-reveal {
+  display: none;
 }
 
 .form-group input:focus,
@@ -242,7 +370,7 @@ button:hover {
 .form-group textarea:focus {
   outline: none;
   border-color: #c9a368;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
 }
 
 .form-group input::placeholder,
@@ -278,7 +406,7 @@ button:hover {
 }
 
 .cancel-button {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.75rem 1.5rem;
@@ -290,7 +418,7 @@ button:hover {
 }
 
 .cancel-button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: transparent;
   border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -307,7 +435,7 @@ button:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 0.5rem 1rem;
@@ -347,7 +475,7 @@ button:hover {
 
 /* Table Section */
 .table-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   backdrop-filter: blur(10px);
@@ -373,7 +501,7 @@ button:hover {
 .count {
   font-size: 0.9rem;
   color: #9ca3af;
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
 }
@@ -389,7 +517,7 @@ button:hover {
 }
 
 .prestamos-table th {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   color: #c9a368;
   font-weight: 600;
   font-size: 0.9rem;
@@ -403,10 +531,15 @@ button:hover {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   color: white;
   font-size: 0.9rem;
+  background: transparent;
 }
 
 .prestamos-table tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(201, 163, 104, 0.05);
+}
+
+.prestamos-table tbody {
+  background: transparent;
 }
 
 /* Table Content Styles */
@@ -472,7 +605,7 @@ button:hover {
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   transform: scale(1.1);
 }
 
@@ -483,7 +616,7 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -492,7 +625,7 @@ button:hover {
 }
 
 .modal-content {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 0;
@@ -532,7 +665,7 @@ button:hover {
 
 .close-button:hover {
   color: white;
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
 }
 
 .modal-body {
@@ -567,6 +700,26 @@ button:hover {
 }
 
 /* Responsive Design */
+@media (min-width: 1600px) {
+  .prestamos-container {
+    max-width: 1600px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .form-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .prestamos-table th,
+  .prestamos-table td {
+    padding: 1.25rem;
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 1200px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -574,30 +727,6 @@ button:hover {
   
   .form-row {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 1200px) {
-  .prestamos-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .prestamos-header h1 {
-    font-size: 2rem;
-  }
-  
-  .add-button {
-    align-self: flex-start;
   }
 }
 

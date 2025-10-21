@@ -11,9 +11,12 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
-    // Permitir ventanas más pequeñas para pruebas/responsivo
-    minWidth: 360,
-    minHeight: 600,
+    // Límites mínimos de tamaño de ventana
+    minWidth: 900,
+    minHeight: 560,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    resizable: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

@@ -1153,6 +1153,38 @@ class DatabaseService {
         }
     }
 
+    async getSociosPorMes(bibliotecaId, meses = 6) {
+        try {
+            // Contar socios registrados por mes
+            const stmt = this.db.prepare(`
+                SELECT 
+                    strftime('%Y-%m', fechaRegistro) as mes,
+                    COUNT(*) as sociosNuevos
+                FROM socios 
+                WHERE bibliotecaId = ? 
+                AND fechaRegistro >= date('now', '-' || ? || ' months')
+                GROUP BY strftime('%Y-%m', fechaRegistro)
+                ORDER BY mes ASC
+            `);
+            
+            const resultados = stmt.all(bibliotecaId, meses);
+            
+            // Calcular total acumulado por mes
+            let totalAcumulado = 0;
+            return resultados.map(item => {
+                totalAcumulado += item.sociosNuevos;
+                return {
+                    mes: item.mes,
+                    sociosNuevos: item.sociosNuevos,
+                    totalAcumulado: totalAcumulado
+                };
+            });
+        } catch (error) {
+            console.error('Error al obtener socios por mes:', error);
+            throw error;
+        }
+    }
+
     // ===== UTILIDADES =====
     
     async close() {

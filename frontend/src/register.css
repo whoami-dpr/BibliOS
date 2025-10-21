@@ -1,7 +1,7 @@
 /* Register Page Styles */
 .register-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+  background: #121212;
   padding: 0;
   display: flex;
   align-items: flex-start;
@@ -10,11 +10,6 @@
   overflow-x: hidden;
   width: 100%;
   margin: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 }
 
 .register-container::before {
@@ -24,12 +19,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(201, 163, 104, 0.06) 0%, rgba(201, 163, 104, 0.02) 40%, transparent 70%),
-    radial-gradient(circle at 80% 80%, rgba(201, 163, 104, 0.05) 0%, rgba(201, 163, 104, 0.015) 40%, transparent 70%),
-    radial-gradient(circle at 50% 50%, rgba(201, 163, 104, 0.04) 0%, rgba(201, 163, 104, 0.01) 50%, transparent 80%),
-    radial-gradient(circle at 30% 70%, rgba(201, 163, 104, 0.03) 0%, rgba(201, 163, 104, 0.01) 50%, transparent 75%),
-    radial-gradient(circle at 70% 30%, rgba(201, 163, 104, 0.025) 0%, rgba(201, 163, 104, 0.01) 50%, transparent 75%);
+  background: transparent;
   pointer-events: none;
   z-index: 1;
 }
@@ -63,7 +53,7 @@
   position: absolute;
   top: 0.25rem;
   right: 0.25rem;
-  background: rgba(0, 0, 0, 0.8);
+  background: transparent;
   border: 1px solid rgba(201, 163, 104, 0.3);
   color: #c9a368;
   padding: 0.5rem;
@@ -137,12 +127,12 @@
 
 /* Form Section */
 .register-form-section {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+  background: #121212;
   border: 1px solid rgba(201, 163, 104, 0.2);
   border-radius: 16px;
   padding: 2rem 2rem 3rem 2rem;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  backdrop-filter: none;
+  box-shadow: none;
   width: 100%;
   height: fit-content;
   margin-bottom: 2rem;
@@ -204,7 +194,7 @@
   padding: 1rem 1.25rem;
   border: 1px solid rgba(201, 163, 104, 0.3);
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.8);
+  background: transparent;
   color: #ffffff !important;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -219,7 +209,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: #c9a368;
-  background: rgba(0, 0, 0, 0.9);
+  background: transparent;
   box-shadow: 0 0 0 3px rgba(201, 163, 104, 0.2);
   color: #ffffff !important;
   opacity: 1;
@@ -321,7 +311,7 @@
 
 /* Existing Libraries Section */
 .existing-libraries-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 2.5rem;
@@ -345,7 +335,7 @@
 }
 
 .library-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 1.5rem;
@@ -356,7 +346,7 @@
 }
 
 .library-card:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border-color: rgba(201, 163, 104, 0.3);
 }
 

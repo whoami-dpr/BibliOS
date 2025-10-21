@@ -198,15 +198,15 @@ function Login() {
       <Navbar />
       <div className="login-container">
         <div className="login-wrapper">
+          <button 
+            className="close-login-button" 
+            onClick={() => navigate('/')}
+          >
+            <X size={24} />
+          </button>
           <div className="login-form-section">
             <div className="login-content">
           <div className="login-header">
-            <button 
-              className="back-button" 
-              onClick={() => navigate('/')}
-            >
-              <X size={20} />
-            </button>
             <div className="header-content">
               <h1>Iniciar Sesión</h1>
               <span className="header-separator">|</span>

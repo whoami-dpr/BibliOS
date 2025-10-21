@@ -72,11 +72,13 @@ export default function Dashboard() {
                 }));
                 setLibrosPorCategoria(categoriasFormateadas);
 
-                // Socios activos (simulado con datos de préstamos)
-                setSociosActivos(prestamosFormateados.map(item => ({
+                // Socios activos - datos históricos acumulados por mes
+                const sociosPorMes = await window.electronAPI.getSociosPorMes(library.id, 6);
+                const sociosActivosFormateados = sociosPorMes.map(item => ({
                   mes: item.mes,
-                  activos: item.prestamos || 0
-                })));
+                  activos: item.totalAcumulado || 0
+                }));
+                setSociosActivos(sociosActivosFormateados);
 
                 // Calcular préstamos próximos a vencer (próximos 3 días)
                 const prestamos = await window.electronAPI.getPrestamos(library.id, { estado: 'activo' });

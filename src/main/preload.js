@@ -120,6 +120,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getLibrosPorCategoria: (bibliotecaId) => 
         ipcRenderer.invoke('database:getLibrosPorCategoria', bibliotecaId),
 
+    // Obtener socios por mes (histórico acumulado)
+    getSociosPorMes: (bibliotecaId, meses = 6) => 
+        ipcRenderer.invoke('database:getSociosPorMes', { bibliotecaId, meses }),
+
     // ===== APIS DE UTILIDADES =====
     
     // Hacer backup de la base de datos

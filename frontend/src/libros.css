@@ -5,7 +5,7 @@
   margin: 0 auto;
   min-height: 100vh;
   color: white;
-  background: linear-gradient(to right, #121212, #1c1c1c);
+  background: #121212;
   padding-top: 80px;
 }
 
@@ -26,19 +26,20 @@ button:hover {
   width: 100%;
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .header-content {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   gap: 1rem;
   flex: 1;
-  width: 100%;
-  flex-wrap: nowrap !important;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .header-separator {
@@ -60,7 +61,6 @@ button:hover {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   white-space: nowrap;
-  display: inline-block !important;
   flex-shrink: 0;
 }
 
@@ -68,10 +68,11 @@ button:hover {
   font-size: 1rem;
   color: white;
   margin: 0;
-  max-width: 600px;
-  display: inline-block !important;
-  flex-shrink: 0;
+  max-width: 100%;
+  flex-shrink: 1;
   margin-top: 0.35rem;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .add-button {
@@ -129,7 +130,7 @@ button:hover {
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.25rem;
@@ -143,7 +144,7 @@ button:hover {
 
 .stat-card:hover {
   border-color: #c9a368;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
 }
 
 .stat-icon {
@@ -154,7 +155,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   color: #c9a368;
@@ -176,7 +177,7 @@ button:hover {
 
 /* Form Section */
 .form-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.5rem;
@@ -227,7 +228,7 @@ button:hover {
   padding: 0.75rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   color: white;
   font-size: 0.9rem;
   transition: all 0.3s ease;
@@ -238,7 +239,7 @@ button:hover {
 .form-group textarea:focus {
   outline: none;
   border-color: #c9a368;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
   box-shadow: 0 0 0 3px rgba(201, 163, 104, 0.1);
 }
 
@@ -303,7 +304,7 @@ button:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 0.5rem 1rem;
@@ -343,7 +344,7 @@ button:hover {
 
 /* Table Section */
 .table-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   overflow: hidden;
@@ -369,7 +370,7 @@ button:hover {
 .count {
   font-size: 0.9rem;
   color: #9ca3af;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
 }
@@ -384,7 +385,7 @@ button:hover {
 }
 
 .libros-table th {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   padding: 1rem;
   text-align: left;
   font-size: 0.9rem;
@@ -397,10 +398,15 @@ button:hover {
   padding: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 0.9rem;
+  background: transparent;
 }
 
 .libros-table tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
+}
+
+.libros-table tbody {
+  background: transparent;
 }
 
 .libro-info {
@@ -528,7 +534,7 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -537,7 +543,7 @@ button:hover {
 }
 
 .modal-content {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 0;
@@ -576,7 +582,7 @@ button:hover {
 }
 
 .close-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   color: white;
 }
 
@@ -611,6 +617,26 @@ button:hover {
 }
 
 /* Responsive */
+@media (min-width: 1600px) {
+  .libros-container {
+    max-width: 1600px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .form-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .libros-table th,
+  .libros-table td {
+    padding: 1.25rem;
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 1200px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -628,29 +654,29 @@ button:hover {
   }
   
   .libros-header {
-    flex-direction: row !important;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
-    display: flex !important;
-    align-items: center !important;
   }
   
   .header-content {
-    flex-direction: row !important;
-    text-align: left;
-    gap: 1rem;
-    flex: 1;
-    display: flex !important;
-    align-items: center !important;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 100%;
   }
   
   .libros-header h1 {
     font-size: 2rem;
-    text-align: left;
   }
   
   .libros-header p {
     font-size: 0.9rem;
-    text-align: left;
+  }
+  
+  .add-button {
+    align-self: flex-start;
   }
   
   .stats-grid {
