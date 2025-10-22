@@ -119,7 +119,7 @@ function registerDialogsIPC() {
     return true;
   });
 
-  console.log('✅ Handlers de diálogos registrados con reparación de foco');
+  console.log('Handlers de diálogos registrados con reparación de foco');
 }
 
 module.exports = { registerDialogsIPC, focusRepair };

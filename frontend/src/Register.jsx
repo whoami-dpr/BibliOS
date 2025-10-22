@@ -148,7 +148,7 @@ function Register() {
       setIsSubmitting(false);
       
       // LOG PARA VERIFICAR LIMPIEZA
-      console.log('🧹 FORMULARIO LIMPIADO COMPLETAMENTE');
+      console.log('FORMULARIO LIMPIADO COMPLETAMENTE');
 
       // SOLUCIÓN DEFINITIVA: NO usar diálogos nativos que roben el focus
       // En su lugar, mostrar un mensaje temporal en pantalla
@@ -250,7 +250,7 @@ function Register() {
         setIsSubmitting(false);
         
         // LOG PARA VERIFICAR LIMPIEZA
-        console.log('🧹 FORMULARIO LIMPIADO COMPLETAMENTE (ERROR)');
+        console.log('FORMULARIO LIMPIADO COMPLETAMENTE (ERROR)');
       }
       
       document.body.appendChild(errorMessage);

@@ -1454,7 +1454,7 @@ class DatabaseService {
 
     async createUTNLibrary() {
         try {
-            console.log('🏛️ Creando biblioteca UTN-FRLP...');
+            console.log('Creando biblioteca UTN-FRLP...');
             
             // Verificar si ya existe
             const existingLibrary = this.db.prepare('SELECT id FROM bibliotecas WHERE nombre = ?').get('UTN-FRLP');

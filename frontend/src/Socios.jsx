@@ -129,7 +129,7 @@ export default function Socios() {
           bibliotecaId: library.id
         };
         
-        console.log('📧 Datos del socio a crear:', socioData);
+        console.log('Datos del socio a crear:', socioData);
         
         const newSocio = await window.electronAPI.createSocio(socioData);
         

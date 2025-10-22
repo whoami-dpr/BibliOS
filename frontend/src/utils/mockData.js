@@ -31,7 +31,7 @@ export const initializeMockData = () => {
     localStorage.setItem('bibliotecas', JSON.stringify(mockLibraries));
     localStorage.setItem('authData', JSON.stringify(mockAuthData[0])); // Solo la primera biblioteca activa
     // NO establecer bibliotecaActiva automáticamente - el usuario debe autenticarse
-    console.log('📚 Datos mock inicializados correctamente');
+    console.log('Datos mock inicializados correctamente');
   }
 };
 
@@ -40,7 +40,7 @@ export const clearMockData = () => {
   localStorage.removeItem('bibliotecas');
   localStorage.removeItem('authData');
   localStorage.removeItem('bibliotecaActiva');
-  console.log('🗑️ Datos mock eliminados');
+  console.log('Datos mock eliminados');
 };
 
 // Función para agregar más bibliotecas mock
