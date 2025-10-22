@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const DatabaseHandlers = require('./ipc/databaseHandlers');
+const { registerDialogsIPC } = require('./dialogs');
 
 // Mantener una referencia global del objeto de ventana
 let mainWindow;
@@ -85,6 +86,9 @@ app.whenReady().then(() => {
     
     // Configurar eventos de la aplicación
     setupAppEvents();
+    
+    // Registrar handlers de diálogos con reparación de foco
+    registerDialogsIPC();
     
   } catch (error) {
     console.error('Error al inicializar la aplicación:', error);

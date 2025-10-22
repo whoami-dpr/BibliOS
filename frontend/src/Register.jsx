@@ -292,12 +292,24 @@ function Register() {
       navigate('/dashboard');
     } catch (error) {
       console.error('Error selecting library:', error);
-      alert('Error al seleccionar la biblioteca.');
+      await window.nativeDialog.error({
+        message: 'Error al seleccionar la biblioteca.',
+        detail: 'No se pudo seleccionar la biblioteca. Inténtalo de nuevo.'
+      });
     }
   };
 
   const handleDeleteLibrary = async (bibliotecaId) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta biblioteca? Esta acción no se puede deshacer.')) {
+    const confirmed = await window.nativeDialog.confirm({
+      message: '¿Estás seguro de que quieres eliminar esta biblioteca?',
+      detail: 'Esta acción no se puede deshacer.',
+      buttons: ['Cancelar', 'Eliminar'],
+      defaultId: 1,
+      cancelId: 0,
+      okIndex: 1
+    });
+    
+    if (!confirmed) {
       return;
     }
 
@@ -305,7 +317,10 @@ function Register() {
       await deleteLibrary(bibliotecaId);
     } catch (error) {
       console.error('Error deleting library:', error);
-      alert('Error al eliminar la biblioteca.');
+      await window.nativeDialog.error({
+        message: 'Error al eliminar la biblioteca.',
+        detail: 'No se pudo eliminar la biblioteca. Inténtalo de nuevo.'
+      });
     }
   };
 

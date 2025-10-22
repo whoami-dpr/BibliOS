@@ -186,9 +186,15 @@ function Login() {
           
           // Mostrar mensaje de éxito
           if (result.exists) {
-            alert('✅ Sesión iniciada con la biblioteca UTN-FRLP existente.\n\n📚 ' + result.datos.librosInsertados + ' libros\n👥 ' + result.datos.sociosInsertados + ' socios\n📋 ' + result.datos.prestamosInsertados + ' préstamos');
+            await window.nativeDialog.message({
+              message: '✅ Sesión iniciada con la biblioteca UTN-FRLP existente.',
+              detail: `📚 ${result.datos.librosInsertados} libros\n👥 ${result.datos.sociosInsertados} socios\n📋 ${result.datos.prestamosInsertados} préstamos`
+            });
           } else {
-            alert('✅ ¡Biblioteca UTN-FRLP creada e iniciada!\n\n📚 ' + result.datos.librosInsertados + ' libros insertados\n👥 ' + result.datos.sociosInsertados + ' socios insertados\n📋 ' + result.datos.prestamosInsertados + ' préstamos creados');
+            await window.nativeDialog.message({
+              message: '✅ ¡Biblioteca UTN-FRLP creada e iniciada!',
+              detail: `📚 ${result.datos.librosInsertados} libros insertados\n👥 ${result.datos.sociosInsertados} socios insertados\n📋 ${result.datos.prestamosInsertados} préstamos creados`
+            });
           }
           
           // Redirigir al dashboard

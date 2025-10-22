@@ -158,11 +158,34 @@ export default function Dashboard() {
     </div>
   );
 
-  const handleLogout = () => {
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      localStorage.removeItem('bibliotecaActiva');
-      localStorage.removeItem('authData');
-      navigate('/');
+  const handleLogout = async () => {
+    try {
+      // Usar el wrapper de diálogo nativo con reparación automática de foco
+      const ok = await window.nativeDialog.confirm({
+        message: '¿Seguro que querés cerrar sesión?',
+        detail: 'Se cerrará tu sesión actual.',
+        buttons: ['Cancelar', 'Cerrar sesión'],
+        defaultId: 1,
+        cancelId: 0,
+        okIndex: 1
+      });
+      
+      if (ok) {
+        localStorage.removeItem('bibliotecaActiva');
+        localStorage.removeItem('authData');
+        navigate('/');
+        
+        // Opcional: Asegurar foco después del logout
+        await window.nativeDialog.ensureFocus();
+      }
+    } catch (error) {
+      console.error('Error en confirmación de logout:', error);
+      // Fallback al confirm nativo si hay error
+      if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+        localStorage.removeItem('bibliotecaActiva');
+        localStorage.removeItem('authData');
+        navigate('/');
+      }
     }
   };
 

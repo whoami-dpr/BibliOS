@@ -100,8 +100,17 @@ const MockCredentials = ({ isOpen, onClose }) => {
               <p>Si quieres empezar de nuevo, puedes limpiar todos los datos mock:</p>
               <button 
                 className="clear-data-btn"
-                onClick={() => {
-                  if (confirm('¿Estás seguro de que quieres eliminar todos los datos mock?')) {
+                onClick={async () => {
+                  const confirmed = await window.nativeDialog.confirm({
+                    message: '¿Estás seguro de que quieres eliminar todos los datos mock?',
+                    detail: 'Esta acción eliminará todos los datos de prueba y recargará la página.',
+                    buttons: ['Cancelar', 'Eliminar'],
+                    defaultId: 1,
+                    cancelId: 0,
+                    okIndex: 1
+                  });
+                  
+                  if (confirmed) {
                     localStorage.clear();
                     window.location.reload();
                   }

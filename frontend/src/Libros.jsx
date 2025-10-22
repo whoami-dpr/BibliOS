@@ -116,7 +116,10 @@ export default function Libros() {
   // Función para buscar automáticamente el libro por ISBN
   const handleAutoSearch = async () => {
     if (!formData.isbn.trim()) {
-      alert('Por favor ingresa el ISBN del libro para buscar automáticamente');
+      await window.nativeDialog.warning({
+        message: 'ISBN requerido',
+        detail: 'Por favor ingresa el ISBN del libro para buscar automáticamente.'
+      });
       return;
     }
 
@@ -137,13 +140,22 @@ export default function Libros() {
           descripcion: libroEncontrado.descripcion || prev.descripcion
         }));
         
-        alert('¡Libro encontrado! Los datos se han llenado automáticamente. Revisa y ajusta si es necesario.');
+        await window.nativeDialog.message({
+          message: '¡Libro encontrado!',
+          detail: 'Los datos se han llenado automáticamente. Revisa y ajusta si es necesario.'
+        });
       } else {
-        alert('No se encontró información del libro con ese ISBN. Por favor completa los datos manualmente.');
+        await window.nativeDialog.warning({
+          message: 'Libro no encontrado',
+          detail: 'No se encontró información del libro con ese ISBN. Por favor completa los datos manualmente.'
+        });
       }
     } catch (error) {
       console.error('Error al buscar libro:', error);
-      alert('Error al buscar el libro: ' + error.message);
+      await window.nativeDialog.error({
+        message: 'Error al buscar el libro',
+        detail: error.message
+      });
     } finally {
       setIsSearching(false);
     }
@@ -156,7 +168,10 @@ export default function Libros() {
       // Obtener biblioteca activa
       const storedLibrary = localStorage.getItem('bibliotecaActiva');
       if (!storedLibrary) {
-        alert('No hay biblioteca activa');
+        await window.nativeDialog.error({
+          message: 'No hay biblioteca activa',
+          detail: 'Por favor, selecciona una biblioteca primero.'
+        });
         return;
       }
       
@@ -211,7 +226,10 @@ export default function Libros() {
       setShowForm(false);
     } catch (error) {
       console.error('Error al crear libro:', error);
-      alert('Error al crear libro: ' + error.message);
+      await window.nativeDialog.error({
+        message: 'Error al crear libro',
+        detail: error.message
+      });
     }
   };
 
@@ -233,7 +251,10 @@ export default function Libros() {
         setLibroToDelete(null);
       } catch (error) {
         console.error('Error al eliminar libro:', error);
-        alert('Error al eliminar libro: ' + error.message);
+        await window.nativeDialog.error({
+          message: 'Error al eliminar libro',
+          detail: error.message
+        });
       }
     }
     setShowDeleteConfirm(false);
@@ -305,7 +326,10 @@ export default function Libros() {
       setEditFormData({});
     } catch (error) {
       console.error('Error al actualizar libro:', error);
-      alert('Error al actualizar libro: ' + error.message);
+      await window.nativeDialog.error({
+        message: 'Error al actualizar libro',
+        detail: error.message
+      });
     }
   };
 

@@ -109,7 +109,10 @@ export default function Socios() {
       // Obtener biblioteca activa
       const storedLibrary = localStorage.getItem('bibliotecaActiva');
       if (!storedLibrary) {
-        alert('No hay biblioteca activa');
+        await window.nativeDialog.error({
+          message: 'No hay biblioteca activa',
+          detail: 'Por favor, selecciona una biblioteca primero.'
+        });
         return;
       }
       
@@ -161,7 +164,10 @@ export default function Socios() {
       setShowForm(false);
     } catch (error) {
       console.error('Error al crear socio:', error);
-      alert('Error al crear socio: ' + error.message);
+      await window.nativeDialog.error({
+        message: 'Error al crear socio',
+        detail: error.message
+      });
     }
   };
 
@@ -183,7 +189,10 @@ export default function Socios() {
         setSocioToDelete(null);
       } catch (error) {
         console.error('Error al eliminar socio:', error);
-        alert('Error al eliminar socio: ' + error.message);
+        await window.nativeDialog.error({
+          message: 'Error al eliminar socio',
+          detail: error.message
+        });
       }
     }
     setShowDeleteConfirm(false);
@@ -247,7 +256,10 @@ export default function Socios() {
       setEditFormData({});
     } catch (error) {
       console.error('Error al actualizar socio:', error);
-      alert('Error al actualizar socio: ' + error.message);
+      await window.nativeDialog.error({
+        message: 'Error al actualizar socio',
+        detail: error.message
+      });
     }
   };
 

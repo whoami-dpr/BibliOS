@@ -215,19 +215,28 @@ export default function Prestamos() {
       const fechaDevolucion = formData.fechaDevolucion;
       
       if (fechaPrestamo < today) {
-        alert('La fecha de préstamo no puede ser anterior a la fecha actual');
+        await window.nativeDialog.error({
+          message: 'Fecha de préstamo inválida',
+          detail: 'La fecha de préstamo no puede ser anterior a la fecha actual.'
+        });
         return;
       }
       
       if (fechaDevolucion < fechaPrestamo) {
-        alert('La fecha de devolución no puede ser anterior a la fecha de préstamo');
+        await window.nativeDialog.error({
+          message: 'Fecha de devolución inválida',
+          detail: 'La fecha de devolución no puede ser anterior a la fecha de préstamo.'
+        });
         return;
       }
       
       // Obtener biblioteca activa
       const storedLibrary = localStorage.getItem('bibliotecaActiva');
       if (!storedLibrary) {
-        alert('No hay biblioteca activa');
+        await window.nativeDialog.error({
+          message: 'No hay biblioteca activa',
+          detail: 'Por favor, selecciona una biblioteca primero.'
+        });
         return;
       }
       
@@ -287,7 +296,10 @@ export default function Prestamos() {
       setShowForm(false);
     } catch (error) {
       console.error('Error al crear préstamo:', error);
-      alert('Error al crear préstamo: ' + error.message);
+      await window.nativeDialog.error({
+        message: 'Error al crear préstamo',
+        detail: error.message
+      });
     }
   };
 
@@ -320,7 +332,10 @@ export default function Prestamos() {
       ));
     } catch (error) {
       console.error('Error al devolver libro:', error);
-      alert('Error al devolver libro: ' + error.message);
+      await window.nativeDialog.error({
+        message: 'Error al devolver libro',
+        detail: error.message
+      });
     }
   };
 
@@ -342,7 +357,10 @@ export default function Prestamos() {
         setPrestamoToDelete(null);
       } catch (error) {
         console.error('Error al eliminar préstamo:', error);
-        alert('Error al eliminar préstamo: ' + error.message);
+        await window.nativeDialog.error({
+          message: 'Error al eliminar préstamo',
+          detail: error.message
+        });
       }
     }
     setShowDeleteConfirm(false);

@@ -298,6 +298,36 @@ contextBridge.exposeInMainWorld('utils', {
     }
 });
 
+// ===== WRAPPER DE DIÁLOGOS NATIVOS CON REPARACIÓN DE FOCO =====
+contextBridge.exposeInMainWorld('nativeDialog', {
+    // Diálogo de confirmación
+    confirm: (opts) => ipcRenderer.invoke('dialog:confirm', opts),
+    
+    // Diálogo de mensaje/información
+    message: (opts) => ipcRenderer.invoke('dialog:message', opts),
+    
+    // Diálogo de error
+    error: (opts) => ipcRenderer.invoke('dialog:error', opts),
+    
+    // Diálogo de advertencia
+    warning: (opts) => ipcRenderer.invoke('dialog:warning', opts),
+    
+    // Diálogo de apertura de archivo
+    open: (opts) => ipcRenderer.invoke('dialog:open', opts),
+    
+    // Diálogo de apertura de múltiples archivos
+    openMultiple: (opts) => ipcRenderer.invoke('dialog:openMultiple', opts),
+    
+    // Diálogo de apertura de directorio
+    openDirectory: (opts) => ipcRenderer.invoke('dialog:openDirectory', opts),
+    
+    // Diálogo de guardado de archivo
+    save: (opts) => ipcRenderer.invoke('dialog:save', opts),
+    
+    // Asegurar foco en la ventana principal
+    ensureFocus: () => ipcRenderer.invoke('ensure-focused')
+});
+
 // Manejar errores de IPC
 ipcRenderer.on('error', (event, error) => {
     console.error('Error en el proceso renderer:', error);
