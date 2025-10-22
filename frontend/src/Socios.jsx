@@ -96,6 +96,12 @@ export default function Socios() {
     }));
   };
 
+  // Función para restaurar focus en inputs (solución para Windows/Electron)
+  const handleInputClick = (e) => {
+    e.target.focus();
+    e.target.select();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -207,6 +213,12 @@ export default function Socios() {
       ...prev,
       [name]: value
     }));
+  };
+
+  // Función para restaurar focus en inputs del formulario de edición
+  const handleEditInputClick = (e) => {
+    e.target.focus();
+    e.target.select();
   };
 
   const handleUpdateSubmit = async (e) => {
@@ -337,6 +349,7 @@ export default function Socios() {
                     name="nombre"
                     value={formData.nombre}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     required
                   />
                 </div>
@@ -348,6 +361,7 @@ export default function Socios() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     required
                   />
                 </div>
@@ -359,6 +373,7 @@ export default function Socios() {
                     name="telefono"
                     value={formData.telefono}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                   />
                 </div>
                 <div className="form-group">
@@ -369,6 +384,7 @@ export default function Socios() {
                     name="direccion"
                     value={formData.direccion}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                   />
                 </div>
               </div>
@@ -380,6 +396,7 @@ export default function Socios() {
                     name="observaciones"
                     value={formData.observaciones}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     rows="3"
                   />
                 </div>
@@ -657,6 +674,7 @@ export default function Socios() {
                         name="nombre"
                         value={editFormData.nombre}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                         required
                       />
                     </div>
@@ -668,6 +686,7 @@ export default function Socios() {
                         name="email"
                         value={editFormData.email}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                         required
                       />
                     </div>
@@ -679,6 +698,7 @@ export default function Socios() {
                         name="telefono"
                         value={editFormData.telefono}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                       />
                     </div>
                     <div className="form-group">
@@ -689,6 +709,7 @@ export default function Socios() {
                         name="direccion"
                         value={editFormData.direccion}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                       />
                     </div>
                   </div>
@@ -700,6 +721,7 @@ export default function Socios() {
                         name="observaciones"
                         value={editFormData.observaciones}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                         rows="3"
                       />
                     </div>

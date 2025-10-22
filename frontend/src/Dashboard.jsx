@@ -10,10 +10,12 @@ import {
 } from 'lucide-react';
 import Navbar from './Navbar.jsx';
 import './dashboard.css';
+import { ConfirmModal } from './components/ConfirmModal.jsx';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [activeLibrary, setActiveLibrary] = useState(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [stats, setStats] = useState({
     totalLibros: 0,
     totalSocios: 0,
@@ -159,11 +161,13 @@ export default function Dashboard() {
   );
 
   const handleLogout = () => {
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      localStorage.removeItem('bibliotecaActiva');
-      localStorage.removeItem('authData');
-      navigate('/');
-    }
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
+    localStorage.removeItem('bibliotecaActiva');
+    localStorage.removeItem('authData');
+    navigate('/');
   };
 
   // Mostrar loading si no hay biblioteca activa
@@ -403,6 +407,17 @@ export default function Dashboard() {
                  </div>
         </section>
       </div>
+      
+      {/* Modal de confirmación de logout */}
+      <ConfirmModal
+        isOpen={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={confirmLogout}
+        title="Cerrar Sesión"
+        message="¿Estás seguro de que quieres cerrar sesión?"
+        confirmText="Cerrar Sesión"
+        cancelText="Cancelar"
+      />
     </>
   );
 } 

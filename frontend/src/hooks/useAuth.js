@@ -95,10 +95,18 @@ export const useAuth = () => {
   };
 
   const logout = () => {
+    // Limpiar estado de autenticación
     setIsAuthenticated(false);
     setCurrentLibrary(null);
+    
+    // Limpiar localStorage completamente
     localStorage.removeItem('authData');
-    // El componente que use este hook debe manejar la navegación
+    localStorage.removeItem('bibliotecaActiva');
+    
+    // Solución simple: solo limpiar el focus actual
+    if (document.activeElement && document.activeElement.blur) {
+      document.activeElement.blur();
+    }
   };
 
   const updateAuth = (newAuthValue) => {

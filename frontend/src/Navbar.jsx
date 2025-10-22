@@ -4,6 +4,7 @@ import './welcome.css';
 import { useAuth } from './hooks/useAuth.js';
 import { useLibrary } from './hooks/useLibrary.js';
 import { useState } from 'react';
+import { ConfirmModal } from './components/ConfirmModal.jsx';
 
 export default function Navbar() {
   const location = useLocation();
@@ -11,12 +12,21 @@ export default function Navbar() {
   const { isAuthenticated, logout } = useAuth();
   const { libraries } = useLibrary();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   
   const handleLogout = () => {
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      logout();
-      navigate('/');
-    }
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
+    // Cerrar menú móvil si está abierto
+    closeMenu();
+    
+    // Ejecutar logout del hook
+    logout();
+    
+    // Navegar inmediatamente
+    navigate('/');
   };
 
   const handleLogin = () => {
@@ -111,6 +121,17 @@ export default function Navbar() {
           </li>
         )}
       </ul>
+      
+      {/* Modal de confirmación de logout */}
+      <ConfirmModal
+        isOpen={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={confirmLogout}
+        title="Cerrar Sesión"
+        message="¿Estás seguro de que quieres cerrar sesión?"
+        confirmText="Cerrar Sesión"
+        cancelText="Cancelar"
+      />
     </header>
   );
 } 

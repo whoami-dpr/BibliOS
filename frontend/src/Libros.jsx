@@ -3,10 +3,11 @@ import {
   Plus, Search, Filter, BookOpen, User, Calendar, 
   CheckCircle, AlertTriangle, Clock, Eye, Edit, Trash2,
   ArrowUpDown, Book, FileText, Circle, Triangle, CheckCircle2, 
-  MapPin, Hash, Tag, Star, Users
+  MapPin, Hash, Tag, Star, Users, Zap
 } from 'lucide-react';
 import './libros.css';
 import Navbar from './Navbar.jsx';
+import { buscarLibroPorTitulo, buscarLibroPorISBN } from './utils/openLibraryAPI.js';
 
 export default function Libros() {
   // Estados principales
@@ -21,6 +22,7 @@ export default function Libros() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [libroToEdit, setLibroToEdit] = useState(null);
   const [editFormData, setEditFormData] = useState({});
+  const [isSearching, setIsSearching] = useState(false);
 
   // Estado del formulario
   const [formData, setFormData] = useState({
@@ -103,6 +105,48 @@ export default function Libros() {
       ...prev,
       [name]: value
     }));
+  };
+
+  // Función para restaurar focus en inputs (solución para Windows/Electron)
+  const handleInputClick = (e) => {
+    e.target.focus();
+    e.target.select();
+  };
+
+  // Función para buscar automáticamente el libro por ISBN
+  const handleAutoSearch = async () => {
+    if (!formData.isbn.trim()) {
+      alert('Por favor ingresa el ISBN del libro para buscar automáticamente');
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const libroEncontrado = await buscarLibroPorISBN(formData.isbn.trim());
+
+      if (libroEncontrado) {
+        // Actualizar el formulario con los datos encontrados
+        setFormData(prev => ({
+          ...prev,
+          titulo: libroEncontrado.titulo || prev.titulo,
+          autor: libroEncontrado.autor || prev.autor,
+          isbn: libroEncontrado.isbn || prev.isbn,
+          categoria: libroEncontrado.categoria || prev.categoria,
+          editorial: libroEncontrado.editorial || prev.editorial,
+          anioPublicacion: libroEncontrado.anioPublicacion || prev.anioPublicacion,
+          descripcion: libroEncontrado.descripcion || prev.descripcion
+        }));
+        
+        alert('¡Libro encontrado! Los datos se han llenado automáticamente. Revisa y ajusta si es necesario.');
+      } else {
+        alert('No se encontró información del libro con ese ISBN. Por favor completa los datos manualmente.');
+      }
+    } catch (error) {
+      console.error('Error al buscar libro:', error);
+      alert('Error al buscar el libro: ' + error.message);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -223,6 +267,12 @@ export default function Libros() {
       ...prev,
       [name]: value
     }));
+  };
+
+  // Función para restaurar focus en inputs del formulario de edición
+  const handleEditInputClick = (e) => {
+    e.target.focus();
+    e.target.select();
   };
 
   const handleUpdateSubmit = async (e) => {
@@ -353,6 +403,7 @@ export default function Libros() {
                     name="titulo"
                     value={formData.titulo}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     required
                   />
                 </div>
@@ -364,6 +415,7 @@ export default function Libros() {
                     name="autor"
                     value={formData.autor}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     required
                   />
                 </div>
@@ -375,6 +427,7 @@ export default function Libros() {
                     name="isbn"
                     value={formData.isbn}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                   />
                 </div>
                 <div className="form-group">
@@ -385,8 +438,25 @@ export default function Libros() {
                     name="categoria"
                     value={formData.categoria}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                   />
                 </div>
+              </div>
+              
+              {/* Botón de búsqueda automática */}
+              <div className="auto-search-section">
+                <button 
+                  type="button"
+                  className="auto-search-button"
+                  onClick={handleAutoSearch}
+                  disabled={isSearching}
+                >
+                  <Zap size={16} />
+                  {isSearching ? 'Buscando...' : 'Buscar Automáticamente'}
+                </button>
+                <p className="auto-search-hint">
+                  Ingresa el ISBN y haz clic para llenar automáticamente los datos del libro
+                </p>
               </div>
               <div className="form-row">
                 <div className="form-group">
@@ -397,6 +467,7 @@ export default function Libros() {
                     name="editorial"
                     value={formData.editorial}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                   />
                 </div>
                 <div className="form-group">
@@ -407,6 +478,7 @@ export default function Libros() {
                     name="anioPublicacion"
                     value={formData.anioPublicacion}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     min="1000"
                     max={new Date().getFullYear()}
                   />
@@ -419,6 +491,7 @@ export default function Libros() {
                     name="cantidad"
                     value={formData.cantidad}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     required
                     min="1"
                   />
@@ -431,6 +504,7 @@ export default function Libros() {
                     name="ubicacion"
                     value={formData.ubicacion}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     placeholder="Ej: Estante A-1"
                   />
                 </div>
@@ -443,6 +517,7 @@ export default function Libros() {
                     name="descripcion"
                     value={formData.descripcion}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     rows="3"
                   />
                 </div>
@@ -752,6 +827,7 @@ export default function Libros() {
                         name="titulo"
                         value={editFormData.titulo}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                         required
                       />
                     </div>
@@ -763,6 +839,7 @@ export default function Libros() {
                         name="autor"
                         value={editFormData.autor}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                         required
                       />
                     </div>
@@ -774,6 +851,7 @@ export default function Libros() {
                         name="isbn"
                         value={editFormData.isbn}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                       />
                     </div>
                     <div className="form-group">
@@ -784,6 +862,7 @@ export default function Libros() {
                         name="categoria"
                         value={editFormData.categoria}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                       />
                     </div>
                   </div>
@@ -796,6 +875,7 @@ export default function Libros() {
                         name="editorial"
                         value={editFormData.editorial}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                       />
                     </div>
                     <div className="form-group">
@@ -806,6 +886,7 @@ export default function Libros() {
                         name="anioPublicacion"
                         value={editFormData.anioPublicacion}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                       />
                     </div>
                     <div className="form-group">
@@ -816,6 +897,7 @@ export default function Libros() {
                         name="cantidad"
                         value={editFormData.cantidad}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                         min="1"
                         required
                       />
@@ -828,6 +910,7 @@ export default function Libros() {
                         name="ubicacion"
                         value={editFormData.ubicacion}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                       />
                     </div>
                   </div>
@@ -839,6 +922,7 @@ export default function Libros() {
                         name="descripcion"
                         value={editFormData.descripcion}
                         onChange={handleEditInputChange}
+                        onClick={handleEditInputClick}
                         rows="3"
                       />
                     </div>

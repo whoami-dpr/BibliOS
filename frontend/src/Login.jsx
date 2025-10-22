@@ -48,7 +48,45 @@ function Login() {
     setPassword('');
     setError('');
     setIsLoading(false);
+    
+    // Solución específica para el problema de logout: resetear completamente el estado de focus
+    const resetFocus = () => {
+      // Limpiar cualquier elemento activo
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
+      
+      // Esperar un momento y luego enfocar el primer input
+      setTimeout(() => {
+        const firstInput = document.querySelector('#libraryName');
+        if (firstInput) {
+          firstInput.focus();
+          firstInput.click(); // Click adicional para asegurar que funcione
+        }
+      }, 100);
+    };
+    
+    // Ejecutar el reset después de un momento
+    setTimeout(resetFocus, 200);
   }, []);
+
+  // Función para restaurar focus en inputs (solución para Windows/Electron)
+  const handleInputClick = (e) => {
+    const target = e.target;
+    
+    // Método 1: Focus directo
+    target.focus();
+    target.select();
+    
+    // Método 2: Si no funciona, intentar con click programático
+    setTimeout(() => {
+      if (document.activeElement !== target) {
+        target.click();
+        target.focus();
+        target.select();
+      }
+    }, 10);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -225,7 +263,8 @@ function Login() {
                 type="text"
                 value={libraryName}
                 onChange={(e) => setLibraryName(e.target.value)}
-                                        placeholder="Ej: UTN-FRLP"
+                onClick={handleInputClick}
+                placeholder="Ej: UTN-FRLP"
                 className="form-input"
                 required
                 disabled={isLoading}
@@ -243,6 +282,7 @@ function Login() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onClick={handleInputClick}
                   placeholder="Ingresa tu contraseña"
                   className="form-input"
                   required

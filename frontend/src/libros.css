@@ -291,6 +291,57 @@ button:hover {
   background: #4b5563;
 }
 
+/* Auto Search Section */
+.auto-search-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: rgba(201, 163, 104, 0.1);
+  border: 1px solid rgba(201, 163, 104, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.auto-search-button {
+  background: linear-gradient(135deg, #c9a368 0%, #e6c27d 100%);
+  color: #1f2937;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.auto-search-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(201, 163, 104, 0.3);
+}
+
+.auto-search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auto-search-hint {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-align: center;
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.4;
+}
+
 /* Filters Section */
 .filters-section {
   display: flex;

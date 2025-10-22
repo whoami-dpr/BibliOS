@@ -79,6 +79,24 @@ function Register() {
     }
   };
 
+  // Función para restaurar focus en inputs (solución para Windows/Electron)
+  const handleInputClick = (e) => {
+    const target = e.target;
+    
+    // Método 1: Focus directo
+    target.focus();
+    target.select();
+    
+    // Método 2: Si no funciona, intentar con click programático
+    setTimeout(() => {
+      if (document.activeElement !== target) {
+        target.click();
+        target.focus();
+        target.select();
+      }
+    }, 10);
+  };
+
   const clearForm = () => {
     setFormData({
       nombre: '',
@@ -329,6 +347,7 @@ function Register() {
                       name="nombre"
                       value={formData.nombre}
                       onChange={handleInputChange}
+                      onClick={handleInputClick}
                       placeholder="Ej: Biblioteca Central"
                       className={errors.nombre ? 'error' : ''}
                     />
@@ -346,6 +365,7 @@ function Register() {
                       name="direccion"
                       value={formData.direccion}
                       onChange={handleInputChange}
+                      onClick={handleInputClick}
                       placeholder="Ej: Av. San Martín 123"
                       className={errors.direccion ? 'error' : ''}
                     />
@@ -363,6 +383,7 @@ function Register() {
                       name="telefono"
                       value={formData.telefono}
                       onChange={handleInputChange}
+                      onClick={handleInputClick}
                       placeholder="Ej: (123) 456-7890"
                       className={errors.telefono ? 'error' : ''}
                     />
@@ -380,6 +401,7 @@ function Register() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
+                      onClick={handleInputClick}
                       placeholder="Ej: info@biblioteca.com"
                       className={errors.email ? 'error' : ''}
                     />
@@ -399,6 +421,7 @@ function Register() {
                       name="responsable"
                       value={formData.responsable}
                       onChange={handleInputChange}
+                      onClick={handleInputClick}
                       placeholder="Ej: María González"
                     />
                   </div>
@@ -414,6 +437,7 @@ function Register() {
                       name="horarios"
                       value={formData.horarios}
                       onChange={handleInputChange}
+                      onClick={handleInputClick}
                       placeholder="Ej: Lunes a Viernes 8:00 - 18:00"
                     />
                   </div>
@@ -429,6 +453,7 @@ function Register() {
                     name="descripcion"
                     value={formData.descripcion}
                     onChange={handleInputChange}
+                    onClick={handleInputClick}
                     placeholder="Breve descripción de la biblioteca..."
                     rows="3"
                   />
@@ -452,6 +477,7 @@ function Register() {
                           setPasswordError('');
                         }
                       }}
+                      onClick={handleInputClick}
                       placeholder="Ingresa una contraseña segura"
                       className={passwordError ? 'error' : ''}
                     />
