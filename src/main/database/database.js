@@ -276,8 +276,8 @@ class DatabaseService {
                 // Verificar si necesita migración buscando la definición de la tabla
                 const tableDef = this.db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='prestamos'").get();
                 
-                console.log('🔍 Verificando migración de tabla préstamos...');
-                console.log('📋 Definición actual:', tableDef ? tableDef.sql : 'No encontrada');
+                console.log('Verificando migración de tabla préstamos...');
+                console.log('Definición actual:', tableDef ? tableDef.sql : 'No encontrada');
                 
                 // Migrar si tiene CASCADE o si no tiene SET NULL
                 const needsMigration = tableDef && (
@@ -285,10 +285,10 @@ class DatabaseService {
                     !tableDef.sql.includes('ON DELETE SET NULL')
                 );
                 
-                console.log('🔄 ¿Necesita migración?', needsMigration);
+                console.log('¿Necesita migración?', needsMigration);
                 
                 if (needsMigration) {
-                    console.log('🚀 Migrando tabla préstamos: cambiando CASCADE a SET NULL...');
+                    console.log('Migrando tabla préstamos: cambiando CASCADE a SET NULL...');
                     
                     // Crear tabla temporal con la nueva estructura
                     this.db.exec(`
@@ -331,9 +331,9 @@ class DatabaseService {
                         CREATE INDEX IF NOT EXISTS idx_prestamos_devolucion ON prestamos(fechaDevolucion);
                     `);
                     
-                    console.log('✅ Migración completada: préstamos ahora mantienen historial al eliminar libros/socios');
+                    console.log('Migración completada: préstamos ahora mantienen historial al eliminar libros/socios');
                 } else {
-                    console.log('✅ Tabla préstamos ya tiene la estructura correcta (SET NULL)');
+                    console.log('Tabla préstamos ya tiene la estructura correcta (SET NULL)');
                 }
             }
         } catch (error) {
@@ -614,9 +614,9 @@ class DatabaseService {
             
             // IMPORTANTE: Poner en NULL los libroId de los préstamos ANTES de eliminar el libro
             // Esto mantiene el historial de préstamos incluso después de eliminar el libro
-            console.log(`🔄 Poniendo en NULL los libroId de los préstamos para el libro ${id}...`);
+            console.log(`Poniendo en NULL los libroId de los préstamos para el libro ${id}...`);
             const updateResult = this.db.prepare('UPDATE prestamos SET libroId = NULL WHERE libroId = ?').run(id);
-            console.log(`✅ Actualizados ${updateResult.changes} préstamos`);
+            console.log(`Actualizados ${updateResult.changes} préstamos`);
             
             // Ahora eliminar el libro
             const stmt = this.db.prepare('DELETE FROM libros WHERE id = ?');
@@ -787,9 +787,9 @@ class DatabaseService {
             
             // IMPORTANTE: Poner en NULL los socioId de los préstamos ANTES de eliminar el socio
             // Esto mantiene el historial de préstamos incluso después de eliminar el socio
-            console.log(`🔄 Poniendo en NULL los socioId de los préstamos para el socio ${id}...`);
+            console.log(`Poniendo en NULL los socioId de los préstamos para el socio ${id}...`);
             const updateResult = this.db.prepare('UPDATE prestamos SET socioId = NULL WHERE socioId = ?').run(id);
-            console.log(`✅ Actualizados ${updateResult.changes} préstamos`);
+            console.log(`Actualizados ${updateResult.changes} préstamos`);
             
             // Ahora eliminar el socio
             const stmt = this.db.prepare('DELETE FROM socios WHERE id = ?');
@@ -1305,7 +1305,7 @@ class DatabaseService {
 
     async insertUTNSampleData(bibliotecaId) {
         try {
-            console.log('📚 Creando datos de muestra para UTN-FRLP...');
+            console.log('Creando datos de muestra para UTN-FRLP...');
             
             // Libros de muestra más extensos
             const librosUTN = [
@@ -1345,7 +1345,7 @@ class DatabaseService {
                 { nombre: 'Jorge Silva', email: 'jorge.silva@utn.frlp.edu.ar', telefono: '221-4567904', direccion: 'Calle 52 890', observaciones: 'Estudiante de Ingeniería Química', bibliotecaId }
             ];
 
-            console.log('📖 Insertando libros...');
+            console.log('Insertando libros...');
             const librosInsertados = [];
             for (const libro of librosUTN) {
                 try {
@@ -1356,7 +1356,7 @@ class DatabaseService {
                 }
             }
 
-            console.log('👥 Insertando socios...');
+            console.log('Insertando socios...');
             const sociosInsertados = [];
             for (const socio of sociosUTN) {
                 try {
@@ -1367,7 +1367,7 @@ class DatabaseService {
                 }
             }
 
-            console.log('📋 Creando préstamos de muestra...');
+            console.log('Creando préstamos de muestra...');
             const prestamosInsertados = [];
             
             // Crear algunos préstamos completados (historial)
@@ -1427,7 +1427,7 @@ class DatabaseService {
                 }
             }
 
-            console.log('✅ Datos de muestra creados exitosamente');
+            console.log('Datos de muestra creados exitosamente');
             
             return {
                 success: true,
@@ -1460,7 +1460,7 @@ class DatabaseService {
             const existingLibrary = this.db.prepare('SELECT id FROM bibliotecas WHERE nombre = ?').get('UTN-FRLP');
             
             if (existingLibrary) {
-                console.log('✅ La biblioteca UTN-FRLP ya existe');
+                console.log('La biblioteca UTN-FRLP ya existe');
                 return { exists: true, id: existingLibrary.id };
             }
             
@@ -1475,12 +1475,12 @@ class DatabaseService {
                 descripcion: 'Biblioteca de la Universidad Tecnológica Nacional - Facultad Regional La Plata'
             });
             
-            console.log('✅ Biblioteca UTN-FRLP creada con ID:', biblioteca.id);
+            console.log('Biblioteca UTN-FRLP creada con ID:', biblioteca.id);
             
             // Insertar datos de muestra
             const result = await this.insertUTNSampleData(biblioteca.id);
             
-            console.log('✅ Datos de muestra insertados:', result);
+            console.log('Datos de muestra insertados:', result);
             
             return {
                 exists: false,
