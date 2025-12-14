@@ -1,12 +1,12 @@
 /* Socios Styles */
 .socios-container {
-  padding: 0.5rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 1.5rem;
+  width: auto;
+  margin-left: 160px;
   min-height: 100vh;
   color: var(--text-primary);
   background: var(--bg-primary);
-  padding-top: 3px;
+  padding-top: 2rem;
 }
 
 /* Eliminar outline azul globalmente */
@@ -138,7 +138,6 @@ button:hover {
   align-items: center;
   gap: 0.75rem;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
 }
 
@@ -304,11 +303,17 @@ button:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 8px;
   padding: 0.5rem 1rem;
-  backdrop-filter: blur(10px);
+  transition: border-color 0.2s;
+}
+
+.search-box:focus-within,
+.filter-box:focus-within {
+  border-color: var(--accent-primary);
+  background: var(--bg-card-hover);
 }
 
 .search-box {
@@ -331,25 +336,26 @@ button:hover {
 .filter-box select {
   background: transparent;
   border: none;
-  color: white;
+  color: var(--text-primary);
   font-size: 0.9rem;
   outline: none;
   cursor: pointer;
+  color-scheme: inherit;
 }
 
 .filter-box select option {
-  background: #1f2937;
-  color: white;
+  background: var(--bg-card);
+  color: var(--text-primary);
 }
 
 /* Table Section */
 .table-section {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow);
+  margin-top: 1rem;
 }
 
 .table-header {
@@ -357,7 +363,8 @@ button:hover {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-header);
 }
 
 .table-header h3 {
@@ -386,25 +393,29 @@ button:hover {
 }
 
 .socios-table th {
-  background: transparent;
+  background: var(--bg-header);
   padding: 1rem;
   text-align: left;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-header);
   border-bottom: 1px solid var(--border-color);
 }
 
 .socios-table td {
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-size: 0.9rem;
-  background: var(--bg-card);
+  background: inherit;
+}
+
+.socios-table tbody tr:nth-child(even) {
+  background-color: var(--bg-zebra);
 }
 
 .socios-table tr:hover {
-  background: var(--bg-card-hover);
+  background-color: var(--bg-hover) !important;
 }
 
 .socios-table tbody {
@@ -635,10 +646,18 @@ button:hover {
   }
 }
 
+@media (max-width: 1024px) {
+  .socios-container {
+    padding: 1rem;
+    padding-top: 5rem;
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .socios-container {
-    padding: 0.5rem;
-    padding-top: 3px;
+    padding: 1rem;
+    padding-top: 4rem;
   }
 
   .socios-header {

@@ -1,0 +1,212 @@
+/* Sidebar y Navbar Styles */
+
+/* Base vars si no están definidas (fallback), aunque deberían venir de index.css */
+:root {
+    --sidebar-width: 200px;
+}
+
+/* === SIDEBAR (App principal) === */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: rgba(18, 18, 18, 0.95);
+    /* semi-transparente */
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+/* Logo Area */
+.sidebar .logo {
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    padding: 0 0.5rem;
+}
+
+.sidebar .logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c9a368 0%, #e6c27d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}
+
+/* Navigation Links */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    color: #9ca3af;
+    /* text-secondary */
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: 1px solid transparent;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: white;
+}
+
+.nav-item.active {
+    background: rgba(201, 163, 104, 0.1);
+    color: #c9a368;
+    /* accent-primary */
+    border-color: rgba(201, 163, 104, 0.15);
+}
+
+.nav-item svg {
+    stroke-width: 2px;
+}
+
+/* Footer Area (Theme + Logout) */
+.sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1.5rem;
+}
+
+.footer-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    color: #9ca3af;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+    width: 100%;
+    text-align: left;
+}
+
+.footer-btn:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: white;
+}
+
+.footer-btn.logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+    /* red tint */
+    color: #ef4444;
+}
+
+/* === NAVBAR SIMPLE (Landing / Login) === */
+.navbar-simple {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    z-index: 100;
+    background: transparent;
+}
+
+.navbar-simple .logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    /* O usar gradiente si prefiere */
+}
+
+.navbar-simple .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-simple a {
+    color: #e5e7eb;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.navbar-simple a:hover {
+    color: #c9a368;
+}
+
+/* Mobile Toggle Button (fuera del sidebar) */
+.mobile-menu-toggle {
+    display: none;
+    /* Hidden on desktop */
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1100;
+    background: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Overlay para cerrar sidebar en móvil */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        backdrop-filter: blur(4px);
+    }
+}

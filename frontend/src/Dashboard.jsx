@@ -68,7 +68,7 @@ export default function Dashboard() {
                 const categoriasFormateadas = librosCategoria.map((item, index) => ({
                   name: item.categoria || 'Sin categoría',
                   value: item.cantidad || 0,
-                  color: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#8dd1e1'][index % 5]
+                  color: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ec4899', '#6366f1'][index % 6]
                 }));
                 setLibrosPorCategoria(categoriasFormateadas);
 
@@ -259,39 +259,65 @@ export default function Dashboard() {
             </div>
             {prestamosPorMes.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={prestamosPorMes}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                  <XAxis dataKey="mes" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
-                  <Tooltip
-                    shared={false}
-                    cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                    contentStyle={{
-                      backgroundColor: '#1f2937',
-                      border: '1px solid #374151',
-                      borderRadius: '8px',
-                      color: '#f3f4f6',
-                      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)'
-                    }}
-                    labelStyle={{
-                      color: '#f3f4f6',
-                      fontWeight: 'bold',
-                      marginBottom: '8px'
-                    }}
-                    itemStyle={{
-                      color: '#e5e7eb'
-                    }}
-                    formatter={(value, name) => {
-                      const nameMap = {
-                        'prestamos': 'Préstamos',
-                        'devoluciones': 'Devoluciones'
-                      };
-                      return [value, nameMap[name] || name];
-                    }}
+                <BarChart data={prestamosPorMes} barGap={8}>
+                  <defs>
+                    <linearGradient id="barGradientPrestamos" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#60a5fa" />
+                      <stop offset="100%" stopColor="#3b82f6" />
+                    </linearGradient>
+                    <linearGradient id="barGradientDevoluciones" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#34d399" />
+                      <stop offset="100%" stopColor="#10b981" />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                  <XAxis
+                    dataKey="mes"
+                    stroke="#9ca3af"
+                    tick={{ fill: '#9ca3af', fontSize: 12 }}
+                    axisLine={{ stroke: '#4b5563' }}
+                    tickLine={false}
                   />
-                  <Legend />
-                  <Bar dataKey="prestamos" fill="#60a5fa" name="Préstamos" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="devoluciones" fill="#34d399" name="Devoluciones" radius={[4, 4, 0, 0]} />
+                  <YAxis
+                    stroke="#9ca3af"
+                    tick={{ fill: '#9ca3af', fontSize: 12 }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <Tooltip
+                    cursor={{ fill: 'transparent' }}
+                    contentStyle={{
+                      backgroundColor: 'rgba(20, 20, 25, 0.95)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      padding: '8px 12px',
+                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.4)'
+                    }}
+                    labelStyle={{ color: '#f3f4f6', fontWeight: '600', marginBottom: '4px', fontSize: '0.9rem' }}
+                    itemStyle={{ color: '#9ca3af', fontSize: '0.85rem', padding: '2px 0' }}
+                    formatter={(value, name) => [
+                      <span style={{ color: '#f3f4f6', fontWeight: 'bold' }}>{value}</span>,
+                      name
+                    ]}
+                  />
+                  <Legend
+                    wrapperStyle={{ paddingTop: '20px', color: '#e5e7eb' }}
+                    iconType="circle"
+                  />
+                  <Bar
+                    dataKey="prestamos"
+                    name="Préstamos"
+                    fill="url(#barGradientPrestamos)"
+                    radius={[6, 6, 0, 0]}
+                    barSize={32}
+                  />
+                  <Bar
+                    dataKey="devoluciones"
+                    name="Devoluciones"
+                    fill="url(#barGradientDevoluciones)"
+                    radius={[6, 6, 0, 0]}
+                    barSize={32}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -314,14 +340,13 @@ export default function Dashboard() {
                     data={librosPorCategoria}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={2}
                     dataKey="value"
                   >
                     {librosPorCategoria.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                      <Cell key={`cell-${index}`} fill={entry.color} stroke="rgba(0,0,0,0.5)" strokeWidth={1} />
                     ))}
                   </Pie>
                   <Tooltip
@@ -333,18 +358,15 @@ export default function Dashboard() {
                       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
                       padding: '12px'
                     }}
-                    labelStyle={{
-                      color: '#f3f4f6',
-                      fontWeight: 'bold',
-                      marginBottom: '4px'
-                    }}
-                    itemStyle={{
-                      color: '#e5e7eb',
-                      padding: '2px 0'
-                    }}
-                    formatter={(value, name) => {
-                      return [`${value} libro${value !== 1 ? 's' : ''}`, name];
-                    }}
+                    itemStyle={{ color: '#e5e7eb' }}
+                    formatter={(value, name) => [`${value} libros`, name]}
+                  />
+                  <Legend
+                    layout="vertical"
+                    verticalAlign="middle"
+                    align="right"
+                    iconType="circle"
+                    wrapperStyle={{ fontSize: '0.85rem', color: '#e5e7eb' }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -411,7 +433,7 @@ export default function Dashboard() {
                       color: 'white'
                     }}
                   />
-                  <Legend />
+                  <Legend wrapperStyle={{ color: '#e5e7eb' }} />
                   <Line
                     type="monotone"
                     dataKey="prestamos"

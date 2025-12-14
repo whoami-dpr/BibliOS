@@ -1,24 +1,24 @@
 /* Dashboard Styles */
 .dashboard-container {
-  padding: 0.5rem;
-  padding-top: 3px;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 1.5rem;
+  padding-top: 2rem;
+  width: auto;
+  margin-left: 160px;
   min-height: 100vh;
   color: var(--text-primary);
   background: var(--bg-primary);
 }
 
 .mt-8 {
-  margin-top: 0;
+  margin-top: 0.5rem;
 }
 
 .mb-4 {
-  margin-bottom: 0;
+  margin-bottom: 1rem;
 }
 
 .mb-2 {
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
 }
 
 .dashboard-header {
@@ -145,7 +145,6 @@
   align-items: center;
   gap: 0.75rem;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
 }
 
@@ -208,19 +207,17 @@
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 1.5rem;
-  backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
   margin-bottom: 2rem;
 }
 
 .chart-card {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 1.5rem;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow);
 }
 
 .chart-card:hover {
