@@ -1,0 +1,225 @@
+/* AuthMethodSelector.css */
+.auth-method-selector {
+  background: rgba(31, 41, 55, 0.6);
+  border: 1px solid rgba(201, 163, 104, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem 0;
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.auth-method-header {
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.auth-method-header::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #c9a368, transparent);
+  border-radius: 2px;
+}
+
+.auth-method-header h3 {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0.125rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #c9a368 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.auth-method-header p {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+.auth-method-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.auth-method-option {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(17, 24, 39, 0.8);
+  border: 2px solid rgba(55, 65, 81, 0.5);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.auth-method-option:hover {
+  border-color: #c9a368;
+  background: rgba(201, 163, 104, 0.1);
+  transform: translateY(-1px);
+}
+
+.auth-method-option.selected {
+  border-color: #c9a368;
+  background: rgba(201, 163, 104, 0.15);
+  box-shadow: 0 8px 25px rgba(201, 163, 104, 0.2);
+}
+
+.auth-method-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #c9a368, #b58b4a);
+  border-radius: 8px;
+  color: #111;
+  margin-right: 0.5rem;
+  box-shadow: 0 2px 8px rgba(201, 163, 104, 0.3);
+}
+
+.auth-method-content {
+  flex: 1;
+}
+
+.auth-method-content h4 {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.125rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.auth-method-content p {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.auth-method-radio {
+  margin-left: 0.5rem;
+}
+
+.auth-method-radio input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #c9a368;
+}
+
+.auth-value-input {
+  margin-top: 1rem;
+}
+
+.auth-value-label {
+  display: block;
+  color: #f3f4f6;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.required {
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+
+.auth-value-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-value-input-field {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(31, 41, 55, 0.8);
+  border: 2px solid rgba(55, 65, 81, 0.5);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auth-value-input-field:focus {
+  outline: none;
+  border-color: #c9a368;
+  box-shadow: 
+    0 0 0 4px rgba(201, 163, 104, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(31, 41, 55, 0.9);
+}
+
+.auth-value-input-field::placeholder {
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.auth-value-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.auth-value-toggle:hover {
+  color: #c9a368;
+  transform: scale(1.1);
+}
+
+.auth-value-help {
+  margin-top: 6px;
+}
+
+.auth-value-help p {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.auth-value-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  color: #fca5a5;
+  font-size: 0.9rem;
+  margin-top: 12px;
+  animation: errorShake 0.3s ease-in-out;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
